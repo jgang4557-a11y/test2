@@ -145,7 +145,8 @@
     .iq-cancel{ background:var(--main-light); color:var(--main-dark); }
 
     @keyframes staggerIn{ from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
-    .wrap > *{ opacity:0; animation:staggerIn .45s ease forwards; }
+    .wrap > *{ opacity:0; }
+    body.ready .wrap > *{ animation:staggerIn .45s ease forwards; }
     .wrap > *:nth-child(1){animation-delay:.04s}
     .wrap > *:nth-child(2){animation-delay:.14s}
     .wrap > *:nth-child(3){animation-delay:.24s}
@@ -171,7 +172,7 @@
       .week{ grid-template-columns:repeat(4,1fr); }
     }
     @media (prefers-reduced-motion: reduce){
-      .wrap > *{ animation:none; opacity:1; }
+      body.ready .wrap > *{ animation:none; opacity:1; }
       .fx-p, .fx-heart{ display:none; }
       .avatar.pop{ animation:none; }
     }
@@ -342,6 +343,7 @@
     document.querySelectorAll('#week .day').forEach(c=>c.classList.toggle('on',active.includes(c.dataset.dow)));
 
     paintDday();
+    document.body.classList.add('ready');
   }
   function setText(id,v){ const el=document.getElementById(id); if(el&&v!=null) el.textContent=v; }
   function esc(s){ return (s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -358,6 +360,7 @@
     if(pChip&&dd&&dd.length>=3){ const deb=new Date(+dd[0],(+dd[1])-1,+dd[2]); const days=Math.round((today-deb)/86400000); if(!isNaN(days)) pChip.textContent='D+'+days; }
   }
   load();
+  setTimeout(function(){ document.body.classList.add('ready'); }, 1600);
 
   function openInquiry(){ document.getElementById('iq-ov').classList.add('show'); }
   function closeInquiry(){ document.getElementById('iq-ov').classList.remove('show'); }
