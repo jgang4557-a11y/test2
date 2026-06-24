@@ -28,7 +28,8 @@ body.dark .page{box-shadow:0 28px 70px rgba(0,0,0,.55)}
 .wrap{max-width:none;margin:0;padding:14px 30px 34px}
 @media(max-width:680px){body{padding:12px 8px 0}.page{border-radius:22px}.wrap{padding:10px 16px 26px}}
 /* 네비 — 메인과 동일(둥근 pill) */
-.nav{background:transparent;padding:12px 22px 0}
+.nav{background:transparent;padding:12px 22px 0;position:relative}
+.nav::after{content:'';position:absolute;left:8%;right:8%;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(63,120,160,.28) 22%,rgba(63,120,160,.42) 50%,rgba(63,120,160,.28) 78%,transparent)}
 .nav-inner{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .nav-logo{display:flex;align-items:baseline;gap:10px;text-decoration:none;margin-right:auto;white-space:nowrap}
 .nav-logo .lg-script{font-family:'Parisienne',cursive;font-size:36px;color:var(--logo);line-height:1}
@@ -38,6 +39,7 @@ body.dark .page{box-shadow:0 28px 70px rgba(0,0,0,.55)}
 .nav a.pill.active{background:var(--main);border-color:var(--main);color:#fff}
 .theme-switch{position:relative;width:52px;height:27px;border-radius:999px;border:none;background:var(--main-light);cursor:pointer;flex-shrink:0;margin-left:6px}
 .theme-switch .knob{position:absolute;top:3px;left:4px;width:21px;height:21px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;transition:left .25s;box-shadow:0 2px 5px rgba(0,0,0,.15)}
+body.dark .nav::after{background:linear-gradient(90deg,transparent,rgba(140,180,200,.22) 22%,rgba(140,180,200,.36) 50%,rgba(140,180,200,.22) 78%,transparent)}
 body.dark .theme-switch{background:#22323c}
 body.dark .theme-switch .knob{left:27px;background:#0e1418}
 @media(max-width:560px){.nav-logo .lg-script{font-size:30px}.nav a.pill{padding:7px 12px;font-size:13px}}
