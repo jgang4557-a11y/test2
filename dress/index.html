@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>우히 · 옷장</title>
 <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/10/1020118/1020118.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&family=Parisienne&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <style>
   :root{--transition:.2s;--shadow:0 6px 18px rgba(20,60,85,.10);--radius-md:12px}
@@ -87,20 +87,18 @@
 </style>
 </head>
 <body>
+<div class="page">
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo"><span class="lg-script">Uhi</span><span class="lg-sub">DAILY</span></a>
+  <a href="../index.html" class="pill">메인</a>
+  <a href="../profile/" class="pill">프로필</a>
+  <a href="../schedule/" class="pill">일정</a>
+  <a href="../song/" class="pill">노래책</a>
+  <a href="index.html" class="pill active">옷장</a>
+  <a href="../work/" class="pill">업보</a>
+  <button class="theme-switch" id="tsw" type="button" aria-label="다크모드 전환"><span class="knob" id="kn">🌙</span></button>
+</div></nav>
 <div class="wrap">
-  <header>
-    <div class="mast"><div class="logo"><span class="scr">Uhi</span><span class="sub">H A Y O · D A I L Y</span></div></div>
-    <div class="navrule"><nav class="nav">
-      <a href="../index.html">메인</a>
-      <a href="../index.html">프로필</a>
-      
-      <a href="../schedule/">일정</a>
-      <a href="index.html" class="on">옷장</a>
-      <a href="../work/">업보</a>
-      <a href="../song/">노래책</a>
-      <div class="actions"><button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button></div>
-    </nav></div>
-  </header>
 
   <div class="kicker"><span class="cat">WARDROBE · 👗</span><span class="date dbox"></span></div>
   <h1 class="headline">우히의 옷장</h1>
@@ -115,7 +113,8 @@
 
 </div>
 
-<footer class="paperfoot">© 2026 우히 Official.<br>비즈니스 문의 — uhi1020118@gmail.com</footer>
+</div><!-- /page -->
+<footer>© 2026 우히 Official.<br>비즈니스 문의 — uhi1020118@gmail.com</footer>
 
 <div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLb()">
   <span class="lightbox-close" onclick="closeLb()">×</span>
