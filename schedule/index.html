@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>우히 · 방송 일정</title>
-<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/10/1020118/1020118.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&family=Parisienne&display=swap" rel="stylesheet">
+<title>모아 · 방송 일정</title>
+<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ki/kimghdus/kimghdus.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <style>
   .calendar{background:var(--card);border-radius:6px;border:1.5px solid var(--rule);overflow:hidden;margin-top:18px}
@@ -23,7 +23,7 @@
   .cal-cell.has:hover{background:var(--main-light)}
   .cal-cell.today{background:var(--main-light)}
   .cal-cell.today .cal-date{background:var(--main-dark);color:#fff;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center}
-  body.dark .cal-cell.today .cal-date{color:#0b2230}
+  body.dark .cal-cell.today .cal-date{color:#16210b}
   .cal-cell.hl{box-shadow:inset 0 0 0 2px var(--main)}
   .cal-date{font-size:13px;font-weight:700;color:var(--text-mid);padding:1px 3px}
   .cal-cell:nth-child(7n+1) .cal-date{color:#e05}
@@ -32,7 +32,7 @@
   .c-green{background:#d6f0e4;color:#1f7a52}.c-pink{background:#ffe0eb;color:#d95f7f}
   .c-yellow{background:#fff0cc;color:#b07d18}.c-orange{background:#ffe0cc;color:#c2611f}
   .c-blue{background:#d6e8fa;color:#2c6fb0}.c-purple{background:#e8ddf7;color:#7a4fb0}
-  .c-red{background:#ffd9d9;color:#c44}.c-gray{background:#e7eef3;color:#666}
+  .c-red{background:#ffd9d9;color:#c44}.c-gray{background:#ececed;color:#666}
 
   .up-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;background:var(--card);border:1px solid var(--rule);margin-bottom:9px;border-left:5px solid var(--main);cursor:pointer}
   .up-date{flex-shrink:0;width:84px}.up-d1{font-size:13px;font-weight:800;color:var(--ink)}
@@ -40,9 +40,9 @@
   .up-time{font-size:12px;color:var(--text-soft);margin-top:2px}
   .up-badge{padding:5px 14px;border-radius:999px;font-size:12px;font-weight:700;flex-shrink:0}
 
-  .ov{position:absolute;left:0;right:0;background:rgba(12,24,32,.35);display:none;align-items:flex-start;justify-content:center;z-index:500;padding:16px}
+  .ov{position:absolute;left:0;right:0;background:rgba(22,26,12,.35);display:none;align-items:flex-start;justify-content:center;z-index:500;padding:16px}
   .ov.show{display:flex}
-  .schmodal{background:var(--card);border-radius:18px;width:100%;max-width:380px;padding:22px;box-shadow:0 20px 60px rgba(20,40,55,.3);animation:pop .2s ease}
+  .schmodal{background:var(--card);border-radius:18px;width:100%;max-width:380px;padding:22px;box-shadow:0 20px 60px rgba(40,60,44,.3);animation:pop .2s ease}
   @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
   .m-date{font-size:14px;color:var(--text-soft);margin-bottom:6px}
   .m-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:14px}
@@ -63,22 +63,20 @@
 </style>
 </head>
 <body>
-<div class="page">
-<nav class="nav"><div class="nav-inner">
-  <a href="../index.html" class="nav-logo"><span class="lg-script">Uhi</span><span class="lg-sub">DAILY</span></a>
-  <a href="../index.html" class="pill">메인</a>
-  <a href="../profile/" class="pill">프로필</a>
-  <a href="index.html" class="pill active">일정</a>
-  <a href="../song/" class="pill">노래책</a>
-  <a href="../dress/" class="pill">옷장</a>
-  <a href="../work/" class="pill">업보</a>
-  <button class="theme-switch" id="tsw" type="button" aria-label="다크모드 전환"><span class="knob" id="kn">🌙</span></button>
-</div></nav>
 <div class="wrap">
+  <header>
+    <div class="mast"><div class="logo"><span class="scr">Moa</span><span class="sub">H A Y O · D A I L Y</span></div></div>
+    <div class="navrule"><nav class="nav">
+      <a href="../index.html">메인</a><a href="../profile/">프로필</a><a href="index.html" class="on">일정</a><a href="../work/">업보</a><a href="../dress/">옷장</a>
+      <div class="actions">
+        <button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button>
+      </div>
+    </nav></div>
+  </header>
 
   <div class="kicker"><span class="cat">SCHEDULE</span><span class="date dbox"></span></div>
   <h1 class="headline">방송 일정</h1>
-  <div class="byline">오후 12시에 만나요 — 우히의 이번 달 일정이에요 🐹</div>
+  <div class="byline">모아의 이번 달 일정이에요 🐸</div>
 
   <div class="calendar">
     <div class="cal-header">
@@ -94,8 +92,7 @@
 
 </div>
 
-</div><!-- /page -->
-<footer>© 2026 우히 Official.<br>비즈니스 문의 — uhi1020118@gmail.com</footer>
+<footer class="paperfoot">© 2026 모아 Official.<br>문의 버튼을 이용해 주세요</footer>
 
 <div class="ov" id="ov" onclick="if(event.target===this)closeModal()">
   <div class="schmodal" id="modal-body"></div>
@@ -199,7 +196,6 @@
 <script>
 (function(){if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){if(kn)kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(sw)sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
 </script>
-<script>(function(){var r=function(){document.body.classList.add("ready")};if(document.readyState==="complete")r();else window.addEventListener("load",r);setTimeout(r,1200);})();</script>
 <script src="../fx.js"></script>
 </body>
 </html>

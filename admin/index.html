@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔐 우히 Admin</title>
+  <title>🔐 모아 Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700&family=Sacramento&display=swap" rel="stylesheet">
   <style>
     /* ── 자체 내장 라임 디자인 시스템 (admin 전용) ── */
     :root{
-      --main:#3fbfe6; --main-dark:#0f7aa8; --main-deep:#06384f; --main-light:#cdeaf9;
-      --bg:#eef6fb; --card:#ffffff; --logo:#0a4d76; --ink:#26323a;
-      --text:#3a4a54; --text-mid:#6f8a99; --text-soft:#9fb6c2;
+      --main:#98dc94; --main-dark:#2f8039; --main-deep:#1e5228; --main-light:#e8f6e6;
+      --bg:#f4f7ec; --card:#ffffff; --logo:#379a4b; --ink:#2b2d31;
+      --text:#3a3d44; --text-mid:#63677a; --text-soft:#9296a1;
       --radius-lg:18px; --radius-md:14px; --radius-sm:10px;
-      --shadow:0 4px 20px rgba(40,110,150,.12); --shadow-hover:0 8px 28px rgba(40,110,150,.20);
+      --shadow:0 4px 20px rgba(60,140,80,.12); --shadow-hover:0 8px 28px rgba(60,140,80,.20);
       --transition:.2s ease;
       --pen:'Noto Sans KR',sans-serif; --mag:'Playfair Display',serif; --script:'Sacramento',cursive;
     }
@@ -43,7 +43,7 @@
     .spinner{width:28px;height:28px;border:3px solid var(--main-light);border-top-color:var(--main-dark);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto}
     @keyframes spin{to{transform:rotate(360deg)}}
     footer{text-align:center;padding:24px;font-size:12px;color:var(--text-soft);line-height:1.7}
-    .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--main-dark);color:#fff;padding:12px 26px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:all .3s;pointer-events:none;z-index:9999;white-space:nowrap;box-shadow:0 8px 24px rgba(40,110,150,.3);max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+    .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--main-dark);color:#fff;padding:12px 26px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;transition:all .3s;pointer-events:none;z-index:9999;white-space:nowrap;box-shadow:0 8px 24px rgba(60,140,80,.3);max-width:90vw;overflow:hidden;text-overflow:ellipsis}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   </style>
   <style>
@@ -89,10 +89,8 @@
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('main',this)">🏠 메인</button>
       <button class="tab-btn" onclick="switchTab('profile',this)">🎀 프로필</button>
-      <button class="tab-btn" onclick="switchTab('notice',this)">📢 공지</button>
       <button class="tab-btn" onclick="switchTab('schedule',this)">📅 일정</button>
       <button class="tab-btn" onclick="switchTab('work',this)">⚡ 업보</button>
-      <button class="tab-btn" onclick="switchTab('song',this)">🎵 노래</button>
       <button class="tab-btn" onclick="switchTab('dress',this)">👗 옷장</button>
       <button class="tab-btn" onclick="switchTab('inquiry',this)">✉️ 문의</button>
     </div>
@@ -107,31 +105,31 @@
     <div class="card">
       <div class="card-title">상단 (로고 · 카테고리)</div>
       <div class="form-grid">
-        <div class="form-field"><label class="input-label">로고 글자</label><input class="input" id="mn-brand" placeholder="Uhi"></div>
+        <div class="form-field"><label class="input-label">로고 글자</label><input class="input" id="mn-brand" placeholder="Moa"></div>
         <div class="form-field"><label class="input-label">로고 밑 소제목</label><input class="input" id="mn-sub" placeholder="V T U B E R · D A I L Y"></div>
-        <div class="form-field full"><label class="input-label">카테고리 (작은 머리말)</label><input class="input" id="mn-kicker" placeholder="PROFILE · 🐹💙"></div>
+        <div class="form-field full"><label class="input-label">카테고리 (작은 머리말)</label><input class="input" id="mn-kicker" placeholder="PROFILE · 🐸🐸"></div>
       </div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveMain()">저장 ♥</button></div>
     </div>
 
     <div class="card">
       <div class="card-title">메인 기사</div>
-      <div class="form-field"><label class="input-label">큰 제목 (앞부분)</label><input class="input" id="mn-headline" placeholder="잔잔하다가도 살벌한,"></div>
-      <div class="form-field"><label class="input-label">큰 제목 강조 (파란색 부분 · 선택)</label><input class="input" id="mn-headline_em" placeholder="국밥요정 우히"></div>
+      <div class="form-field"><label class="input-label">큰 제목 (앞부분)</label><input class="input" id="mn-headline" placeholder="소통하고 게임하는,"></div>
+      <div class="form-field"><label class="input-label">큰 제목 강조 (초록색 부분 · 선택)</label><input class="input" id="mn-headline_em" placeholder="해맑은 개구리 모아"></div>
       <div class="form-grid">
-        <div class="form-field"><label class="input-label">BY (작성자)</label><input class="input" id="mn-by" placeholder="히히"></div>
-        <div class="form-field"><label class="input-label">ART BY (그림 · 선택)</label><input class="input" id="mn-art" placeholder="우히"></div>
+        <div class="form-field"><label class="input-label">BY (작성자)</label><input class="input" id="mn-by" placeholder="꾸물이"></div>
+        <div class="form-field"><label class="input-label">ART BY (그림 · 선택)</label><input class="input" id="mn-art" placeholder="모아"></div>
       </div>
-      <div class="form-field"><label class="input-label">🖼️ 히어로 이미지 URL (메인 상단 배너 · 세로로 긴 칸) · 권장 세로형 3:4 · 900×1200px (최소 600×800) · 비우면 기본 배경</label><input class="input" id="mn-hero" type="url" placeholder="https://... 이미지 주소"></div>
-      <div class="form-field"><label class="input-label">이미지 위 서명 글씨</label><input class="input" id="mn-sign" placeholder="Uhi"></div>
-      <div class="form-field"><label class="input-label">이미지 아래 캡션</label><input class="input" id="mn-herocap" placeholder="— 저녁 8시, 오늘도 국밥들을 기다리는 우히 🐹💙"></div>
+      <div class="form-field"><label class="input-label">대표 이미지 URL (비우면 기본 이미지 유지)</label><input class="input" id="mn-hero" type="url" placeholder="https://... 이미지 주소"></div>
+      <div class="form-field"><label class="input-label">이미지 위 서명 글씨</label><input class="input" id="mn-sign" placeholder="Moa"></div>
+      <div class="form-field"><label class="input-label">이미지 아래 캡션</label><input class="input" id="mn-herocap" placeholder="— 오후 12시, 오늘도 꾸물이를 기다리는 모아 🐸"></div>
       <div class="form-field"><label class="input-label">소개 문단 (lead)</label><textarea class="input" id="mn-lead" rows="3"></textarea></div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveMain()">저장 ♥</button></div>
     </div>
 
     <div class="card">
       <div class="card-title">이번 주 일정 (요일별 시간)</div>
-      <div class="form-grid"><div class="form-field"><label class="input-label">일</label><input class="input" id="mn-week-0" placeholder="20:00"></div><div class="form-field"><label class="input-label">월</label><input class="input" id="mn-week-1" placeholder="20:00"></div><div class="form-field"><label class="input-label">화</label><input class="input" id="mn-week-2" placeholder="20:00"></div><div class="form-field"><label class="input-label">수</label><input class="input" id="mn-week-3" placeholder="20:00"></div><div class="form-field"><label class="input-label">목</label><input class="input" id="mn-week-4" placeholder="20:00"></div><div class="form-field"><label class="input-label">금</label><input class="input" id="mn-week-5" placeholder="20:00"></div><div class="form-field"><label class="input-label">토</label><input class="input" id="mn-week-6" placeholder="20:00"></div></div>
+      <div class="form-grid"><div class="form-field"><label class="input-label">일</label><input class="input" id="mn-week-0" placeholder="12:00"></div><div class="form-field"><label class="input-label">월</label><input class="input" id="mn-week-1" placeholder="12:00"></div><div class="form-field"><label class="input-label">화</label><input class="input" id="mn-week-2" placeholder="12:00"></div><div class="form-field"><label class="input-label">수</label><input class="input" id="mn-week-3" placeholder="12:00"></div><div class="form-field"><label class="input-label">목</label><input class="input" id="mn-week-4" placeholder="12:00"></div><div class="form-field"><label class="input-label">금</label><input class="input" id="mn-week-5" placeholder="12:00"></div><div class="form-field"><label class="input-label">토</label><input class="input" id="mn-week-6" placeholder="12:00"></div></div>
       <div style="font-size:11px;color:var(--text-soft);margin-top:-4px;margin-bottom:8px">비워두면 그 요일 칸이 빈칸으로 보여요</div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveMain()">저장 ♥</button></div>
     </div>
@@ -140,7 +138,7 @@
       <div class="card-title">사이드 (프로필 박스 · 인용 카드)</div>
       <div class="form-field"><label class="input-label">프로필 박스 라벨</label><input class="input" id="mn-plabel" placeholder="Profile"></div>
       <div class="form-field"><label class="input-label">인용 카드 윗 글씨</label><input class="input" id="mn-qlabel" placeholder="Today's words"></div>
-      <div class="form-field"><label class="input-label">인용 문구</label><textarea class="input" id="mn-quote" rows="2" placeholder="히히, 왔구나! 오늘도 와줘서 고마워 💙"></textarea></div>
+      <div class="form-field"><label class="input-label">인용 문구</label><textarea class="input" id="mn-quote" rows="2" placeholder="꾸물이를 세상에서 제일 사랑하는 모아 🐸"></textarea></div>
       <div class="form-field"><label class="input-label">인용 카드 배경 이미지 URL (비우면 기본 유지)</label><input class="input" id="mn-qimg" type="url" placeholder="https://... 이미지 주소"></div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveMain()">저장 ♥</button></div>
     </div>
@@ -156,12 +154,12 @@
       </div>
       <div class="form-field">
         <label class="input-label">SOOP 아이디</label>
-        <input class="input" id="f-soop_id" type="text" placeholder="1020118" oninput="previewAvatar()">
+        <input class="input" id="f-soop_id" type="text" placeholder="kimghdus" oninput="previewAvatar()">
       </div>
       <div style="display:flex;align-items:center;gap:12px;margin-top:8px">
         <div style="width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--main-light);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px">
           <img id="av-preview" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;display:none" onerror="this.style.display='none';var q=document.getElementById('av-ph');if(q)q.style.display='flex'">
-          <span id="av-ph">🐹</span>
+          <span id="av-ph">🐸</span>
         </div>
         <span style="font-size:12px;color:var(--text-soft)">← 표시될 프사 미리보기</span>
         <button class="btn btn-primary" style="margin-left:auto" onclick="saveProfile()">저장 ♥</button>
@@ -169,16 +167,16 @@
     </div>
 
     <div class="card">
-      <div class="card-title">🐹 기본 정보</div>
+      <div class="card-title">🐸 기본 정보</div>
       <div class="form-grid">
-        <div class="form-field"><label class="input-label">이름 (한글)</label><input class="input" id="f-name" placeholder="우히"></div>
-        <div class="form-field"><label class="input-label">이름 (영문)</label><input class="input" id="f-name_en" placeholder="UHI"></div>
-        <div class="form-field"><label class="input-label">생일 (MM-DD)</label><input class="input" id="f-birthday" placeholder="01-18"></div>
-        <div class="form-field"><label class="input-label">데뷔</label><input class="input" id="f-debut" placeholder="2025.12.13"></div>
+        <div class="form-field"><label class="input-label">이름 (한글)</label><input class="input" id="f-name" placeholder="모아"></div>
+        <div class="form-field"><label class="input-label">이름 (영문)</label><input class="input" id="f-name_en" placeholder="MOA"></div>
+        <div class="form-field"><label class="input-label">생일 (MM-DD)</label><input class="input" id="f-birthday" placeholder="02-21"></div>
+        <div class="form-field"><label class="input-label">데뷔</label><input class="input" id="f-debut" placeholder="2026.04.11"></div>
         <div class="form-field"><label class="input-label">소속</label><input class="input" id="f-agency" placeholder="개인세"></div>
         <div class="form-field"><label class="input-label">MBTI</label><input class="input" id="f-mbti" placeholder="ENFP"></div>
         <div class="form-field"><label class="input-label">나이 (선택)</label><input class="input" id="f-age" placeholder=""></div>
-        <div class="form-field"><label class="input-label">팬닉</label><input class="input" id="f-fan_name" placeholder="히히"></div>
+        <div class="form-field"><label class="input-label">팬닉</label><input class="input" id="f-fan_name" placeholder="꾸물이"></div>
         <div class="form-field full"><label class="input-label">한마디 (태그라인)</label><input class="input" id="f-tagline" placeholder="짧은 인사 한 줄"></div>
         <div class="form-field full"><label class="input-label">소개 (문단)</label><textarea class="input" id="f-intro" rows="3"></textarea></div>
       </div>
@@ -216,7 +214,7 @@
     <div class="card">
       <div class="card-title">📣 지금 진행 중 이벤트 (제목 비우면 숨김)</div>
       <div class="form-field"><label class="input-label">이벤트 제목</label><input class="input" id="f-event-title" placeholder="예: 팔로우 이벤트"></div>
-      <div class="form-field"><label class="input-label">입장 코드 / 키워드 (선택)</label><input class="input" id="f-event-code" placeholder="예: UHI"></div>
+      <div class="form-field"><label class="input-label">입장 코드 / 키워드 (선택)</label><input class="input" id="f-event-code" placeholder="예: MOA"></div>
       <div class="form-field"><label class="input-label">설명 (선택)</label><textarea class="input" id="f-event-note" rows="2"></textarea></div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveProfile()">저장 ♥</button></div>
     </div>
@@ -246,28 +244,10 @@
 
     <div class="card">
       <div class="card-title">🔗 관련 링크</div>
-      <div class="form-field"><label class="input-label">SOOP URL</label><input class="input" id="f-link-soop" type="url" placeholder="https://www.sooplive.com/station/1020118"></div>
+      <div class="form-field"><label class="input-label">SOOP URL</label><input class="input" id="f-link-soop" type="url" placeholder="https://ch.sooplive.co.kr/kimghdus"></div>
       <div class="form-field"><label class="input-label">YouTube URL</label><input class="input" id="f-link-youtube" type="url" placeholder="https://"></div>
       <div class="form-field"><label class="input-label">X (트위터) URL</label><input class="input" id="f-link-x" type="url" placeholder="https://"></div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveProfile()">저장 ♥</button></div>
-    </div>
-  </div>
-
-  <!-- 공지 탭 -->
-  <div class="tab-panel" id="tab-notice">
-    <div class="card">
-      <div class="card-title">공지 추가</div>
-      <div class="form-field"><label class="input-label">제목 *</label><input class="input" id="noti-title"></div>
-      <div class="form-field"><label class="input-label">내용</label><textarea class="input" id="noti-content" rows="4"></textarea></div>
-      <div class="form-field"><label class="input-label">이미지 링크 (여러 개면 줄바꿈으로 붙여넣기)</label><textarea id="noti-image-url" class="input" rows="2" placeholder="https://... (한 줄에 하나씩)"></textarea></div>
-      <div class="form-field full" style="font-size:11px;color:var(--text-soft);margin-top:-4px">💡 SOOP에 <b>비공개 게시판</b>을 만들어 이미지를 올린 뒤 → 이미지 <b>우클릭 → "이미지 주소 복사"</b> → 위 칸에 붙여넣기 (글 주소 말고 <b>이미지 주소</b>)</div>
-      <div class="form-field"><label><input type="checkbox" id="noti-pin"> 📌 고정 공지</label></div>
-      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addNotice()">+ 추가</button></div>
-    </div>
-    <div class="card">
-      <div class="card-title">등록된 공지</div>
-      <div class="table-wrap"><table><thead><tr><th>제목</th><th>고정</th><th>날짜</th><th>삭제</th></tr></thead>
-      <tbody id="noti-list"><tr><td colspan="4"><div class="spinner"></div></td></tr></tbody></table></div>
     </div>
   </div>
 
@@ -420,28 +400,6 @@
     </div>
   </div>
 
-  <!-- 노래 탭 -->
-  <div class="tab-panel" id="tab-song">
-    <div class="card">
-      <div class="card-title">곡 추가</div>
-      <div class="form-grid">
-        <div class="form-field"><label class="input-label">장르</label>
-          <select class="input" id="song-genre"><option>K-Pop</option><option>J-Pop</option><option>Pop</option><option>애교송</option><option>기타</option></select>
-        </div>
-        <div class="form-field"><label class="input-label">아티스트</label><input class="input" id="song-artist" placeholder="아티스트명"></div>
-        <div class="form-field"><label class="input-label">제목 *</label><input class="input" id="song-title" placeholder="곡명"></div>
-        <div class="form-field"><label class="input-label">난이도 (1~5)</label><input class="input" id="song-diff" type="number" min="1" max="5" value="3"></div>
-        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addSong()">+ 추가</button></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">노래 목록</div>
-      <input class="input" id="song-search" placeholder="🔍 검색..." style="margin-bottom:12px" oninput="renderSongs()">
-      <div class="table-wrap"><table><thead><tr><th>제목</th><th>아티스트</th><th>장르</th><th>난이도</th><th>삭제</th></tr></thead>
-      <tbody id="song-list"><tr><td colspan="5"><div class="spinner"></div></td></tr></tbody></table></div>
-    </div>
-  </div>
-
   <!-- 옷장 탭 -->
   <div class="tab-panel" id="tab-dress">
     <div class="card">
@@ -476,13 +434,13 @@
   </div>
 
 </div>
-<footer>© 2026 Uhi 관리자 ♥</footer>
+<footer>© 2026 모아 관리자 ♥</footer>
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../supabase.js"></script>
 <script>
-  const ADMIN_PASSWORD = '1234';
+  const ADMIN_PASSWORD = '{{관리자비밀번호}}';
 
   function tryLogin() {
     if (document.getElementById('pwInput').value === ADMIN_PASSWORD) {
@@ -490,7 +448,7 @@
       document.getElementById('adminBody').style.display = 'flex';
       checkDb();
       loadProfileFields(); loadMain(); loadContents();
-      loadNotice(); loadSchedule(); loadWork(); loadSong(); loadDress(); loadInquiry(); loadOriginalSongs();
+      loadSchedule(); loadWork(); loadDress(); loadInquiry(); loadOriginalSongs();
     } else {
       document.getElementById('loginErr').textContent = '비밀번호가 틀렸어요 >﹏<';
     }
@@ -709,7 +667,7 @@
     const images = document.getElementById('noti-image-url').value.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
     const image_url = images[0] || null;
     const ok = await insertRow('notice', { title, content: document.getElementById('noti-content').value, pinned: document.getElementById('noti-pin').checked, image_url, images });
-    if (ok) { showToast('✅ 추가!'); ['noti-title','noti-content','noti-image-url'].forEach(id=>document.getElementById(id).value=''); document.getElementById('noti-pin').checked=false; loadNotice(); }
+    if (ok) { showToast('✅ 추가!'); ['noti-title','noti-content','noti-image-url'].forEach(id=>document.getElementById(id).value=''); document.getElementById('noti-pin').checked=false; }
     else showToast('❌ 실패' + (window.__dbErr ? ': ' + window.__dbErr : ''));
   }
 
@@ -915,7 +873,7 @@
     let diff = parseInt(document.getElementById('song-diff').value)||3;
     diff = Math.min(5, Math.max(1, diff));
     const ok = await insertRow('songs', { title, artist: document.getElementById('song-artist').value.trim(), genre: document.getElementById('song-genre').value, difficulty: diff });
-    if (ok) { showToast('✅ 추가!'); document.getElementById('song-title').value=''; document.getElementById('song-artist').value=''; loadSong(); }
+    if (ok) { showToast('✅ 추가!'); document.getElementById('song-title').value=''; document.getElementById('song-artist').value=''; }
     else showToast('❌ 실패' + (window.__dbErr ? ': ' + window.__dbErr : ''));
   }
 

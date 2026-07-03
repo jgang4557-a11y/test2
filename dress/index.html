@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>우히 · 옷장</title>
-<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/10/1020118/1020118.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&family=Parisienne&display=swap" rel="stylesheet">
+<title>모아 · 옷장</title>
+<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ki/kimghdus/kimghdus.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <style>
-  :root{--transition:.2s;--shadow:0 6px 18px rgba(20,60,85,.10);--radius-md:12px}
+  :root{--transition:.2s;--shadow:0 6px 18px rgba(50,110,60,.10);--radius-md:12px}
   body.dark{--shadow:0 6px 18px rgba(0,0,0,.4)}
 
   .mode-seg{display:inline-flex;background:var(--main-light);border-radius:999px;padding:4px;gap:4px;margin:22px 0 16px}
   .seg-btn{border:none;background:transparent;color:var(--main-dark);font-size:14px;font-weight:700;padding:9px 18px;border-radius:999px;cursor:pointer;transition:all var(--transition);white-space:nowrap}
   .seg-btn:hover{opacity:.8}
   .seg-btn.active{background:var(--main-dark);color:#fff;box-shadow:var(--shadow)}
-  body.dark .seg-btn.active{color:#0b2230}
+  body.dark .seg-btn.active{color:#16210b}
 
   .cat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
   .cat-tab{display:inline-flex;align-items:center;gap:7px;padding:9px 17px;border-radius:999px;border:1.5px solid var(--rule);background:var(--card);color:var(--main-dark);font-size:14px;font-weight:600;cursor:pointer;transition:all var(--transition)}
   .cat-tab:hover{border-color:var(--main)}
-  .cat-tab.active{background:var(--main);color:#06384f;border-color:var(--main)}
-  body.dark .cat-tab.active{color:#0b2230}
+  .cat-tab.active{background:var(--main);color:#1e5228;border-color:var(--main)}
+  body.dark .cat-tab.active{color:#16210b}
   .cat-tab .cnt{font-size:11px;font-weight:700;min-width:18px;height:18px;padding:0 5px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--main-light);color:var(--main-dark)}
-  .cat-tab.active .cnt{background:rgba(0,0,0,.16);color:#06384f}
+  .cat-tab.active .cnt{background:rgba(0,0,0,.16);color:#1e5228}
 
   .zoom-hint{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.34);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:0;transition:opacity var(--transition);z-index:2}
 
@@ -72,8 +72,8 @@
   .dress-pager{display:flex;justify-content:center;gap:6px;margin-top:24px;flex-wrap:wrap}
   .pg{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--rule);background:var(--card);color:var(--text-mid);font-size:13px;font-weight:600;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;justify-content:center}
   .pg:hover{border-color:var(--main)}
-  .pg.active{background:var(--main);color:#06384f;border-color:var(--main)}
-  body.dark .pg.active{color:#0b2230}
+  .pg.active{background:var(--main);color:#1e5228;border-color:var(--main)}
+  body.dark .pg.active{color:#16210b}
 
   .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:600;padding:24px}
   .lightbox.open{display:flex}
@@ -87,22 +87,20 @@
 </style>
 </head>
 <body>
-<div class="page">
-<nav class="nav"><div class="nav-inner">
-  <a href="../index.html" class="nav-logo"><span class="lg-script">Uhi</span><span class="lg-sub">DAILY</span></a>
-  <a href="../index.html" class="pill">메인</a>
-  <a href="../profile/" class="pill">프로필</a>
-  <a href="../schedule/" class="pill">일정</a>
-  <a href="../song/" class="pill">노래책</a>
-  <a href="index.html" class="pill active">옷장</a>
-  <a href="../work/" class="pill">업보</a>
-  <button class="theme-switch" id="tsw" type="button" aria-label="다크모드 전환"><span class="knob" id="kn">🌙</span></button>
-</div></nav>
 <div class="wrap">
+  <header>
+    <div class="mast"><div class="logo"><span class="scr">Moa</span><span class="sub">H A Y O · D A I L Y</span></div></div>
+    <div class="navrule"><nav class="nav">
+      <a href="../index.html">메인</a><a href="../profile/">프로필</a><a href="../schedule/">일정</a><a href="../work/">업보</a><a href="index.html" class="on">옷장</a>
+      <div class="actions">
+        <button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button>
+      </div>
+    </nav></div>
+  </header>
 
   <div class="kicker"><span class="cat">WARDROBE · 👗</span><span class="date dbox"></span></div>
-  <h1 class="headline">우히의 옷장</h1>
-  <div class="byline">새로 올린 옷은 <b>포스터</b>로, 기존 옷은 <b>앨범</b>으로 봐요. 이미지를 누르면 크게 볼 수 있어요 💙</div>
+  <h1 class="headline">모아의 옷장</h1>
+  <div class="byline">새로 올린 옷은 <b>포스터</b>로, 기존 옷은 <b>앨범</b>으로 봐요. 이미지를 누르면 크게 볼 수 있어요 🐸</div>
 
   <div class="mode-seg" id="mode-seg">
     <button class="seg-btn active" data-mode="new">✨ 새 옷 (포스터)</button>
@@ -113,8 +111,7 @@
 
 </div>
 
-</div><!-- /page -->
-<footer>© 2026 우히 Official.<br>비즈니스 문의 — uhi1020118@gmail.com</footer>
+<footer class="paperfoot">© 2026 모아 Official.<br>문의 버튼을 이용해 주세요</footer>
 
 <div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLb()">
   <span class="lightbox-close" onclick="closeLb()">×</span>
@@ -203,7 +200,7 @@
   }
 
   function posterHTML(pageItems){
-    return '<div class="poster-head"><div class="ph-t">NEW LOOKS</div><div class="ph-m">UHI · ' + esc(LABELS[curCat]||'') + '</div></div>'
+    return '<div class="poster-head"><div class="ph-t">NEW LOOKS</div><div class="ph-m">HAYO · ' + esc(LABELS[curCat]||'') + '</div></div>'
       + '<div class="poster-grid">' + pageItems.map((it, idx) => {
         const img = it.image_url ? `<img src="${esc(it.image_url)}" alt="${esc(it.name)}" referrerpolicy="no-referrer" loading="lazy">` : '<span class="ph-ph">👗</span>';
         const cat = (it.category && LABELS[it.category]) ? `<span class="p-cat">${esc(LABELS[it.category])}</span>` : '';
@@ -212,7 +209,7 @@
           ${img}
           <div class="frame"></div>
           <div class="p-top">
-            <span class="p-brand">UHI</span>
+            <span class="p-brand">HAYO</span>
             <span class="p-new">✦ NEW</span>
           </div>
           <div class="p-bottom">
@@ -272,7 +269,6 @@
 <script>
 (function(){if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){if(kn)kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(sw)sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
 </script>
-<script>(function(){var r=function(){document.body.classList.add("ready")};if(document.readyState==="complete")r();else window.addEventListener("load",r);setTimeout(r,1200);})();</script>
 <script src="../fx.js"></script>
 </body>
 </html>

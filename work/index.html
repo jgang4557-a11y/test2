@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>우히 · 업보</title>
-<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/10/1020118/1020118.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&family=Parisienne&display=swap" rel="stylesheet">
+<title>모아 · 업보</title>
+<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ki/kimghdus/kimghdus.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Sacramento&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
 <style>
   .upbo-head{display:flex;justify-content:flex-end;margin-bottom:10px}
@@ -22,12 +22,12 @@
   .viewer-av-fb{width:62px;height:62px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--main),var(--main-dark));color:#fff;font-size:24px;font-weight:700;border:3px solid var(--main-light)}
   .viewer-nick{font-size:14px;font-weight:700;color:var(--ink)}
   .viewer-id{font-size:11px;color:var(--text-soft);margin:2px 0 8px}
-  .viewer-total{display:inline-block;background:var(--main);color:#06384f;border-radius:999px;padding:3px 14px;font-size:12px;font-weight:800}
-  body.dark .viewer-total{color:#0b2230}
+  .viewer-total{display:inline-block;background:var(--main);color:#1e5228;border-radius:999px;padding:3px 14px;font-size:12px;font-weight:800}
+  body.dark .viewer-total{color:#16210b}
 
-  .ov{position:absolute;left:0;right:0;background:rgba(12,24,32,.35);display:none;align-items:flex-start;justify-content:center;z-index:500;padding:16px}
+  .ov{position:absolute;left:0;right:0;background:rgba(22,26,12,.35);display:none;align-items:flex-start;justify-content:center;z-index:500;padding:16px}
   .ov.show{display:flex}
-  .wmodal{background:var(--card);border-radius:20px;width:100%;max-width:420px;max-height:84vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(20,40,55,.3);animation:pop .22s ease}
+  .wmodal{background:var(--card);border-radius:20px;width:100%;max-width:420px;max-height:84vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(40,60,44,.3);animation:pop .22s ease}
   @keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
   .modal-top{display:flex;align-items:center;gap:12px;padding:20px 22px 16px;border-bottom:1px solid var(--rule);position:relative}
   .modal-av{width:52px;height:52px;border-radius:50%;object-fit:cover;border:3px solid var(--main-light);background:var(--main-light);flex-shrink:0}
@@ -44,22 +44,20 @@
 </style>
 </head>
 <body>
-<div class="page">
-<nav class="nav"><div class="nav-inner">
-  <a href="../index.html" class="nav-logo"><span class="lg-script">Uhi</span><span class="lg-sub">DAILY</span></a>
-  <a href="../index.html" class="pill">메인</a>
-  <a href="../profile/" class="pill">프로필</a>
-  <a href="../schedule/" class="pill">일정</a>
-  <a href="../song/" class="pill">노래책</a>
-  <a href="../dress/" class="pill">옷장</a>
-  <a href="index.html" class="pill active">업보</a>
-  <button class="theme-switch" id="tsw" type="button" aria-label="다크모드 전환"><span class="knob" id="kn">🌙</span></button>
-</div></nav>
 <div class="wrap">
+  <header>
+    <div class="mast"><div class="logo"><span class="scr">Moa</span><span class="sub">H A Y O · D A I L Y</span></div></div>
+    <div class="navrule"><nav class="nav">
+      <a href="../index.html">메인</a><a href="../profile/">프로필</a><a href="../schedule/">일정</a><a href="index.html" class="on">업보</a><a href="../dress/">옷장</a>
+      <div class="actions">
+        <button class="tsw" id="tsw" type="button" aria-label="다크"><span class="kn" id="kn">🌙</span></button>
+      </div>
+    </nav></div>
+  </header>
 
   <div class="kicker"><span class="cat">UPBO · ⚡</span><span class="date dbox"></span></div>
   <h1 class="headline">업보 현황</h1>
-  <div class="byline">히히들의 업보를 기록해두는 곳이에요. 카드를 누르면 상세가 떠요 💙</div>
+  <div class="byline">꾸물이들의 업보를 기록해두는 곳이에요. 카드를 누르면 상세가 떠요 🐸</div>
 
   <div class="card">
     <div class="upbo-head"><span class="upbo-update" id="update-date"></span></div>
@@ -69,8 +67,7 @@
 
 </div>
 
-</div><!-- /page -->
-<footer>© 2026 우히 Official.<br>비즈니스 문의 — uhi1020118@gmail.com</footer>
+<footer class="paperfoot">© 2026 모아 Official.<br>문의 버튼을 이용해 주세요</footer>
 
 <div class="ov" id="ov" onclick="if(event.target===this)closeModal()">
   <div class="wmodal">
@@ -147,7 +144,6 @@
 <script>
 (function(){if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');var sw=document.getElementById('tsw'),kn=document.getElementById('kn');function r(){if(kn)kn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';}if(sw)sw.addEventListener('click',function(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');r();});r();})();
 </script>
-<script>(function(){var r=function(){document.body.classList.add("ready")};if(document.readyState==="complete")r();else window.addEventListener("load",r);setTimeout(r,1200);})();</script>
 <script src="../fx.js"></script>
 </body>
 </html>

@@ -1,87 +1,96 @@
 /* =========================================================
-   style.css — 우히 팬페이지 공통 스타일 (DAILY · 떠있는 패널 테마)
-   서브 페이지(프로필·일정·옷장·업보·노래책) 공용. 메인(index.html)과 동일 테마.
+   style.css — 모아 팬페이지 공통 스타일 (Verily 매거진 테마)
+   서브 페이지(프로필·공지·일정·옷장·업보·노래책) 공용.
+   색만 바꾸려면 :root / body.dark 변수만 교체하면 됨.
    ========================================================= */
+
 :root{
-  --main:#3fbfe6; --main-dark:#0f7aa8; --main-light:#cdeaf9;
-  --bg:#ffffff; --paper:#f7fbfe; --card:#ffffff; --cream:#e8f4fb;
-  --logo:#0a4d76; --ink:#26323a; --text:#3a4a54; --text-mid:#6f8a99; --text-soft:#9fb6c2;
-  --rule:#dbe8f0; --backdrop:#cdd9e2; --page-bg:#cdd9e2;
-  --shadow-hover:0 10px 26px rgba(20,60,85,.14);
+  --main:#98dc94; --main-dark:#2f8039; --main-light:#e8f6e6;
+  --bg:#ffffff; --paper:#ffffff; --card:#ffffff; --cream:#eef8ec;
+  --logo:#379a4b; --ink:#2b2d31; --text:#3a3d44; --text-mid:#63677a; --text-soft:#9296a1;
+  --rule:#e4e6ec; --backdrop:#eceef4;
+  --shadow-hover:0 10px 26px rgba(50,110,60,.14);
   --pen:'Noto Sans KR',sans-serif; --serif:'Nanum Myeongjo',serif;
-  --mag:'Playfair Display',serif; --script:'Parisienne',cursive; --katuri:'Jua','Noto Sans KR',sans-serif;
+  --mag:'Playfair Display',serif; --script:'Sacramento',cursive; --katuri:'Jua','Noto Sans KR',sans-serif;
 }
 body.dark{
-  --main:#5cc8ea; --main-dark:#86d6f1; --main-light:#143544;
-  --bg:#0e1418; --paper:#0e1418; --card:#161f25; --cream:#143544;
-  --logo:#86d6f1; --ink:#dceef6; --text:#dceef6; --text-mid:#aebfc9; --text-soft:#6f93a3;
-  --rule:#243038; --backdrop:#070b0e; --page-bg:#070b0e;
+  --main:#a6e6a2; --main-dark:#c3edbf; --main-light:#24331f;
+  --bg:#141712; --paper:#141712; --card:#1c1f19; --cream:#202a1c;
+  --logo:#c3edbf; --ink:#e9efe6; --text:#e4e9e1; --text-mid:#b5b9c2; --text-soft:#8b8f88;
+  --rule:#2a2f28; --backdrop:#0d0f0b;
   --shadow-hover:0 10px 26px rgba(0,0,0,.5);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--page-bg);font-family:var(--pen);color:var(--ink);min-height:100vh;padding:22px 14px 0;transition:background .3s,color .3s}
+body{background:var(--backdrop);font-family:var(--pen);color:var(--text);min-height:100vh;padding:1px 0;transition:background .2s,color .2s}
 a{color:inherit}
 .av{cursor:pointer}
-/* 떠있는 패널 */
-.page{max-width:1240px;margin:0 auto;background:var(--bg);border-radius:30px;box-shadow:0 28px 70px rgba(40,70,95,.28);overflow:hidden;transition:background .3s}
-body.dark .page{box-shadow:0 28px 70px rgba(0,0,0,.55)}
-.wrap{max-width:none;margin:0;padding:18px 30px 34px;opacity:0;transition:opacity .3s ease}
-body.ready .wrap{opacity:1}
-@media(max-width:680px){body{padding:12px 8px 0}.page{border-radius:22px}.wrap{padding:22px 16px 26px}}
-/* 네비 — 메인과 동일(둥근 pill) */
-.nav{background:transparent;padding:12px 22px 26px;position:relative}
-.nav::after{content:'';position:absolute;left:8%;right:8%;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(63,120,160,.30) 18%,rgba(63,120,160,.52) 50%,rgba(63,120,160,.30) 82%,transparent)}
-.nav-inner{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.nav-logo{display:flex;align-items:baseline;gap:10px;text-decoration:none;margin-right:auto;white-space:nowrap}
-.nav-logo .lg-script{font-family:'Parisienne',cursive;font-size:36px;color:var(--logo);line-height:1}
-.nav-logo .lg-sub{font-size:12.5px;font-weight:700;letter-spacing:.34em;color:var(--text-soft)}
-.nav a.pill{font-size:14px;font-weight:600;color:var(--ink);padding:9px 18px;border-radius:999px;border:1.5px solid var(--main-light);background:var(--card);text-decoration:none;white-space:nowrap;transition:all .2s}
-.nav a.pill:hover{border-color:var(--main);color:var(--main-dark)}
-.nav a.pill.active{background:var(--main);border-color:var(--main);color:#fff}
-.theme-switch{position:relative;width:52px;height:27px;border-radius:999px;border:none;background:var(--main-light);cursor:pointer;flex-shrink:0;margin-left:6px}
-.theme-switch .knob{position:absolute;top:3px;left:4px;width:21px;height:21px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;transition:left .25s;box-shadow:0 2px 5px rgba(0,0,0,.15)}
-body.dark .nav::after{background:linear-gradient(90deg,transparent,rgba(140,180,200,.22) 22%,rgba(140,180,200,.36) 50%,rgba(140,180,200,.22) 78%,transparent)}
-body.dark .theme-switch{background:#22323c}
-body.dark .theme-switch .knob{left:27px;background:#0e1418}
-@media(max-width:560px){.nav-logo .lg-script{font-size:30px}.nav a.pill{padding:7px 12px;font-size:13px}}
-/* 페이지 인트로 */
-.kicker{display:flex;align-items:center;gap:10px;margin-top:24px}
+
+/* ── 떠있는 시트 ── */
+.wrap{max-width:1120px;margin:30px auto;padding:14px 44px 30px;background:var(--card);
+  box-shadow:0 28px 70px rgba(50,110,60,.16),0 6px 18px rgba(50,110,60,.07);position:relative;z-index:1}
+body.dark .wrap{box-shadow:0 28px 70px rgba(0,0,0,.6)}
+@media(max-width:680px){.wrap{margin:12px;padding:8px 18px 24px}}
+
+/* ── 마스트헤드 + 네비 ── */
+.mast{display:flex;justify-content:flex-end;padding:14px 0 4px}
+.logo{text-align:right;line-height:1}
+.logo .scr{font-family:var(--script);font-size:54px;color:var(--ink);display:block;line-height:1}
+.logo .sub{font-size:11px;letter-spacing:6px;font-weight:700;color:var(--text-soft);margin-top:15px}
+.navrule{border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);margin-top:4px}
+.nav{display:flex;align-items:center;gap:26px;padding:9px 2px}
+.nav a{font-size:13px;letter-spacing:2px;font-weight:700;color:var(--text);text-decoration:none;white-space:nowrap}
+.nav a.on,.nav a:hover{color:var(--main-dark)}
+.nav .actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.tsw{width:22px;height:33px;border-radius:999px;border:1.5px solid var(--rule);background:#e8f6e6;cursor:pointer;position:relative;padding:0}
+.tsw .kn{position:absolute;left:1.5px;top:1.5px;width:16px;height:16px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;transition:top .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+body.dark .tsw{background:#212a1e}body.dark .tsw .kn{top:14px;background:#1c1f19}
+@media(max-width:560px){.logo .scr{font-size:48px}.nav{gap:14px;overflow-x:auto}}
+
+/* ── 페이지 인트로 ── */
+.kicker{display:flex;align-items:center;gap:10px;margin-top:30px}
 .kicker .cat{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--main-dark)}
-.kicker .date{margin-left:auto;background:var(--main-dark);color:#fff;font-size:11px;font-weight:800;letter-spacing:1px;padding:4px 9px;border-radius:6px}
-body.dark .kicker .date{color:#0b2230}
+.kicker .date{margin-left:auto;background:var(--main-dark);color:#fff;font-size:11px;font-weight:800;letter-spacing:1px;padding:4px 9px}
+body.dark .kicker .date{color:#16210b}
 .headline{font-family:var(--pen);font-weight:800;font-size:30px;line-height:1.3;color:var(--ink);margin-top:12px;letter-spacing:-1px}
 .headline em{font-style:normal;color:var(--main-dark)}
 .byline{font-size:13px;font-weight:600;color:var(--text-soft);margin-top:10px;line-height:1.7}
 .seclabel{display:flex;align-items:center;gap:12px;margin:34px 0 16px}
 .seclabel b{font-size:12px;letter-spacing:3px;font-weight:800;color:var(--main-dark);white-space:nowrap}
 .seclabel .ln{flex:1;height:1.5px;background:var(--rule)}
-/* 콘텐츠 컨테이너/카드 */
+
+/* ── 콘텐츠 컨테이너/카드 ── */
 .container{margin-top:24px}
-.card{background:var(--card);border:1.5px solid var(--rule);border-radius:16px;padding:22px;margin-top:18px}
+.card{background:var(--card);border:1.5px solid var(--rule);border-radius:4px;padding:22px;margin-top:18px}
 .page-title{font-family:var(--pen);font-weight:800;font-size:26px;color:var(--ink)}
 .page-subtitle{font-size:13px;color:var(--text-soft);margin-top:6px}
-/* 상태 */
+
+/* ── 상태 표시 ── */
 .spinner{width:30px;height:30px;border:3px solid var(--main-light);border-top-color:var(--main-dark);border-radius:50%;margin:30px auto;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty{text-align:center;color:var(--text-soft);font-size:14px;padding:38px 10px}
 .empty-icon{font-size:30px;margin-bottom:8px;opacity:.5}
-/* 푸터 (패널 밖) */
-footer{text-align:center;color:var(--text-soft);font-size:12px;line-height:1.8;font-weight:600;margin:22px 0 30px;padding:0;border-top:none}
-/* 콘텐츠 칩 (nav pill과 별개) */
+
+/* ── 푸터 ── */
+footer{text-align:center;color:var(--text-soft);font-size:12px;line-height:1.7;font-weight:600;margin-top:34px;padding-top:18px;border-top:1px solid var(--rule)}
+footer.paperfoot{max-width:1120px;margin:24px auto 46px;padding:0 22px;border-top:none}
+
+/* ── 공통 칩/필 ── */
 .pill{border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;background:var(--main-light);color:var(--main-dark);display:inline-block}
 .pill.no{background:#ffe2e2;color:#c0564f}
 body.dark .pill.no{background:#3a2222;color:#e79a94}
-.tag{font-size:11px;background:var(--main);color:#06384f;border-radius:6px;padding:2px 7px;font-weight:800}
-body.dark .tag{color:#0b2230}
-/* 문의 모달 */
-.modal{position:fixed;inset:0;background:rgba(20,40,55,.4);display:none;align-items:center;justify-content:center;z-index:500;padding:16px}
+.tag{font-size:11px;background:var(--main);color:#1e5228;border-radius:6px;padding:2px 7px;font-weight:800}
+body.dark .tag{color:#16210b}
+
+/* ── 문의 모달 (페이지 공통) ── */
+.modal{position:fixed;inset:0;background:rgba(40,60,44,.4);display:none;align-items:center;justify-content:center;z-index:500;padding:16px}
 .modal.on{display:flex}
 .modal .box{background:var(--card);border-radius:18px;width:100%;max-width:420px;padding:24px}
 .modal .box h4{font-family:var(--pen);font-size:18px;color:var(--main-dark);font-weight:800}
 .modal .box p{font-size:13px;color:var(--text-soft);margin:4px 0 14px}
 .modal .box input,.modal .box textarea{width:100%;padding:12px 14px;border-radius:13px;border:1.5px solid var(--rule);font-size:14px;margin-bottom:10px;font-family:inherit;background:var(--bg);color:var(--text);outline:none}
 .modal .box .bt{display:flex;gap:8px}.modal .box .bt button{flex:1;padding:12px;border-radius:13px;border:none;font-weight:800;cursor:pointer}
-.modal .box .send{background:var(--main);color:#06384f}.modal .box .cancel{background:var(--main-light);color:var(--main-dark)}
-/* 토스트 */
+.modal .box .send{background:var(--main);color:#1e5228}.modal .box .cancel{background:var(--main-light);color:var(--main-dark)}
+
+/* ── 토스트 ── */
 .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:11px 20px;border-radius:999px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:9999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
