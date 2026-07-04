@@ -3,8 +3,8 @@
    ✅ 이 파일 상단 두 줄만 본인 값으로 교체!
    ============================================= */
 
-const SUPABASE_URL  = 'https://lgkcwcjoxaztiyymndzu.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxna2N3Y2pveGF6dGl5eW1uZHp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyOTE4MjQsImV4cCI6MjA5Nzg2NzgyNH0.7V_3q7DPJmACnz0dWNrfQsNT99SUeVgv1qkx1G54j80';
+const SUPABASE_URL  = 'https://{{SUPABASE프로젝트ID}}.supabase.co';
+const SUPABASE_ANON = '{{SUPABASE_ANON_KEY}}';
 
 // ── Supabase 클라이언트 초기화 ──
 const { createClient } = supabase;
@@ -32,7 +32,7 @@ async function fetchAll(table, options = {}) {
  */
 async function insertRow(table, row) {
   const { error } = await db.from(table).insert(row);
-  if (error) { console.error(`insertRow(${table}) 오류:`, error); window.__dbErr = error.message; return false; }
+  if (error) { console.error(`insertRow(${table}) 오류:`, error); return false; }
   return true;
 }
 
@@ -41,7 +41,7 @@ async function insertRow(table, row) {
  */
 async function deleteRow(table, id) {
   const { error } = await db.from(table).delete().eq('id', id);
-  if (error) { console.error(`deleteRow(${table}) 오류:`, error); window.__dbErr = error.message; return false; }
+  if (error) { console.error(`deleteRow(${table}) 오류:`, error); return false; }
   return true;
 }
 
@@ -50,7 +50,7 @@ async function deleteRow(table, id) {
  */
 async function updateRow(table, id, updates) {
   const { error } = await db.from(table).update(updates).eq('id', id);
-  if (error) { console.error(`updateRow(${table}) 오류:`, error); window.__dbErr = error.message; return false; }
+  if (error) { console.error(`updateRow(${table}) 오류:`, error); return false; }
   return true;
 }
 
