@@ -130,6 +130,20 @@
   .fanchar{ text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; padding:2px 0; }
   .fanchar img{ max-width:82%; max-height:236px; object-fit:contain; filter:drop-shadow(0 8px 14px rgba(80,150,78,.22)); }
   .fanchar-name{ font-family:var(--hand); font-size:19px; color:var(--main-dark); margin-top:10px; letter-spacing:1px; }
+  /* 성격 (좋아싫어 카드 안) */
+  .pers{ margin-top:16px; padding-top:15px; border-top:1px dashed var(--main-light); }
+  .pers h4{ font-family:var(--round); font-size:15px; color:#7cc474; margin-bottom:10px; }
+  .pers h4 .jp{ font-family:var(--hand); font-size:11px; color:var(--para); font-weight:400; margin-left:3px; }
+  /* 진행한 컨텐츠 표 */
+  .clog{ width:100%; border-collapse:collapse; font-size:14.5px; }
+  .clog th{ text-align:left; padding:11px 14px; background:var(--main-light); color:var(--main-deep); font-weight:700; font-size:12.5px; letter-spacing:.03em; }
+  .clog th:first-child{ border-radius:10px 0 0 10px; } .clog th:last-child{ border-radius:0 10px 10px 0; }
+  .clog td{ padding:13px 14px; border-bottom:1px dashed var(--main-light); color:var(--ink); vertical-align:middle; }
+  .clog tr:last-child td{ border-bottom:none; }
+  .clog .d{ color:var(--main-dark); font-weight:800; white-space:nowrap; font-family:var(--round); letter-spacing:.5px; }
+  .clog a{ color:var(--main-deep); text-decoration:none; font-weight:700; border-bottom:2px solid var(--main); padding-bottom:1px; }
+  .clog a:hover{ color:var(--main); }
+  .clog .noa{ color:var(--ink); font-weight:600; }
   .ld h4{ font-family:var(--round); font-size:15px; margin-bottom:10px; }
   .ld .like h4{ color:#e79bb0; } .ld .dislike h4{ color:var(--para); }
   .chip{ display:inline-block; background:var(--main-light); color:var(--main-dark); border-radius:999px;
@@ -278,12 +292,16 @@
       <div class="stat"><div class="top"><span class="lb">귀여움</span><span class="val" id="st-cute-v">90%</span></div><div class="bar"><div class="fill" id="st-cute"></div></div></div>
     </section>
 
-    <!-- 좋아 / 싫어 -->
+    <!-- 좋아 / 싫어 + 성격 (한 칸) -->
     <section class="art">
       <h3>💗 좋아 · 싫어 <span class="jp">すき・きらい</span></h3>
       <div class="ld">
         <div class="like"><h4>💚 좋아하는 것</h4><div class="tagwrap" id="likes"></div></div>
         <div class="dislike"><h4>🥲 싫어하는 것</h4><div class="tagwrap" id="dislikes"></div></div>
+      </div>
+      <div class="pers">
+        <h4>🌱 성격 <span class="jp">せいかく</span></h4>
+        <div class="tagwrap" id="info-tags"></div>
       </div>
     </section>
 
@@ -296,22 +314,10 @@
       </div>
     </section>
 
-    <!-- 성격 -->
-    <section class="art">
-      <h3>🌱 성격 <span class="jp">せいかく</span></h3>
-      <div class="tagwrap" id="info-tags"></div>
-    </section>
-
-    <!-- 진행 컨텐츠 (진행중) -->
-    <section class="art">
-      <h3>🎮 진행 컨텐츠 <span class="jp">コンテンツ</span></h3>
-      <div class="tagwrap" id="content-list"></div>
-    </section>
-
-    <!-- 진행한 컨텐츠 (완료) -->
+    <!-- 진행한 컨텐츠 (완료 · 날짜+링크 표) -->
     <section class="art full">
       <h3>✅ 진행한 컨텐츠 <span class="jp">アーカイブ</span></h3>
-      <div class="tagwrap" id="content-done"></div>
+      <div id="content-done"><div class="spinner"></div></div>
     </section>
 
     <!-- 이번 주 일정 -->
@@ -376,8 +382,6 @@
     'info-gender':'여자', 'info-debut':'2026.01.13', 'info-birth':'11월 28일',
     'info-sing':'가끔 함 🎤', 'info-item':'개구리삔 🐸',
     'info-tags':'밝음, 칭찬 좋아함, 타격감 좋음',
-    'content-list':'종합 게임, 공포게임, 저챗(수다), 노래 방송, 시청자 참여',
-    'content-done':'공포게임 클리어, 노래 커버, 팬아트 리뷰, 시청자 합방',
     'stat-smart':'10', 'stat-tension':'95', 'stat-hit':'100', 'stat-cute':'90',
     like1:'게임', like2:'꾸물이', like3:'잠', like4:'',
     dislike1:'귀신', dislike2:'벌레', dislike3:'주사',
@@ -434,8 +438,6 @@
     chips('dislikes', [d.dislike1,d.dislike2,d.dislike3].filter(Boolean).join(','));
     // 성격 / 컨텐츠
     chips('info-tags', d['info-tags']);
-    chips('content-list', d['content-list'], true);
-    chips('content-done', d['content-done'], true);
 
     // 어록
     { const el=document.getElementById('quote'); if(el) el.innerHTML = esc(d.quote).replace(/\n/g,'<br>'); }
@@ -467,6 +469,19 @@
     wrap.insertBefore(a, wrap.lastElementChild);   // 문의 버튼 앞에
   }
 
+  // 진행한 컨텐츠 (완료 · 날짜+제목+링크 표)
+  function fmtD(x){ if(!x) return '-'; var d=new Date(x+'T00:00:00'); if(isNaN(d)) return esc(String(x)); return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0'); }
+  async function loadContentLog(){
+    var el=document.getElementById('content-done'); if(!el) return;
+    var list=[]; try{ list=await fetchAll('content_log',{order:'log_date',asc:false}); }catch(e){}
+    if(!list || !list.length){ el.innerHTML='<div style="text-align:center;color:var(--para);padding:26px 10px;font-size:14px">아직 등록된 컨텐츠가 없어요 🐸<br><span style="font-size:12px;opacity:.8">관리자에서 날짜·제목·링크를 추가하면 여기 표로 떠요</span></div>'; return; }
+    var rows=list.map(function(c){
+      var cell = c.url ? '<a href="'+esc(c.url)+'" target="_blank" rel="noopener">'+esc(c.title||'')+' ↗</a>' : '<span class="noa">'+esc(c.title||'')+'</span>';
+      return '<tr><td class="d">'+fmtD(c.log_date)+'</td><td>'+cell+'</td></tr>';
+    }).join('');
+    el.innerHTML='<div class="table-wrap"><table class="clog"><thead><tr><th style="width:130px">날짜</th><th>컨텐츠</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  }
+
   // 다시보기(VOD)
   async function loadOriginalSongs(){
     const card=document.getElementById('songs-card'), grid=document.getElementById('ovod-grid');
@@ -479,7 +494,7 @@
     }).join('');
   }
 
-  load(); loadOriginalSongs();
+  load(); loadOriginalSongs(); loadContentLog();
   setTimeout(function(){ document.body.classList.add('ready'); }, 1600);
 
   // 문의

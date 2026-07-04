@@ -97,15 +97,13 @@
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♥</button></div>
     </div>
     <div class="card">
-      <div class="card-title">✦ 능력치 & 진행 컨텐츠</div>
+      <div class="card-title">✦ 능력치</div>
       <div class="form-grid">
         <div class="form-field"><label class="input-label">똑똑함 (0~100)</label><input class="input" id="f-stat-smart" type="number" min="0" max="100"></div>
         <div class="form-field"><label class="input-label">텐션 (0~100)</label><input class="input" id="f-stat-tension" type="number" min="0" max="100"></div>
         <div class="form-field"><label class="input-label">타격감 (0~100)</label><input class="input" id="f-stat-hit" type="number" min="0" max="100"></div>
         <div class="form-field"><label class="input-label">귀여움 (0~100)</label><input class="input" id="f-stat-cute" type="number" min="0" max="100"></div>
       </div>
-      <div class="form-field"><label class="input-label">진행 컨텐츠 · 진행중 (쉼표 구분)</label><input class="input" id="f-content-list" type="text" placeholder="예: 종합 게임, 공포게임, 저챗, 노래 방송"></div>
-      <div class="form-field"><label class="input-label">진행한 컨텐츠 · 완료 (쉼표 구분)</label><input class="input" id="f-content-done" type="text" placeholder="예: 공포게임 클리어, 노래 커버, 합방"></div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♥</button></div>
     </div>
     <div class="card">
@@ -145,6 +143,16 @@
         <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addOriginalSong()">+ 추가</button></div>
       </div>
       <div id="os-list" style="margin-top:6px"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">✅ 진행한 컨텐츠 (완료 기록)</div>
+      <div class="form-grid">
+        <div class="form-field"><label class="input-label">날짜</label><input class="input" id="cl-date" type="date"></div>
+        <div class="form-field"><label class="input-label">컨텐츠 (제목) *</label><input class="input" id="cl-title" placeholder="예: 공포게임 그래니 클리어"></div>
+        <div class="form-field full"><label class="input-label">링크 URL (선택)</label><input class="input" id="cl-url" type="url" placeholder="https:// (선택)"></div>
+        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addContentLog()">+ 추가</button></div>
+      </div>
+      <div id="cl-list" style="margin-top:6px"></div>
     </div>
     <div class="card">
       <div class="card-title">🔗 관련 링크</div>
@@ -341,7 +349,7 @@
     'avatar','soop-id',
     'info-name','info-reading','info-catchphrase','info-tags','info-fandom',
     'info-gender','info-debut','info-birth','info-sing','info-item',
-    'stat-smart','stat-tension','stat-hit','stat-cute','content-list','content-done',
+    'stat-smart','stat-tension','stat-hit','stat-cute',
     'like1','like2','like3','like4','dislike1','dislike2','dislike3',
     'days',
     'link-soop','link-youtube','link-fancafe','link-fancim','link-mfancim','link-heart','link-code'
@@ -352,7 +360,7 @@
       document.getElementById('loginOverlay').style.display = 'none';
       document.getElementById('adminBody').style.display = 'flex';
       loadProfileFields();
-      loadSchedule(); loadWork(); loadDress(); loadInquiry(); loadOriginalSongs();
+      loadSchedule(); loadWork(); loadDress(); loadInquiry(); loadOriginalSongs(); loadContentLog();
     } else {
       document.getElementById('loginErr').textContent = '비밀번호가 틀렸어요 >﹏<';
     }
@@ -713,6 +721,28 @@
         <div style="font-size:14px;color:var(--text);white-space:pre-wrap;line-height:1.5">${(q.message||'').replace(/</g,'&lt;')}</div>
         <div style="text-align:right;margin-top:8px"><button class="delete-btn" onclick="del('inquiries',${q.id},loadInquiry)">🗑 삭제</button></div>
       </div>`).join('');
+  }
+
+  // ── 진행한 컨텐츠 ──
+  async function loadContentLog(){
+    const data = await fetchAll('content_log', { order:'log_date', asc:false });
+    const el = document.getElementById('cl-list');
+    if (!el) return;
+    if (!data.length){ el.innerHTML = '<div style="font-size:13px;color:#ccc;text-align:center;padding:10px">등록된 컨텐츠 없음</div>'; return; }
+    el.innerHTML = data.map(c => `
+      <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:#fff;border:1px solid var(--main-light);border-radius:10px;margin-bottom:7px">
+        <span style="font-size:12px;font-weight:700;color:var(--main-dark);white-space:nowrap">${c.log_date||'-'}</span>
+        <span style="flex:1;font-size:14px;font-weight:600">${(c.title||'').replace(/</g,'&lt;')}</span>
+        ${c.url?'<span style="font-size:11px;color:var(--text-soft)">🔗</span>':''}
+        <button class="delete-btn" onclick="del('content_log',${c.id},loadContentLog)">🗑</button>
+      </div>`).join('');
+  }
+  async function addContentLog(){
+    const title = document.getElementById('cl-title').value.trim();
+    if (!title){ showToast('❗ 컨텐츠 제목 필수!'); return; }
+    const ok = await insertRow('content_log', { log_date: document.getElementById('cl-date').value||null, title, url: document.getElementById('cl-url').value.trim() });
+    if (ok){ showToast('✅ 추가!'); ['cl-date','cl-title','cl-url'].forEach(id=>document.getElementById(id).value=''); loadContentLog(); }
+    else showToast('❌ 실패');
   }
 
   // ── 오리지널 곡 ──
