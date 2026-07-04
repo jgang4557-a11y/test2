@@ -36,15 +36,17 @@
     transition:color .25s ease, background-color .25s ease;
     /* 풀블리드 고정 배경 (§0.0.6: body 배경 레이어 + fixed) */
     background-color:var(--bg);
-    background-image:
-      linear-gradient(180deg, rgba(232,246,224,.42) 0%, rgba(219,239,206,.30) 45%, rgba(219,239,206,.34) 100%),
-      url('bg.jpg');
-    background-repeat:no-repeat,no-repeat;
-    background-position:center top,center center;
-    background-size:cover,cover;
-    background-attachment:fixed,fixed;
+    background-image:url('bg.jpg');
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-size:cover;
+    background-attachment:fixed;
   }
-  body.dark{ background-image:none; background-color:#141a11; }
+  body.dark{
+    background-color:#141a11;
+    background-image:linear-gradient(rgba(17,22,14,.72),rgba(17,22,14,.80)),url('bg.jpg');
+    background-repeat:no-repeat,no-repeat; background-position:center center; background-size:cover,cover; background-attachment:fixed,fixed;
+  }
 
   /* ── 떠있는 매거진 시트 ── */
   .sheet{ position:relative; max-width:1240px; margin:clamp(46px,7vh,92px) auto 0; background:var(--card);

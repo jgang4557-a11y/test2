@@ -28,15 +28,17 @@
     padding:clamp(16px,3.2vw,52px) clamp(14px,4.5vw,64px);
     transition:color .25s ease, background-color .25s ease;
     background-color:var(--bg);
-    background-image:
-      linear-gradient(180deg, rgba(232,246,224,.44) 0%, rgba(219,239,206,.30) 45%, rgba(219,239,206,.36) 100%),
-      url('../bg.jpg');
-    background-repeat:no-repeat,no-repeat;
-    background-position:center top,center center;
-    background-size:cover,cover;
-    background-attachment:fixed,fixed;
+    background-image:url('../bg.jpg');
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-size:cover;
+    background-attachment:fixed;
   }
-  body.dark{ background-image:none; background-color:#141a11; }
+  body.dark{
+    background-color:#141a11;
+    background-image:linear-gradient(rgba(17,22,14,.72),rgba(17,22,14,.80)),url('../bg.jpg');
+    background-repeat:no-repeat,no-repeat; background-position:center center; background-size:cover,cover; background-attachment:fixed,fixed;
+  }
 
   .sheet{ position:relative; max-width:1180px; margin:clamp(40px,6vh,84px) auto 0; background:var(--card);
     border-radius:30px; box-shadow:0 34px 90px -30px rgba(55,105,50,.5), 0 4px 14px rgba(55,105,50,.1);
