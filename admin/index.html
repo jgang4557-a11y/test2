@@ -81,11 +81,6 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-title">⭐ 오늘의 한마디</div>
-      <div class="form-field"><label class="input-label">오늘의 한마디 (줄바꿈=엔터)</label><textarea class="input" id="f-quote" rows="3"></textarea></div>
-      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♥</button></div>
-    </div>
-    <div class="card">
       <div class="card-title">모아 특징</div>
       <div class="form-field"><label class="input-label">이름</label><input class="input" id="f-info-name" type="text"></div>
       <div class="form-field"><label class="input-label">이름 읽기 (예: 모아 / moa)</label><input class="input" id="f-info-reading" type="text"></div>
@@ -123,13 +118,6 @@
         <div class="form-field"><label class="input-label">싫어 2</label><input class="input" id="f-dislike2" type="text"></div>
         <div class="form-field"><label class="input-label">싫어 3</label><input class="input" id="f-dislike3" type="text"></div>
       </div>
-      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♥</button></div>
-    </div>
-    <div class="card">
-      <div class="card-title">♥ TMI</div>
-      <div class="form-field"><label class="input-label">좋아하는 음식</label><input class="input" id="f-tmi-food" type="text"></div>
-      <div class="form-field"><label class="input-label">요즘 듣는 노래</label><input class="input" id="f-tmi-song" type="text"></div>
-      <div class="form-field"><label class="input-label">최근 읽은 책</label><input class="input" id="f-tmi-book" type="text"></div>
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveLocalProfile()">저장 ♥</button></div>
     </div>
     <div class="card">
@@ -349,12 +337,12 @@
   const ADMIN_PASSWORD = 'moa2026';
 
   const profileKeys = [
-    'avatar','quote','soop-id',
+    'avatar','soop-id',
     'info-name','info-reading','info-catchphrase','info-tags','info-fandom',
     'info-gender','info-debut','info-birth','info-sing','info-item',
     'stat-smart','stat-tension','stat-hit','stat-cute','content-list',
     'like1','like2','like3','like4','dislike1','dislike2','dislike3',
-    'tmi-food','tmi-song','tmi-book','days',
+    'days',
     'link-soop','link-youtube','link-fancafe','link-fancim','link-mfancim','link-heart','link-code'
   ];
 
