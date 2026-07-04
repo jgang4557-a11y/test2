@@ -102,7 +102,8 @@
 
   /* ── 아티클 그리드 ── */
   .grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:clamp(18px,2.6vh,30px); }
-  .art{ border:1.5px solid var(--main-light); border-radius:20px; padding:22px 22px; background:var(--card); }
+  .art{ border:2px solid #a9dca0; border-radius:20px; padding:22px 22px; background:#f7fdf5; box-shadow:0 5px 16px -8px rgba(80,150,78,.22); }
+  body.dark .art{ background:#1e2a19; border-color:#3c5333; box-shadow:0 5px 16px -8px rgba(0,0,0,.55); }
   .art.full{ grid-column:1 / -1; }
   .art h3{ font-family:var(--round); font-size:18px; color:var(--main-deep); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
   .art h3 .jp{ font-family:var(--hand); font-size:12px; color:var(--para); font-weight:400; margin-left:2px; }
@@ -283,13 +284,13 @@
     </section>
 
     <!-- 성격 -->
-    <section class="art full">
+    <section class="art">
       <h3>🌱 성격 <span class="jp">せいかく</span></h3>
       <div class="tagwrap" id="info-tags"></div>
     </section>
 
     <!-- 진행한 컨텐츠 -->
-    <section class="art full">
+    <section class="art">
       <h3>🎮 진행한 컨텐츠 <span class="jp">コンテンツ</span></h3>
       <div class="tagwrap" id="content-list"></div>
     </section>
