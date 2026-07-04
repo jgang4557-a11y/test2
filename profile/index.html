@@ -125,7 +125,11 @@
     background:linear-gradient(90deg,var(--main),var(--main-dark)); }
 
   /* 좋아/싫어 */
-  .ld{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .ld{ display:grid; grid-template-columns:1fr; gap:12px; }
+  /* 팬캐릭터 */
+  .fanchar{ text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; padding:2px 0; }
+  .fanchar img{ max-width:82%; max-height:236px; object-fit:contain; filter:drop-shadow(0 8px 14px rgba(80,150,78,.22)); }
+  .fanchar-name{ font-family:var(--hand); font-size:19px; color:var(--main-dark); margin-top:10px; letter-spacing:1px; }
   .ld h4{ font-family:var(--round); font-size:15px; margin-bottom:10px; }
   .ld .like h4{ color:#e79bb0; } .ld .dislike h4{ color:var(--para); }
   .chip{ display:inline-block; background:var(--main-light); color:var(--main-dark); border-radius:999px;
@@ -275,11 +279,20 @@
     </section>
 
     <!-- 좋아 / 싫어 -->
-    <section class="art full">
+    <section class="art">
       <h3>💗 좋아 · 싫어 <span class="jp">すき・きらい</span></h3>
       <div class="ld">
         <div class="like"><h4>💚 좋아하는 것</h4><div class="tagwrap" id="likes"></div></div>
         <div class="dislike"><h4>🥲 싫어하는 것</h4><div class="tagwrap" id="dislikes"></div></div>
+      </div>
+    </section>
+
+    <!-- 팬캐릭터 -->
+    <section class="art">
+      <h3>🐸 팬캐릭터 <span class="jp">ファンキャラ</span></h3>
+      <div class="fanchar">
+        <img src="../fan.png" alt="꾸물이" referrerpolicy="no-referrer">
+        <div class="fanchar-name">🐸 꾸물이 🐸</div>
       </div>
     </section>
 
@@ -289,10 +302,16 @@
       <div class="tagwrap" id="info-tags"></div>
     </section>
 
-    <!-- 진행한 컨텐츠 -->
+    <!-- 진행 컨텐츠 (진행중) -->
     <section class="art">
-      <h3>🎮 진행한 컨텐츠 <span class="jp">コンテンツ</span></h3>
+      <h3>🎮 진행 컨텐츠 <span class="jp">コンテンツ</span></h3>
       <div class="tagwrap" id="content-list"></div>
+    </section>
+
+    <!-- 진행한 컨텐츠 (완료) -->
+    <section class="art full">
+      <h3>✅ 진행한 컨텐츠 <span class="jp">アーカイブ</span></h3>
+      <div class="tagwrap" id="content-done"></div>
     </section>
 
     <!-- 이번 주 일정 -->
@@ -358,6 +377,7 @@
     'info-sing':'가끔 함 🎤', 'info-item':'개구리삔 🐸',
     'info-tags':'밝음, 칭찬 좋아함, 타격감 좋음',
     'content-list':'종합 게임, 공포게임, 저챗(수다), 노래 방송, 시청자 참여',
+    'content-done':'공포게임 클리어, 노래 커버, 팬아트 리뷰, 시청자 합방',
     'stat-smart':'10', 'stat-tension':'95', 'stat-hit':'100', 'stat-cute':'90',
     like1:'게임', like2:'꾸물이', like3:'잠', like4:'',
     dislike1:'귀신', dislike2:'벌레', dislike3:'주사',
@@ -415,6 +435,7 @@
     // 성격 / 컨텐츠
     chips('info-tags', d['info-tags']);
     chips('content-list', d['content-list'], true);
+    chips('content-done', d['content-done'], true);
 
     // 어록
     { const el=document.getElementById('quote'); if(el) el.innerHTML = esc(d.quote).replace(/\n/g,'<br>'); }
