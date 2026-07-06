@@ -19,7 +19,7 @@
 var FX_FLOAT = ['🍃','🌼','❀','🍃','🌼','✿','🍃'];   // 떠다니는 입자 모양
 var FX_CLICK = '🍃';                           // 클릭/프사톡 모양. 글자·이모지 또는 이미지(data:… / https://… .svg·.png)도 가능
 var FX_COUNT = 7;                            // 떠다니는 입자 개수 (많을수록 무거움)
-var FX_TILT  = true;                          // 카드 마우스오버 살짝 기울기 (끄려면 false)
+var FX_TILT  = false;                          // 카드 마우스오버 살짝 기울기 (끄려면 false)
 
 /* ─ 로딩화면 + 페이지 전환(커지는 등장) — 보통 그대로 두세요 ─ */
 var FX_LOADER      = true;   // 페이지 넘어갈 때 로딩화면 + 레이아웃 커지는 등장 (끄려면 false)

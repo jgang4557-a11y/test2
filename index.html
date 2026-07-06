@@ -954,7 +954,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
   var FX_FLOAT = ['🍃','🌼','❀','🍃','🌼','✿','🍃'];
   var FX_CLICK = '🍃';
   var FX_COUNT = 7;
-  var FX_TILT  = true;
+  var FX_TILT  = false;
 </script>
 <script src="fx.js"></script>
 <script>
@@ -973,7 +973,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
 })();
 </script>
 <script>
-/* ── fx.js 없을 때만 도는 미리보기 폴백 (반드시 fx.js 뒤) — 낙하 비 + 클릭 흘러내림 ── */
+/* ── fx.js 없을 때만 도는 미리보기 폴백 (반드시 fx.js 뒤) — 비·클릭 흘러내림·프사 톡+바운스·카드 틸트 ── */
 (function(){
   if (typeof window.fxHearts === 'function') return;
   var style=document.createElement('style');
@@ -981,12 +981,27 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
    +'#fx .fxfb{position:absolute;top:-30px;color:var(--main);opacity:0;animation:fbfall linear infinite}'
    +'@keyframes fbfall{0%{opacity:0;transform:translateY(-30px) translateX(0) rotate(0)}12%{opacity:.7}88%{opacity:.45}100%{opacity:0;transform:translateY(105vh) translateX(var(--dr,24px)) rotate(200deg)}}'
    +'.fxpop{position:fixed;pointer-events:none;z-index:520;color:var(--main);animation:fbflow 1s cubic-bezier(.33,.12,.55,1) forwards}'
-   +'@keyframes fbflow{0%{opacity:0;transform:translate(-50%,-50%) scale(.45) rotate(0)}14%{opacity:.95}100%{opacity:0;transform:translate(calc(-50% + var(--hx,0px)),calc(-50% + 96px)) scale(1) rotate(150deg)}}';
+   +'@keyframes fbflow{0%{opacity:0;transform:translate(-50%,-50%) scale(.45) rotate(0)}14%{opacity:.95}100%{opacity:0;transform:translate(calc(-50% + var(--hx,0px)),calc(-50% + 96px)) scale(1) rotate(150deg)}}'
+   +'@keyframes fbbounce{0%{transform:scale(1)}35%{transform:scale(1.12,.9)}65%{transform:scale(.94,1.07)}100%{transform:scale(1)}}';
   document.head.appendChild(style);
   var box=document.createElement('div'); box.id='fx'; document.body.appendChild(box);
   var shapes=(typeof FX_FLOAT!=='undefined')?FX_FLOAT:['🍃','🌼'];
-  var n=(typeof FX_COUNT!=='undefined')?FX_COUNT:10;
-  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  var n=(typeof FX_COUNT!=='undefined')?FX_COUNT:7;
+  var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cshapes=['🍃','🌼','❀'];
+  function burst(x,y,cnt){
+    for(var k=0;k<cnt;k++){
+      var p=document.createElement('span'); p.className='fxpop';
+      p.textContent=cshapes[(Math.random()*cshapes.length)|0];
+      p.style.left=(x+(Math.random()*44-22))+'px';
+      p.style.top=(y+(Math.random()*28-14))+'px';
+      p.style.fontSize=(14+Math.random()*9)+'px';
+      p.style.setProperty('--hx',(Math.random()*64-32).toFixed(0)+'px');
+      document.body.appendChild(p);
+      setTimeout(function(el){return function(){el.remove()}}(p),1150);
+    }
+  }
+  if(!reduced){
     for(var i=0;i<n;i++){
       var s=document.createElement('span'); s.className='fxfb';
       s.textContent=shapes[i%shapes.length];
@@ -998,19 +1013,18 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
       s.style.setProperty('--dr',(Math.random()*60-30).toFixed(0)+'px');
       box.appendChild(s);
     }
-    var cshapes=['🍃','🌼','❀'];
     document.addEventListener('click',function(e){
       if(e.target.closest('input, textarea, button, a, .iq-modal, .iq-ov')) return;
-      for(var k=0;k<3;k++){
-        var p=document.createElement('span'); p.className='fxpop';
-        p.textContent=cshapes[(Math.random()*cshapes.length)|0];
-        p.style.left=(e.clientX+(Math.random()*40-20))+'px';
-        p.style.top=(e.clientY+(Math.random()*26-13))+'px';
-        p.style.fontSize=(14+Math.random()*9)+'px';
-        p.style.setProperty('--hx',(Math.random()*64-32).toFixed(0)+'px');
-        document.body.appendChild(p);
-        setTimeout(function(el){return function(){el.remove()}}(p),1150);
-      }
+      burst(e.clientX, e.clientY, 3);
+    });
+    /* 프사 톡 + 바운스 (배포본은 fx.js가 담당 — 폴백은 미리보기 전용) */
+    var av=document.getElementById('avatarWrap');
+    if(av) av.addEventListener('click',function(e){
+      e.stopPropagation();
+      av.style.animation='none'; void av.offsetWidth;
+      av.style.animation='fbbounce .55s cubic-bezier(.34,1.56,.64,1)';
+      var r=av.getBoundingClientRect();
+      burst(r.left+r.width/2, r.top+r.height*0.35, 9);
     });
   }
 })();
