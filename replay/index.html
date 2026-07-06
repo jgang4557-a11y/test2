@@ -4,7 +4,7 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>모요 · 다시보기</title>
   <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/{{SOOP아이디앞2글자}}/{{SOOP아이디}}/{{SOOP아이디}}.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Jua&family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Gowun+Batang:wght@400;700&family=Jua&family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <style>
     .vod-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
@@ -18,6 +18,13 @@
   </style>
 </head>
 <body>
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+<div class="sheet">
+<div class="chrome">
+  <span class="dots"><i></i><i></i><i></i></span>
+  <div class="addr"><span class="lock">🔒</span> https://moyo.sooplive.com/replay</div>
+  <button class="theme-switch" id="themeSwitch" type="button" aria-label="다크모드 전환"><span class="knob" id="themeKnob">🌙</span></button>
+</div>
 <nav class="nav"><div class="nav-inner">
   <a href="../index.html" class="nav-logo">모요</a>
   <a href="../index.html">프로필</a>
@@ -27,11 +34,11 @@
   <a href="../song/">노래책</a>
   <a href="../diary/">일기</a>
   <a href="../work/">숙제</a>
-  <button class="theme-switch" id="themeSwitch" type="button" aria-label="다크모드 전환"><span class="knob" id="themeKnob">🌙</span></button>
 </div></nav>
 
 <div class="container stagger">
-  <div class="page-title">🎬 다시보기</div>
+  <div class="ohd"><i></i><span class="dm">✦</span>ADVENTURE LOG<span class="dm">✦</span><i></i></div>
+  <div class="ohd-sub">다시보기</div>
   <div class="vod-grid" id="vod-grid">
     <div class="vod-card"><div class="vod-frame"><span class="ph">▶</span></div><div class="vod-name">다시보기가 등록되면 여기에 떠요</div></div>
     <div class="vod-card"><div class="vod-frame"><span class="ph">▶</span></div><div class="vod-name">admin → 프로필 탭 → VOD에서 추가</div></div>
@@ -39,6 +46,7 @@
 </div>
 
 <footer>© 2026 모요 Official.<br>비즈니스 문의 — 문의 버튼을 이용해 주세요</footer>
+</div><!-- /sheet -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../supabase.js"></script>
