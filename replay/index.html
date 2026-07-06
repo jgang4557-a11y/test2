@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모요 · 다시보기</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/{{SOOP아이디앞2글자}}/{{SOOP아이디}}/{{SOOP아이디}}.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Jua&family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .vod-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+    .vod-card{background:var(--card); border-radius:var(--radius-md,16px); overflow:hidden; box-shadow:var(--shadow);}
+    .vod-frame{aspect-ratio:16/9; position:relative; background:var(--main-light); display:flex; align-items:center; justify-content:center;}
+    .vod-frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+    .vod-frame .ph{width:52px; height:52px; border-radius:50%; border:2px solid var(--main); color:var(--main); display:flex; align-items:center; justify-content:center; font-size:18px; padding-left:4px;}
+    .vod-name{padding:13px 16px 15px; font-weight:700; font-size:15px; color:var(--text);}
+    .vod-empty{color:var(--text-soft); font-size:14px; text-align:center; padding:26px 0 6px;}
+    @media (max-width:720px){ .vod-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">모요</a>
+  <a href="../index.html">프로필</a>
+  <a href="../schedule/">방송 일정</a>
+  <a href="index.html" class="active">다시보기</a>
+  <a href="../gallery/">갤러리</a>
+  <a href="../song/">노래책</a>
+  <a href="../diary/">일기</a>
+  <a href="../work/">숙제</a>
+  <button class="theme-switch" id="themeSwitch" type="button" aria-label="다크모드 전환"><span class="knob" id="themeKnob">🌙</span></button>
+</div></nav>
+
+<div class="container stagger">
+  <div class="page-title">🎬 다시보기</div>
+  <div class="vod-grid" id="vod-grid">
+    <div class="vod-card"><div class="vod-frame"><span class="ph">▶</span></div><div class="vod-name">다시보기가 등록되면 여기에 떠요</div></div>
+    <div class="vod-card"><div class="vod-frame"><span class="ph">▶</span></div><div class="vod-name">admin → 프로필 탭 → VOD에서 추가</div></div>
+  </div>
+</div>
+
+<footer>© 2026 모요 Official.<br>비즈니스 문의 — 문의 버튼을 이용해 주세요</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../supabase.js"></script>
+<script>
+async function loadVods(){
+  try{
+    if (typeof fetchAll !== 'function') throw 0;
+    const list = await fetchAll('original_songs', { order:'id', asc:false });
+    const grid = document.getElementById('vod-grid');
+    if (grid && list && list.length){
+      grid.innerHTML = list.map(s => {
+        const vid=(s.vod_id||'').trim();
+        const t=(s.title||'').replace(/</g,'&lt;');
+        return '<div class="vod-card"><div class="vod-frame"><iframe src="https://vod.sooplive.co.kr/player/'+vid+'/embed?showChat=false&autoPlay=false&mutePlay=false" allowfullscreen scrolling="no"></iframe></div><div class="vod-name">'+t+'</div></div>';
+      }).join('');
+    }
+  }catch(e){}
+  finally{ document.body.classList.add('ready'); }
+}
+loadVods();
+setTimeout(()=>document.body.classList.add('ready'),1200);
+</script>
+<script>
+(function(){
+  if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+  var sw=document.getElementById('themeSwitch'), knob=document.getElementById('themeKnob');
+  function refresh(){ if(knob) knob.textContent=document.body.classList.contains('dark')?'☀️':'🌙'; }
+  if(sw) sw.addEventListener('click', function(){
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');
+    refresh();
+  });
+  refresh();
+})();
+</script>
+<script src="../fx.js"></script>
+<script src="../fxplus.js"></script>
+<script src="../cursor.js"></script>
+</body>
+</html>

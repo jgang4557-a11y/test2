@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>모아 · 업보</title>
-  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/ki/kimghdus/kimghdus.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <title>모요 · 숙제</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/{{SOOP아이디앞2글자}}/{{SOOP아이디}}/{{SOOP아이디}}.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Jua&family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <style>
     .upbo-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:6px; }
@@ -26,7 +24,7 @@
     }
     .viewer-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-hover); border-color:var(--main); }
     .viewer-av { width:62px; height:62px; border-radius:50%; object-fit:cover; margin:0 auto 10px; display:block; border:3px solid var(--main-light); background:var(--main-light); }
-    .viewer-av-fb { width:62px; height:62px; border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#c9ecc3,#8fd189); color:#fff; font-size:24px; font-weight:700; border:3px solid var(--main-light); }
+    .viewer-av-fb { width:62px; height:62px; border-radius:50%; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#e6e9ee,#c4cad4); color:#fff; font-size:24px; font-weight:700; border:3px solid var(--main-light); }
     .viewer-nick { font-size:14px; font-weight:700; color:var(--text); }
     .viewer-id { font-size:11px; color:var(--text-soft); margin:2px 0 8px; }
     .viewer-total { display:inline-block; background:var(--main); color:#fff; border-radius:999px; padding:3px 14px; font-size:12px; font-weight:700; }
@@ -41,7 +39,7 @@
     @keyframes pop { from{ transform:scale(.94); opacity:0;} to{ transform:scale(1); opacity:1;} }
     .modal-top { display:flex; align-items:center; gap:12px; padding:20px 22px 16px; border-bottom:1px solid var(--main-light); position:relative; }
     .modal-av { width:52px; height:52px; border-radius:50%; object-fit:cover; border:3px solid var(--main-light); background:var(--main-light); flex-shrink:0; }
-    .modal-av-fb { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#c9ecc3,#8fd189); color:#fff; font-size:20px; font-weight:700; border:3px solid var(--main-light); flex-shrink:0; }
+    .modal-av-fb { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#e6e9ee,#c4cad4); color:#fff; font-size:20px; font-weight:700; border:3px solid var(--main-light); flex-shrink:0; }
     .modal-nick { font-size:18px; font-weight:800; color:var(--main-dark); line-height:1.2; }
     .modal-id { font-size:12px; color:var(--text-soft); }
     .modal-x { position:absolute; top:16px; right:18px; background:none; border:none; font-size:22px; color:var(--text-soft); cursor:pointer; line-height:1; }
@@ -63,39 +61,30 @@
   </style>
 </head>
 <body>
-<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
-<div class="mag-sheet">
-<span class="mag-tape"></span>
-<header class="mag-mast">
-  <a href="../index.html" class="mag-wordmark"><span class="paw">🐸</span><span class="nm">모아</span><span class="mg">MAGAZINE</span></a>
-  <nav class="mag-nav">
-    <a href="../index.html">메인</a>
-    <a href="../profile/">프로필</a>
-    <a href="../schedule/">일정</a>
-    <a href="index.html" class="active">업보</a>
-    <a href="../dress/">옷장</a>
-    <a href="#" onclick="openInquiry();return false;">문의</a>
-  </nav>
-  <button class="mag-dk" id="themeSwitch" type="button" aria-label="다크모드"><span class="knob" id="themeKnob">🌙</span></button>
-</header>
-<div class="mag-rule"></div>
-<div class="mag-issue"><span><b>UPBO</b></span><span>업보 현황</span><span>アップボ</span><span class="dday" id="dday">2026</span></div>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">모요</a>
+  <a href="../index.html">프로필</a>
+  <a href="../schedule/">방송 일정</a>
+  <a href="../replay/">다시보기</a>
+  <a href="../gallery/">갤러리</a>
+  <a href="../song/">노래책</a>
+  <a href="../diary/">일기</a>
+  <a href="index.html" class="active">숙제</a>
+  <button class="theme-switch" id="themeSwitch" type="button" aria-label="다크모드 전환"><span class="knob" id="themeKnob">🌙</span></button>
+</div></nav>
 
 <div class="container stagger">
   <div class="card">
     <div class="upbo-head">
       <div>
         <div class="upbo-eyebrow">UPBO</div>
-        <div class="upbo-title">업보 현황</div>
+        <div class="upbo-title">숙제 현황</div>
       </div>
       <span class="upbo-update" id="update-date"></span>
     </div>
     <input class="search-box" id="search" placeholder="🔍 닉네임 또는 아이디 검색...">
     <div class="viewer-grid" id="grid"><div class="spinner"></div></div>
   </div>
-</div>
-
-<div class="mag-colophon">MOA MAGAZINE · VOL.01 &nbsp;—&nbsp; © 2026 모아 (moa) Official · 문의 버튼을 이용해 주세요</div>
 </div>
 
 <div class="ov" id="ov" onclick="if(event.target===this)closeModal()">
@@ -105,20 +94,7 @@
   </div>
 </div>
 
-
-
-<div class="iq-ov" id="iq-ov" onclick="if(event.target===this)closeInquiry()">
-  <div class="iq-modal">
-    <div class="iq-title">✉️ 문의하기</div>
-    <div class="iq-desc">모아에게 하고 싶은 말을 남겨주세요 🐸💚</div>
-    <input class="iq-input" id="iq-nick" placeholder="닉네임 (필수)">
-    <textarea class="iq-input" id="iq-msg" rows="4" placeholder="문의 내용을 적어주세요"></textarea>
-    <div class="iq-btns">
-      <button class="iq-cancel" onclick="closeInquiry()">취소</button>
-      <button class="iq-send" onclick="sendInquiry()">보내기 💚</button>
-    </div>
-  </div>
-</div>
+<footer>© 2026 모요 Official.<br>비즈니스 문의 — 문의 버튼을 이용해 주세요</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="../supabase.js"></script>
@@ -155,7 +131,7 @@
         ${avHtml}
         <div class="viewer-nick">${esc(v.nickname)}</div>
         ${v.soop_id?`<div class="viewer-id">(${esc(v.soop_id)})</div>`:'<div class="viewer-id">&nbsp;</div>'}
-        <span class="viewer-total">업보 ${total}</span>
+        <span class="viewer-total">숙제 ${total}</span>
       </div>`;
     }).join('');
     enableIframeAutoHeight();
@@ -178,7 +154,7 @@
         ${t.category==='이벤트'?'<span class="ev">이벤트</span>':''}
         <span class="ct">×${myCounts[t.id]}</span>
       </div>`).join('');
-    document.getElementById('modal-body').innerHTML = rows || '<div class="modal-empty">아직 업보가 없어요 ♡</div>';
+    document.getElementById('modal-body').innerHTML = rows || '<div class="modal-empty">아직 숙제가 없어요 ♡</div>';
     const ov = document.getElementById('ov');
     // SOOP iframe(고정높이·스크롤off) 대응: 클릭 지점 기준으로 모달 띄움
     const e = window.event;
@@ -214,22 +190,7 @@
 </script>
 <!-- 공통 연출(입자·클릭·기울기) -->
 <script src="../fx.js"></script>
-<script>
-function openInquiry(){ document.getElementById('iq-ov').classList.add('show'); }
-function closeInquiry(){ document.getElementById('iq-ov').classList.remove('show'); }
-async function sendInquiry(){
-  var nick=document.getElementById('iq-nick').value.trim(); if(!nick){ alert('닉네임을 적어주세요'); return; }
-  var msg=document.getElementById('iq-msg').value.trim(); if(!msg){ alert('문의 내용을 적어주세요'); return; }
-  var ok=await insertRow('inquiries',{ nickname:nick, message:msg });
-  if(ok){ alert('문의가 전송됐어요! 💚'); document.getElementById('iq-nick').value=''; document.getElementById('iq-msg').value=''; closeInquiry(); }
-  else { alert('전송 실패 ㅠㅠ 잠시 후 다시 시도해주세요'); }
-}
-(function(){
-  var _dd=document.getElementById('dday');
-  if(_dd && typeof fxDday==='function'){ var _n=fxDday('11-28'); if(_n!==null) _dd.textContent=(_n===0?'오늘 생일! 🎉':'생일까지 D-'+_n+' 🎂'); }
-  document.body.classList.add('ready');
-  setTimeout(function(){ document.body.classList.add('ready'); }, 120);
-})();
-</script>
+<script src="../fxplus.js"></script>
+<script src="../cursor.js"></script>
 </body>
 </html>

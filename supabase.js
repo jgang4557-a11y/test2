@@ -3,8 +3,8 @@
    ✅ 이 파일 상단 두 줄만 본인 값으로 교체!
    ============================================= */
 
-const SUPABASE_URL  = 'https://lgkcwcjoxaztiyymndzu.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxna2N3Y2pveGF6dGl5eW1uZHp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyOTE4MjQsImV4cCI6MjA5Nzg2NzgyNH0.7V_3q7DPJmACnz0dWNrfQsNT99SUeVgv1qkx1G54j80';
+const SUPABASE_URL  = 'https://{{SUPABASE프로젝트ID}}.supabase.co';
+const SUPABASE_ANON = '{{SUPABASE_ANON_KEY}}';
 
 // ── Supabase 클라이언트 초기화 ──
 const { createClient } = supabase;
@@ -94,11 +94,11 @@ async function uploadImage(file, folder = 'uploads') {
     const blob = await compressImage(file);
     const rand = Math.random().toString(36).slice(2, 8);
     const path = `${folder}/${Date.now()}_${rand}.jpg`;
-    const { error } = await db.storage.from('images').upload(path, blob, {
+    const { error } = await db.storage.from('{{버킷이름}}').upload(path, blob, {
       upsert: true, contentType: 'image/jpeg'
     });
     if (error) { console.error('uploadImage 오류:', error); return null; }
-    const { data } = db.storage.from('images').getPublicUrl(path);
+    const { data } = db.storage.from('{{버킷이름}}').getPublicUrl(path);
     return data?.publicUrl || null;
   } catch (e) {
     console.error('uploadImage 예외:', e);
