@@ -981,8 +981,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
    +'#fx .fxfb{position:absolute;top:-30px;color:var(--main);opacity:0;animation:fbfall linear infinite}'
    +'@keyframes fbfall{0%{opacity:0;transform:translateY(-30px) translateX(0) rotate(0)}12%{opacity:.7}88%{opacity:.45}100%{opacity:0;transform:translateY(105vh) translateX(var(--dr,24px)) rotate(200deg)}}'
    +'.fxpop{position:fixed;pointer-events:none;z-index:520;color:var(--main);animation:fbflow 1s cubic-bezier(.33,.12,.55,1) forwards}'
-   +'@keyframes fbflow{0%{opacity:0;transform:translate(-50%,-50%) scale(.45) rotate(0)}14%{opacity:.95}100%{opacity:0;transform:translate(calc(-50% + var(--hx,0px)),calc(-50% + 96px)) scale(1) rotate(150deg)}}'
-   +'@keyframes fbbounce{0%{transform:scale(1)}35%{transform:scale(1.12,.9)}65%{transform:scale(.94,1.07)}100%{transform:scale(1)}}';
+   +'@keyframes fbflow{0%{opacity:0;transform:translate(-50%,-50%) scale(.45) rotate(0)}14%{opacity:.95}100%{opacity:0;transform:translate(calc(-50% + var(--hx,0px)),calc(-50% + 96px)) scale(1) rotate(150deg)}}';
   document.head.appendChild(style);
   var box=document.createElement('div'); box.id='fx'; document.body.appendChild(box);
   var shapes=(typeof FX_FLOAT!=='undefined')?FX_FLOAT:['🍃','🌼'];
@@ -1017,14 +1016,11 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
       if(e.target.closest('input, textarea, button, a, .iq-modal, .iq-ov')) return;
       burst(e.clientX, e.clientY, 3);
     });
-    /* 프사 톡 + 바운스 (배포본은 fx.js가 담당 — 폴백은 미리보기 전용) */
+    /* 프사 톡 — fx.js 원본과 동일: 클릭 지점에 입자 10개 (프사는 안 움직임) */
     var av=document.getElementById('avatarWrap');
     if(av) av.addEventListener('click',function(e){
       e.stopPropagation();
-      av.style.animation='none'; void av.offsetWidth;
-      av.style.animation='fbbounce .55s cubic-bezier(.34,1.56,.64,1)';
-      var r=av.getBoundingClientRect();
-      burst(r.left+r.width/2, r.top+r.height*0.35, 9);
+      burst(e.clientX, e.clientY, 10);
     });
   }
 })();
@@ -1047,6 +1043,22 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     st.sheet.cssRules[0].style.cursor='url("'+BASE[bi]+'") 0 0, auto';
     st.sheet.cssRules[1].style.cursor='url("'+PTR[pi]+'") 0 0, pointer';
   }, MS);
+})();
+</script>
+
+<script>
+/* 프사 바운스 — 눌렸다(0.88) 튀어오르고(1.08) 제자리. 균일 스케일(짜부·홉 아님)
+   구 fx.js 기능 복원 · 배포/미리보기 공통(§9: 배포에서도 돌아야 하는 상호작용 = 가드 없는 전용 스크립트) */
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var st=document.createElement('style');
+  st.textContent='@keyframes fxAvBounce{0%{transform:scale(1)}30%{transform:scale(.88)}60%{transform:scale(1.08)}100%{transform:scale(1)}}';
+  document.head.appendChild(st);
+  var av=document.getElementById('avatarWrap');
+  if(av) av.addEventListener('click', function(){
+    av.style.animation='none'; void av.offsetWidth;
+    av.style.animation='fxAvBounce .5s ease';
+  });
 })();
 </script>
 
