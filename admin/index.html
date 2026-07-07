@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🔐 모요 Admin</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/du/duvl123/duvl123.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <style>
@@ -104,7 +105,7 @@
       <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="saveDays()">저장 ♥</button></div>
     </div>
     <div class="card">
-      <div class="card-title">🎵 모요 오리지널 곡</div>
+      <div class="card-title">🎬 다시보기 (메인 ADVENTURE LOG · 다시보기 페이지)</div>
       <div class="form-grid">
         <div class="form-field full"><label class="input-label">영상 제목 *</label><input class="input" id="os-title" placeholder="예: 노래 제목"></div>
         <div class="form-field full"><label class="input-label">SOOP VOD ID *</label><input class="input" id="os-vod" placeholder="194780409"></div>
@@ -133,9 +134,9 @@
     <div class="card">
       <div class="card-title">📊 스탯 스트립 (메인 6칸)</div>
       <div class="form-field"><label class="input-label">데뷔일</label><input class="input" id="f-stat-debut" type="text" placeholder="2025.12.20"></div>
-      <div class="form-field"><label class="input-label">종족</label><input class="input" id="f-stat-race" type="text"></div>
-      <div class="form-field"><label class="input-label">클래스</label><input class="input" id="f-stat-class" type="text"></div>
-      <div class="form-field"><label class="input-label">소속 길드</label><input class="input" id="f-stat-guild" type="text"></div>
+      <div class="form-field"><label class="input-label">종족</label><input class="input" id="f-stat-race" type="text" placeholder="엘프"></div>
+      <div class="form-field"><label class="input-label">클래스</label><input class="input" id="f-stat-class" type="text" placeholder="모험가"></div>
+      <div class="form-field"><label class="input-label">소속 길드</label><input class="input" id="f-stat-guild" type="text" placeholder="숲속의 노래꾼"></div>
     </div>
     <div class="card">
       <div class="card-title">🗓 방송 일정 카드 문구 (메인)</div>
@@ -695,13 +696,12 @@
     const title = document.getElementById('os-title').value.trim();
     const vod = document.getElementById('os-vod').value.trim();
     if (!title || !vod) { showToast('❗ 제목/VOD ID 필수!'); return; }
-    const ok = await insertRow('original_songs', { title, vod_id: vod, thumbnail: document.getElementById('os-thumb').value.trim() });
-    if (ok) { showToast('✅ 추가!'); ['os-title','os-vod','os-thumb'].forEach(id=>document.getElementById(id).value=''); loadOriginalSongs(); }
+    const ok = await insertRow('original_songs', { title, vod_id: vod });
+    if (ok) { showToast('✅ 추가!'); ['os-title','os-vod'].forEach(id=>document.getElementById(id).value=''); loadOriginalSongs(); }
     else showToast('❌ 실패');
   }
 
-  // ── 옷장 ──   // 'all' | 'new'(새 옷/포스터) | 'old'(기존)   // 관리자 목록의 분류·순서 (분류를 바꿀 땐 위 select 옵션 + 옷장 페이지 탭도 함께 수정)
-  const dressByOrder = (a,b)=> ((a.sort_order||0)-(b.sort_order||0)) || (new Date(a.created_at)-new Date(b.created_at));
+  
 </script>
 <script>
 /* ── 갤러리 관리 (gallery_items) ── */
