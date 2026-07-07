@@ -298,8 +298,9 @@ body.dark .cc-img{background:linear-gradient(150deg,#262d18,#212714); color:rgba
 .p-art img{width:100%; height:100%; object-fit:cover; display:none;}
 .p-info{flex:1; min-width:0;}
 .p-eyebrow{font-size:11px; font-weight:800; letter-spacing:2.5px; opacity:.85;}
+.p-hint{font-size:10px; font-weight:700; letter-spacing:.4px; background:rgba(244,241,221,.2); border-radius:999px; padding:3px 9px; margin-left:9px; vertical-align:1px; animation:pulse 1.8s ease infinite; display:inline-block;}
 .p-title{font-family:var(--disp); font-size:21px; font-weight:700; margin-top:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.p-sub{font-size:12.5px; opacity:.8; margin-top:3px;}
+.p-sub{font-size:12.5px; opacity:.8; margin-top:3px; white-space:nowrap; overflow:hidden;}
 .p-barrow{display:flex; align-items:center; gap:12px; margin:15px 0 13px;}
 .p-bar{flex:1; height:5px; border-radius:999px; background:rgba(244,241,221,.25); overflow:hidden;}
 .p-bar span{display:block; width:45%; height:100%; background:#f2f0dd; border-radius:999px; transition:width .3s linear;}
@@ -315,6 +316,16 @@ body.dark .cc-img{background:linear-gradient(150deg,#262d18,#212714); color:rgba
 .p-ctrl button:hover{background:rgba(244,241,221,.3);}
 .p-ctrl .p-play{width:46px; height:46px; background:#f2f0dd; color:#374e2e; font-size:16px;}
 .p-ctrl .p-play:hover{transform:scale(1.07); background:#fff;}
+.p-vol{display:flex; align-items:center; gap:8px; margin-left:auto;}
+.p-vol button{font-size:15px;}
+.p-vol input[type=range]{width:76px; height:4px; accent-color:#f2f0dd; cursor:pointer;}
+.p-title.marq,.p-sub.marq{
+  text-overflow:clip;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 14px),transparent);
+          mask-image:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 14px),transparent);
+}
+.marq .tt{display:inline-block; padding-right:48px; animation:pmarq var(--marq,12s) linear infinite;}
+@keyframes pmarq{to{transform:translateX(-100%)}}
 .vinyl{
   position:absolute; right:24px; top:50%; transform:translateY(-50%);
   width:118px; height:118px; border-radius:50%;
@@ -632,7 +643,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     <div class="player" id="playerBox">
       <div class="p-art" id="pArt"><span>♪</span><img id="pArtImg" alt=""></div>
       <div class="p-info">
-        <div class="p-eyebrow">♪ NOW PLAYING</div>
+        <div class="p-eyebrow">♪ NOW PLAYING<span id="muteHint" class="p-hint" hidden>🔇 누르면 소리 ON</span></div>
         <div class="p-title" id="npTitle">숲의 노래</div>
         <div class="p-sub" id="npSub">모요 cover</div>
         <div class="p-barrow">
@@ -643,6 +654,10 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
           <button type="button" aria-label="이전">◁</button>
           <button type="button" class="p-play" id="songPlayBtn" aria-label="노래 재생" onclick="toggleSong()">▶</button>
           <button type="button" aria-label="다음">▷</button>
+          <div class="p-vol">
+            <button type="button" id="volBtn" aria-label="음소거 전환" onclick="toggleMute()">🔊</button>
+            <input type="range" id="volRange" min="0" max="100" value="80" aria-label="음량">
+          </div>
         </div>
       </div>
       <div class="vinyl"><i></i></div>
@@ -730,7 +745,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     'soop-id': 'duvl123',
     avatar: '', 'hero-bg': '',
     'hero-quote': '오늘도 작은 모험을 찾아 숲을 걷는 중',
-    'song-audio': '', 'song-title': '숲의 노래', 'song-sub': '모요 cover', 'song-art': '',
+    'song-audio': 'https://youtu.be/_f9RFMBlrN4', 'song-title': '숲의 노래', 'song-sub': '모요 cover', 'song-art': '',
     'class-media': 'https://youtu.be/_f9RFMBlrN4',
     'hero-badges': 'FOREST ADVENTURER,GUILD MEMBER,LIVE',
     'sched-line1': '정규 방송 · 밤 10시', 'sched-line2': '휴방 · 쉬는 날엔 숲속 탐험!',
@@ -803,8 +818,8 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
       }
 
       /* 플레이어 */
-      const nt = document.getElementById('npTitle'); if (nt && (d['song-title']||'').trim()) nt.textContent = d['song-title'].trim();
-      const ns = document.getElementById('npSub');   if (ns && (d['song-sub']||'').trim())   ns.textContent = d['song-sub'].trim();
+      if ((d['song-title']||'').trim()) marquee('npTitle', d['song-title'].trim());
+      if ((d['song-sub']||'').trim())   marquee('npSub',   d['song-sub'].trim());
       if ((d['song-art']||'').trim()){
         const ai = document.getElementById('pArtImg');
         ai.src = d['song-art']; ai.style.display='block';
@@ -834,7 +849,10 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
       });
       setSongSource(d['song-audio']);
     }catch(e){ console.log('load skip:', e.message||e); }
-    finally{ document.body.classList.add('ready'); }
+    finally{
+      if(!songMode) setSongSource(defaults['song-audio']);
+      document.body.classList.add('ready');
+    }
   }
 
   /* ── 다시보기: original_songs 있으면 카드 교체 ── */
@@ -853,10 +871,62 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
   }
 
   /* ── 노래: mp3=소리 / 유튜브=숨겨서 소리만 / 그 외 링크=새 탭 ── */
+  var SONG_AUTOPLAY = true;   /* 자동재생: 소리 시도 → 막히면 음소거 시작 → 첫 터치에 소리 ON */
   let songMode=null, ytPlayer=null, ytReady=false, ytWantToggle=false, ytTimer=null, songLink='';
+  function showMuteHint(on){ const el=document.getElementById('muteHint'); if(el) el.hidden=!on; }
+  function armUnmute(){
+    function un(){
+      if(songMode==='yt' && ytPlayer && ytPlayer.isMuted && ytPlayer.isMuted()) ytPlayer.unMute();
+      const a=document.getElementById('songAudio');
+      if(songMode==='audio' && a && a.muted) a.muted=false;
+      showMuteHint(false); volIcon();
+      document.removeEventListener('pointerdown', un, true);
+      document.removeEventListener('keydown', un, true);
+    }
+    document.addEventListener('pointerdown', un, true);
+    document.addEventListener('keydown', un, true);
+  }
   const fmt = s => { s=Math.max(0,Math.floor(s||0)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); };
   function setTime(c,dur){ const t=document.getElementById('pTime'); if(t&&dur) t.textContent = fmt(c)+' / '+fmt(dur); }
   function setBar(p){ const b=document.getElementById('pBarFill'); if(b) b.style.width=(Math.max(0,Math.min(100,p)))+'%'; }
+  function marquee(id, text){
+    const el=document.getElementById(id); if(!el) return;
+    const t=(text!=null?text:el.textContent).trim();
+    el.classList.remove('marq'); el.textContent=t;
+    requestAnimationFrame(()=>{
+      if (el.scrollWidth > el.clientWidth+2){
+        const esc=t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+        el.style.setProperty('--marq', Math.max(9, Math.round(t.length*0.45))+'s');
+        el.innerHTML='<span class="tt">'+esc+'</span><span class="tt">'+esc+'</span>';
+        el.classList.add('marq');
+      }
+    });
+  }
+  const VOL_KEY='moyo-vol';
+  function getVol(){ const v=parseInt(localStorage.getItem(VOL_KEY)); return isNaN(v)?80:Math.min(100,Math.max(0,v)); }
+  function applyVol(v){
+    const a=document.getElementById('songAudio'); if(a) a.volume=v/100;
+    if(ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(v);
+    const r=document.getElementById('volRange'); if(r && +r.value!==v) r.value=v;
+    volIcon();
+  }
+  function volIcon(){
+    let muted=false;
+    if(songMode==='yt' && ytPlayer && ytPlayer.isMuted) muted=ytPlayer.isMuted();
+    const a=document.getElementById('songAudio');
+    if(songMode==='audio' && a) muted=a.muted;
+    const v=getVol();
+    const b=document.getElementById('volBtn'); if(b) b.textContent=(muted||v===0)?'🔇':(v<45?'🔉':'🔊');
+  }
+  function toggleMute(){
+    if(songMode==='yt' && ytPlayer && ytPlayer.isMuted){
+      if(ytPlayer.isMuted()){ ytPlayer.unMute(); showMuteHint(false); } else ytPlayer.mute();
+    } else {
+      const a=document.getElementById('songAudio');
+      if(a){ a.muted=!a.muted; if(!a.muted) showMuteHint(false); }
+    }
+    setTimeout(volIcon,60);
+  }
   function playing(on){
     const btn=document.getElementById('songPlayBtn'); if(btn) btn.textContent = on?'⏸':'▶';
     document.getElementById('playerBox').classList.toggle('playing', !!on);
@@ -873,7 +943,15 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     if(!raw) return;
     const k=songKind(raw);
     if(k==='yt'){ const id=ytId(raw); if(id){ songMode='yt'; setupYT(id); } else { songMode='link'; songLink=raw; } }
-    else if(k==='audio'){ songMode='audio'; const a=document.getElementById('songAudio'); if(a) a.src=raw; }
+    else if(k==='audio'){
+      songMode='audio'; const a=document.getElementById('songAudio');
+      if(a){ a.src=raw;
+        if(SONG_AUTOPLAY) a.play().catch(function(){
+          a.muted=true;
+          a.play().then(function(){ showMuteHint(true); armUnmute(); volIcon(); }).catch(function(){});
+        });
+      }
+    }
     else { songMode='link'; songLink=raw; }
   }
   function setupYT(id){
@@ -881,7 +959,27 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
       ytPlayer = new YT.Player('ytFrame', {
         videoId:id, playerVars:{playsinline:1,controls:0,disablekb:1,rel:0},
         events:{
-          onReady:function(){ ytReady=true; if(ytWantToggle){ ytWantToggle=false; ytPlayer.playVideo(); } },
+          onReady:function(){
+            ytReady=true;
+            applyVol(getVol());
+            var t0=setInterval(function(){
+              if(ytPlayer.getDuration && ytPlayer.getDuration()>0){
+                setTime(ytPlayer.getCurrentTime()||0, ytPlayer.getDuration());
+                if(ytPlayer.getPlayerState()!==1) setBar((ytPlayer.getCurrentTime()||0)/ytPlayer.getDuration()*100);
+                clearInterval(t0);
+              }
+            }, 300);
+            if(ytWantToggle){ ytWantToggle=false; ytPlayer.playVideo(); }
+            else if(SONG_AUTOPLAY){
+              ytPlayer.playVideo();
+              setTimeout(function(){
+                if(ytPlayer.getPlayerState && ytPlayer.getPlayerState()!==1){
+                  ytPlayer.mute(); ytPlayer.playVideo();
+                  showMuteHint(true); armUnmute(); volIcon();
+                }
+              }, 900);
+            }
+          },
           onStateChange:function(e){
             if(e.data===1){ playing(true); startYTProgress(); }
             else if(e.data===2){ playing(false); stopYTProgress(); }
@@ -900,7 +998,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
         const d=ytPlayer.getDuration(), c=ytPlayer.getCurrentTime();
         if(d){ setBar(c/d*100); setTime(c,d); }
       }
-    },500);
+    },250);
   }
   function stopYTProgress(){ if(ytTimer){ clearInterval(ytTimer); ytTimer=null; } }
   function toggleSong(){
@@ -911,6 +1009,8 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
   }
   (function(){
     const a=document.getElementById('songAudio'); if(!a) return;
+    a.addEventListener('loadedmetadata', ()=>{ if(a.duration){ setTime(0,a.duration); setBar(0); } });
+    a.volume=getVol()/100;
     a.addEventListener('play', ()=>playing(true));
     a.addEventListener('pause',()=>playing(false));
     a.addEventListener('ended',()=>{ playing(false); setBar(0); });
@@ -973,6 +1073,19 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
   loadOriginalSongs();
   loadRecentDiary();
   loadGalleryMain();
+  marquee('npTitle'); marquee('npSub');
+  const _vr=document.getElementById('volRange');
+  if(_vr){ _vr.value=getVol();
+    _vr.addEventListener('input', function(){
+      const v=+this.value; localStorage.setItem(VOL_KEY, v);
+      if(v>0){
+        if(songMode==='yt' && ytPlayer && ytPlayer.isMuted && ytPlayer.isMuted()) ytPlayer.unMute();
+        const a=document.getElementById('songAudio'); if(a) a.muted=false;
+        showMuteHint(false);
+      }
+      applyVol(v);
+    });
+  }
   setTimeout(()=>document.body.classList.add('ready'), 1600); /* FOUC 폴백 */
 </script>
 
