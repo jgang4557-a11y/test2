@@ -43,7 +43,8 @@
       .s-genre { font-size:10px; padding:2px 8px; }
       .dot { width:7px; height:7px; }
     }
-  </style>
+  .s-key{font-size:12.5px;font-weight:700;color:var(--main-dark);letter-spacing:.3px;white-space:nowrap;}
+</style>
 </head>
 <body>
 <script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
@@ -75,8 +76,8 @@
     <div class="count-line" id="count"></div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th class="s-num">#</th><th>제목</th><th class="hide-m">아티스트</th><th>장르</th><th>난이도</th></tr></thead>
-        <tbody id="song-body"><tr><td colspan="5"><div class="spinner"></div></td></tr></tbody>
+        <thead><tr><th class="s-num">#</th><th>제목</th><th class="hide-m">아티스트</th><th>장르</th><th>KEY</th><th>숙련도</th></tr></thead>
+        <tbody id="song-body"><tr><td colspan="6"><div class="spinner"></div></td></tr></tbody>
       </table>
     </div>
     <div class="pagination" id="pagination"></div>
@@ -119,7 +120,7 @@
     const pageItems = list.slice((curPage-1)*PAGE, curPage*PAGE);
     document.getElementById('count').textContent = `총 ${list.length}곡 · ${curPage}/${totalPages} 페이지`;
     const body = document.getElementById('song-body');
-    if (!list.length) { body.innerHTML = '<tr><td colspan="5"><div class="empty"><div class="empty-icon">🎵</div>노래가 없어요</div></td></tr>'; document.getElementById('pagination').innerHTML=''; return; }
+    if (!list.length) { body.innerHTML = '<tr><td colspan="6"><div class="empty"><div class="empty-icon">🎵</div>노래가 없어요</div></td></tr>'; document.getElementById('pagination').innerHTML=''; return; }
     body.innerHTML = pageItems.map((s, i) => {
       const num = (curPage-1)*PAGE + i + 1;
       const diff = parseInt(s.difficulty)||0;
@@ -129,6 +130,7 @@
         <td class="s-title">${esc(s.title)}</td>
         <td class="hide-m">${esc(s.artist)||'-'}</td>
         <td><span class="s-genre">${esc(s.genre)||'기타'}</span></td>
+        <td><span class="s-key">${esc(s.song_key)||'-'}</span></td>
         <td><span class="s-diff">${dots}</span></td>
       </tr>`;
     }).join('');
