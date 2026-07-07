@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>모요</title>
-<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/{{SOOP아이디앞2글자}}/{{SOOP아이디}}/{{SOOP아이디}}.jpg">
+<link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/du/duvl123/duvl123.jpg">
 <meta name="description" content="모요 공식 페이지">
 <meta property="og:type" content="website">
 <meta property="og:title" content="모요">
 <meta property="og:description" content="모요 공식 페이지 — Forest Adventurer">
-<meta property="og:image" content="https://profile.img.sooplive.co.kr/LOGO/{{SOOP아이디앞2글자}}/{{SOOP아이디}}/{{SOOP아이디}}.jpg">
+<meta property="og:image" content="https://profile.img.sooplive.co.kr/LOGO/du/duvl123/duvl123.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -266,7 +266,8 @@ body.dark .corner{color:#8aa25e;}
   font-size:26px; color:rgba(96,118,66,.4);
 }
 body.dark .cc-img{background:linear-gradient(150deg,#262d18,#212714); color:rgba(169,196,127,.4);}
-.cc-img img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none;}
+.cc-img img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+.cc-img .cc-yt{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:auto; height:auto; min-width:100%; min-height:100%; aspect-ratio:16/9; border:0;}
 .cc-diary{flex-shrink:0; display:flex; flex-direction:column;}
 .d-row{
   display:flex; align-items:center; gap:14px;
@@ -563,7 +564,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
       <div class="hero-mid">
         <h1 class="h-title">모요<span class="h-leaf">🌿</span></h1>
         <div class="h-sub"><i></i><span class="dm">✦</span>MOYO<span class="dm">✦</span><i></i></div>
-        <div class="h-badges">
+        <div class="h-badges" id="heroBadges">
           <span class="hb">FOREST ADVENTURER</span>
           <span class="hb">GUILD MEMBER</span>
           <span class="hb live"><b></b>LIVE</span>
@@ -618,7 +619,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
       <svg class="corner tr" viewBox="0 0 70 70" fill="none"><path d="M6 52 C6 22 22 6 52 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M20 13 q9-8 17-5 q-5 10-17 5z" fill="currentColor" opacity=".8"/><path d="M9 32 q-7-9-3-17 q10 5 3 17z" fill="currentColor" opacity=".55"/><path d="M36 8 q7-6 13-4 q-4 8-13 4z" fill="currentColor" opacity=".4"/></svg>
       <div class="ohd"><i></i><span class="dm">✦</span>CLASS CHANGE<span class="dm">✦</span><i></i></div>
       <div class="cc-body" id="classchange-body">
-        <div class="cc-img" id="ccImgBox"><span class="pl">🌿</span><img id="ccImg" alt=""></div>
+        <div class="cc-img" id="ccImgBox"><iframe class="cc-yt" src="https://www.youtube.com/embed/_f9RFMBlrN4?rel=0" title="CLASS CHANGE" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
         <div class="cc-diary" id="ccDiary">
           <a class="d-row" href="diary/"><b>0706</b><span>오늘의 일기</span><i>›</i></a>
           <a class="d-row" href="diary/"><b>0705</b><span>오늘의 일기</span><i>›</i></a>
@@ -661,8 +662,8 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
         <span class="day" id="day-5">토</span>
         <span class="day" id="day-6">일</span>
       </div>
-      <div class="s-row"><b>정규 방송</b> · 밤 10시</div>
-      <div class="s-row"><b>휴방</b> · 쉬는 날엔 숲속 탐험!</div>
+      <div class="s-row" id="sched-line1"><b>정규 방송</b> · 밤 10시</div>
+      <div class="s-row" id="sched-line2"><b>휴방</b> · 쉬는 날엔 숲속 탐험!</div>
     </section>
   </div>
 
@@ -696,7 +697,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     <section class="card">
       <div class="sec-hd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5l5-5"/><path d="M11 6.5l1.5-1.5a4 4 0 0 1 5.5 5.5L16.5 12M13 17.5L11.5 19a4 4 0 0 1-5.5-5.5L7.5 12"/></svg>LINKS</div>
       <div class="l-grid">
-        <a class="lbtn" id="link-soop" href="https://www.sooplive.com/station/{{SOOP아이디}}" target="_blank" rel="noopener"><span class="l-ic soop">S</span>SOOP 방송국</a>
+        <a class="lbtn" id="link-soop" href="https://www.sooplive.com/station/duvl123" target="_blank" rel="noopener"><span class="l-ic soop">S</span>SOOP 방송국</a>
         <a class="lbtn" id="link-youtube" href="{{유튜브주소}}" target="_blank" rel="noopener"><span class="l-ic yt">▶</span>YouTube</a>
         <a class="lbtn" id="link-fancim" href="{{X주소}}" target="_blank" rel="noopener"><span class="l-ic xx">X</span>X (트위터)</a>
         <a class="lbtn" id="link-fancafe" href="{{카페주소}}" target="_blank" rel="noopener"><span class="l-ic cafe">N</span>네이버 카페</a>
@@ -727,10 +728,13 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
 <script>
   /* ── 기본값 (DB 없이도 이 값으로 완성 화면) ── */
   const defaults = {
-    'soop-id': '{{SOOP아이디}}',
+    'soop-id': 'duvl123',
     avatar: '', 'hero-bg': '',
     'hero-quote': '오늘도 작은 모험을 찾아 숲을 걷는 중',
-    'song-audio': '', 'song-title': '숲의 노래', 'song-sub': '모요 cover', 'song-art': '', 'class-img': '',
+    'song-audio': '', 'song-title': '숲의 노래', 'song-sub': '모요 cover', 'song-art': '',
+    'class-media': 'https://youtu.be/_f9RFMBlrN4',
+    'hero-badges': 'FOREST ADVENTURER,GUILD MEMBER,LIVE',
+    'sched-line1': '정규 방송 · 밤 10시', 'sched-line2': '휴방 · 쉬는 날엔 숲속 탐험!',
     'info-name': '모요 (MOYO)',
     'info-catchphrase': '오늘도 작은 모험을 찾는 중 🌿',
     'info-tags': '밝음,긍정적,잔잔함',
@@ -738,7 +742,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     'info-fandom': '새싹이들 🌱',
     'info-dates': '12.20 · 2025.12.20 데뷔',
     'stat-debut':'2025.12.20','stat-race':'엘프','stat-class':'모험가','stat-guild':'숲속의 노래꾼',
-    'link-soop':'https://www.sooplive.com/station/{{SOOP아이디}}',
+    'link-soop':'https://www.sooplive.com/station/duvl123',
     'link-youtube':'{{유튜브주소}}',
     'link-fancim':'{{X주소}}',
     'link-fancafe':'{{카페주소}}',
@@ -759,9 +763,16 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
         const bg = document.getElementById('heroBg');
         bg.src = d['hero-bg']; bg.style.display = 'block';
       }
+      const avImg = document.getElementById('avatarImg');
       if ((d.avatar||'').trim()){
-        const img = document.getElementById('avatarImg');
-        img.src = d.avatar; img.style.display = 'block';
+        avImg.src = d.avatar; avImg.style.display = 'block';
+      } else {
+        const sid=(d['soop-id']||'').trim();
+        if (sid && sid.indexOf('{{')===-1 && !avImg.getAttribute('src')){
+          avImg.src='https://profile.img.sooplive.co.kr/LOGO/'+sid.slice(0,2)+'/'+sid+'/'+sid+'.jpg';
+          avImg.style.display='block';
+          avImg.onerror=function(){ this.style.display='none'; };
+        }
       }
 
       /* 텍스트 훅 */
@@ -800,11 +811,28 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
         ai.src = d['song-art']; ai.style.display='block';
         document.querySelector('#pArt span').style.display='none';
       }
-      if ((d['class-img']||'').trim()){
-        const ci = document.getElementById('ccImg');
-        ci.src = d['class-img']; ci.style.display='block';
-        document.querySelector('#ccImgBox .pl').style.display='none';
+      const media=(d['class-media']||'').trim();
+      if (media){
+        const box=document.getElementById('ccImgBox');
+        const vid=ytId(media);
+        if (vid) box.innerHTML='<iframe class="cc-yt" src="https://www.youtube.com/embed/'+vid+'?rel=0" title="CLASS CHANGE" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+        else box.innerHTML='<img src="'+media+'" alt="" referrerpolicy="no-referrer">';
       }
+      const hb=document.getElementById('heroBadges');
+      if (hb && (d['hero-badges']||'').trim()){
+        hb.innerHTML=d['hero-badges'].split(',').map(t=>t.trim()).filter(Boolean).map(t=>
+          t.toUpperCase()==='LIVE' ? '<span class="hb live"><b></b>LIVE</span>'
+          : '<span class="hb">'+t.replace(/</g,'&lt;')+'</span>').join('');
+      }
+      ['sched-line1','sched-line2'].forEach(k=>{
+        const el=document.getElementById(k); const v=(d[k]||'').trim();
+        if (el && v){
+          const i=v.indexOf('·');
+          el.innerHTML = i>0
+            ? '<b>'+v.slice(0,i).trim().replace(/</g,'&lt;')+'</b> · '+v.slice(i+1).trim().replace(/</g,'&lt;')
+            : v.replace(/</g,'&lt;');
+        }
+      });
       setSongSource(d['song-audio']);
     }catch(e){ console.log('load skip:', e.message||e); }
     finally{ document.body.classList.add('ready'); }

@@ -68,7 +68,7 @@
       </div>
       <div class="form-field">
         <label class="input-label">SOOP 아이디 (위 링크를 비우면 이걸로 자동 연동)</label>
-        <input class="input" id="f-soop-id" type="text" placeholder="{{SOOP아이디}}" oninput="previewAvatar()">
+        <input class="input" id="f-soop-id" type="text" placeholder="duvl123" oninput="previewAvatar()">
       </div>
       <div style="display:flex;align-items:center;gap:12px;margin-top:8px">
         <div style="width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--main-light);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px">
@@ -127,7 +127,8 @@
       <div class="card-title">🌿 메인 히어로</div>
       <div class="form-field"><label class="input-label">히어로 배경 이미지 URL (비우면 기본 일러)</label><input class="input" id="f-hero-bg" type="text" placeholder="https://…"></div>
       <div class="form-field"><label class="input-label">히어로 인용구 (따옴표 안 문구)</label><input class="input" id="f-hero-quote" type="text"></div>
-      <div class="form-field"><label class="input-label">CLASS CHANGE 이미지 URL</label><input class="input" id="f-class-img" type="text" placeholder="https://…"></div>
+      <div class="form-field"><label class="input-label">CLASS CHANGE 영상/이미지 (유튜브 링크 또는 이미지 URL)</label><input class="input" id="f-class-media" type="text" placeholder="https://youtu.be/…"></div>
+      <div class="form-field"><label class="input-label">히어로 배지 (쉼표 구분 · LIVE 입력 시 라이브 점 표시)</label><input class="input" id="f-hero-badges" type="text" placeholder="FOREST ADVENTURER,GUILD MEMBER,LIVE"></div>
     </div>
     <div class="card">
       <div class="card-title">📊 스탯 스트립 (메인 6칸)</div>
@@ -135,6 +136,11 @@
       <div class="form-field"><label class="input-label">종족</label><input class="input" id="f-stat-race" type="text"></div>
       <div class="form-field"><label class="input-label">클래스</label><input class="input" id="f-stat-class" type="text"></div>
       <div class="form-field"><label class="input-label">소속 길드</label><input class="input" id="f-stat-guild" type="text"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🗓 방송 일정 카드 문구 (메인)</div>
+      <div class="form-field"><label class="input-label">1줄 (· 앞이 굵게)</label><input class="input" id="f-sched-line1" type="text" placeholder="정규 방송 · 밤 10시"></div>
+      <div class="form-field"><label class="input-label">2줄</label><input class="input" id="f-sched-line2" type="text" placeholder="휴방 · 쉬는 날엔 숲속 탐험!"></div>
     </div>
     <div class="card">
       <div class="card-title">🎵 NOW PLAYING 플레이어</div>
@@ -146,22 +152,7 @@
   </div>
 
   <!-- 공지 탭 -->
-  <div class="tab-panel" id="tab-notice">
-    <div class="card">
-      <div class="card-title">공지 추가</div>
-      <div class="form-field"><label class="input-label">제목 *</label><input class="input" id="noti-title"></div>
-      <div class="form-field"><label class="input-label">내용</label><textarea class="input" id="noti-content" rows="4"></textarea></div>
-      <div class="form-field"><label class="input-label">이미지 링크 (여러 개면 줄바꿈으로 붙여넣기)</label><textarea id="noti-image-url" class="input" rows="2" placeholder="https://... (한 줄에 하나씩)"></textarea></div>
-      <div class="form-field full" style="font-size:11px;color:var(--text-soft);margin-top:-4px">💡 SOOP에 <b>비공개 게시판</b>을 만들어 이미지를 올린 뒤 → 이미지 <b>우클릭 → "이미지 주소 복사"</b> → 위 칸에 붙여넣기 (글 주소 말고 <b>이미지 주소</b>)</div>
-      <div class="form-field"><label><input type="checkbox" id="noti-pin"> 📌 고정 공지</label></div>
-      <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addNotice()">+ 추가</button></div>
-    </div>
-    <div class="card">
-      <div class="card-title">등록된 공지</div>
-      <div class="table-wrap"><table><thead><tr><th>제목</th><th>고정</th><th>날짜</th><th>삭제</th></tr></thead>
-      <tbody id="noti-list"><tr><td colspan="4"><div class="spinner"></div></td></tr></tbody></table></div>
-    </div>
-  </div>
+  
 
   <!-- 일정 탭 -->
   <div class="tab-panel" id="tab-schedule">
@@ -350,29 +341,7 @@
   </div>
 
   <!-- 옷장 탭 -->
-  <div class="tab-panel" id="tab-dress">
-    <div class="card">
-      <div class="card-title">👗 옷장 항목 추가</div>
-      <div class="form-grid">
-        <div class="form-field"><label class="input-label">분류</label>
-          <select class="input" id="dr-cat"><option value="hair">헤어</option><option value="outfit">의상</option><option value="lens">렌즈</option></select>
-        </div>
-        <div class="form-field"><label class="input-label">순서 (작을수록 앞 · 비우면 맨 뒤)</label>
-          <input class="input" id="dr-order" type="number" min="0" placeholder="비워두면 맨 뒤">
-        </div>
-        <div class="form-field full"><label class="input-label">이름 *</label><input class="input" id="dr-name" placeholder="예: 기본 헤어"></div>
-        <div class="form-field full"><label class="input-label">설명 (선택)</label><input class="input" id="dr-desc" placeholder="짧은 설명"></div>
-        <div class="form-field full"><label class="input-label">이미지 링크 (이미지 주소 붙여넣기)</label><input type="url" id="dr-img-url" class="input" placeholder="https://... 이미지 주소"></div>
-        <div class="form-field full" style="font-size:11px;color:var(--text-soft);margin-top:-4px">💡 SOOP <b>비공개 게시판</b>에 이미지 올린 뒤 → <b>우클릭 → "이미지 주소 복사"</b> → 위 칸에 붙여넣기. 권장 크기 <b>세로 3:4 (900×1200px)</b></div>
-        <div class="form-field full"><label><input type="checkbox" id="dr-new"> ✨ <b>새 옷</b>으로 올리기 <span style="color:var(--text-soft);font-weight:400">(체크하면 옷장 '새 옷'에 포스터로 떠요)</span></label></div>
-        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addDressItem()">+ 추가</button></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">등록된 옷장 항목</div>
-      <div id="dress-list"><div class="spinner"></div></div>
-    </div>
-  </div>
+  
 
   <!-- 문의 탭 -->
   <div class="tab-panel" id="tab-gallery">
@@ -407,8 +376,9 @@
   const profileKeys = [
     'avatar','soop-id',
     'info-name','info-catchphrase','info-tags','info-mbti','info-fandom','info-dates','days',
-    'hero-bg','hero-quote','class-img',
+    'hero-bg','hero-quote','hero-badges','class-media',
     'stat-debut','stat-race','stat-class','stat-guild',
+    'sched-line1','sched-line2',
     'song-title','song-sub','song-audio','song-art',
     'link-soop','link-youtube','link-fancafe','link-fancim'
   ];
@@ -418,7 +388,7 @@
       document.getElementById('loginOverlay').style.display = 'none';
       document.getElementById('adminBody').style.display = 'flex';
       loadProfileFields();
-      loadNotice(); loadSchedule(); loadWork(); loadDiary(); loadSong(); loadDress(); loadInquiry(); loadOriginalSongs();
+      loadSchedule(); loadWork(); loadDiary(); loadSong(); loadInquiry(); loadOriginalSongs(); loadGalleryAdmin();
     } else {
       document.getElementById('loginErr').textContent = '비밀번호가 틀렸어요 >﹏<';
     }
@@ -474,79 +444,6 @@
     if (error) { showToast('❌ 저장 실패: ' + error.message); return; }
     showToast('✅ 저장됐어요!');
   }
-  function showCurrentAvatar(url) {
-    const cur = document.getElementById('current-avatar');
-    const none = document.getElementById('no-avatar');
-    const delBtn = document.getElementById('delete-avatar-btn');
-    if (!cur || !none) return;   // 프사는 SOOP 연동 전용 → 업로드/미리보기 UI 없음
-    if (url) {
-      cur.src = url; cur.style.display = 'inline-block'; none.style.display = 'none';
-      if (delBtn) delBtn.style.display = 'inline-flex';
-    } else {
-      cur.style.display = 'none'; none.style.display = 'inline';
-      if (delBtn) delBtn.style.display = 'none';
-    }
-  }
-  async function deleteAvatar() {
-    if (!confirm('프로필 사진을 삭제할까요?\n(삭제하면 SOOP 아이디 프사가 적용돼요)')) return;
-    let saved = {};
-    try {
-      const { data: rows } = await db.from('profile').select('data').eq('id', 1);
-      if (rows && rows.length > 0 && rows[0].data) saved = rows[0].data;
-    } catch(e) {}
-    saved['avatar'] = '';
-    const { error } = await db.from('profile').upsert({ id: 1, data: saved });
-    if (error) { showToast('❌ 삭제 실패: ' + error.message); return; }
-    showCurrentAvatar('');
-    showToast('🗑 사진 삭제됨! 이제 SOOP 아이디 프사가 떠요');
-  }
-  function previewUpload() {
-    const file = document.getElementById('avatar-file').files[0];
-    if (!file) return;
-    document.getElementById('avatar-preview').src = URL.createObjectURL(file);
-    document.getElementById('avatar-preview').style.display = 'block';
-    document.getElementById('upload-btn').style.display = 'inline-flex';
-  }
-  async function uploadAvatar() {
-    const file = document.getElementById('avatar-file').files[0];
-    if (!file) return;
-    const status = document.getElementById('upload-status');
-    status.textContent = '업로드 중...';
-    const ext = file.name.split('.').pop();
-    const { data, error } = await db.storage.from('{{버킷이름}}').upload('profile.' + ext, file, { upsert: true });
-    if (error) { status.textContent = '❌ 업로드 실패: ' + error.message; return; }
-    const { data: u } = db.storage.from('{{버킷이름}}').getPublicUrl('profile.' + ext);
-    const url = u.publicUrl + '?t=' + Date.now();
-    let saved = {};
-    try {
-      const { data: rows } = await db.from('profile').select('data').eq('id', 1);
-      if (rows && rows.length > 0 && rows[0].data) saved = rows[0].data;
-    } catch(e) {}
-    saved['avatar'] = url;
-    await db.from('profile').upsert({ id: 1, data: saved });
-    showCurrentAvatar(url);
-    status.textContent = '✅ 완료!';
-    showToast('✅ 프로필 사진 저장!');
-  }
-
-  // ── 공지 ──
-  async function loadNotice() {
-    const data = await fetchAll('notice', { order: 'created_at', asc: false });
-    const t = document.getElementById('noti-list');
-    if (!data.length) { t.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#ccc;padding:20px">없음</td></tr>'; return; }
-    t.innerHTML = data.map(n => `<tr><td>${n.title}</td><td>${n.pinned?'📌':'-'}</td><td>${new Date(n.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="del('notice',${n.id},loadNotice)">🗑</button></td></tr>`).join('');
-  }
-  async function addNotice() {
-    const title = document.getElementById('noti-title').value.trim();
-    if (!title) { showToast('❗ 제목 필수!'); return; }
-    const images = document.getElementById('noti-image-url').value.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
-    const image_url = images[0] || null;
-    const ok = await insertRow('notice', { title, content: document.getElementById('noti-content').value, pinned: document.getElementById('noti-pin').checked, image_url, images });
-    if (ok) { showToast('✅ 추가!'); ['noti-title','noti-content','noti-image-url'].forEach(id=>document.getElementById(id).value=''); document.getElementById('noti-pin').checked=false; loadNotice(); }
-    else showToast('❌ 실패');
-  }
-
-  // ── 일정 ──
   async function loadSchedule() {
     const data = await fetchAll('schedule', { order: 'date', asc: true });
     const t = document.getElementById('sch-list');
@@ -803,122 +700,8 @@
     else showToast('❌ 실패');
   }
 
-  // ── 옷장 ──
-  let dressCache = [];
-  let dressFilter = 'all';   // 'all' | 'new'(새 옷/포스터) | 'old'(기존)
-  const DRESS_CATS = [['hair','헤어'],['outfit','의상'],['lens','렌즈']];   // 관리자 목록의 분류·순서 (분류를 바꿀 땐 위 select 옵션 + 옷장 페이지 탭도 함께 수정)
+  // ── 옷장 ──   // 'all' | 'new'(새 옷/포스터) | 'old'(기존)   // 관리자 목록의 분류·순서 (분류를 바꿀 땐 위 select 옵션 + 옷장 페이지 탭도 함께 수정)
   const dressByOrder = (a,b)=> ((a.sort_order||0)-(b.sort_order||0)) || (new Date(a.created_at)-new Date(b.created_at));
-  function hasNew(d){
-    return (d.badges||[]).some(function(b){ var l=(b&&(b.label!=null?b.label:b))||''; return String(l).trim().toUpperCase()==='NEW'; });
-  }
-
-  async function loadDress(){
-    dressCache = await fetchAll('dress_items', { order:'created_at', asc:true }) || [];
-    const el = document.getElementById('dress-list');
-    if(!el) return;
-
-    const newCnt = dressCache.filter(hasNew).length;
-    const oldCnt = dressCache.length - newCnt;
-    const fbtn = (key,label) => `<button onclick="setDressFilter('${key}')" style="border:1.5px solid ${dressFilter===key?'var(--main)':'var(--main-light)'};background:${dressFilter===key?'var(--main)':'var(--card)'};color:${dressFilter===key?'#fff':'var(--main-dark)'};font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:999px;cursor:pointer">${label}</button>`;
-    let html = `<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px">${fbtn('all','전체 '+dressCache.length)}${fbtn('new','✨ 새 옷 '+newCnt)}${fbtn('old','🗂 기존 '+oldCnt)}</div>`;
-
-    if(!dressCache.length){ el.innerHTML = html + '<div style="text-align:center;color:#ccc;padding:20px">없음</div>'; return; }
-
-    const match = (d) => dressFilter==='all' ? true : (dressFilter==='new' ? hasNew(d) : !hasNew(d));
-    const chip = (d) => hasNew(d)
-      ? `<span style="font-size:10px;font-weight:800;color:#fff;background:var(--main);padding:2px 8px;border-radius:999px;white-space:nowrap">✨ 새옷</span>`
-      : `<span style="font-size:10px;font-weight:700;color:var(--text-soft);background:var(--main-light);padding:2px 8px;border-radius:999px;white-space:nowrap">기존</span>`;
-    const tgl = (d) => `<button onclick="toggleDressNew('${d.id}')" title="새옷/기존 전환" style="border:1px solid var(--main-light);background:var(--card);color:var(--main-dark);font-size:11px;font-weight:700;padding:5px 9px;border-radius:8px;cursor:pointer;white-space:nowrap">${hasNew(d)?'기존으로':'새옷으로'}</button>`;
-
-    const row = (d, i, len) => `
-      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card);border:1px solid var(--main-light);border-radius:10px;margin-bottom:7px">
-        <div style="display:flex;flex-direction:column;gap:2px">
-          <button class="ord-btn" onclick="moveDress('${d.id}',-1)" ${i===0?'disabled':''} title="위로">▲</button>
-          <button class="ord-btn" onclick="moveDress('${d.id}',1)" ${i===len-1?'disabled':''} title="아래로">▼</button>
-        </div>
-        <div style="width:42px;height:56px;border-radius:7px;background:var(--bg) center/cover no-repeat;flex-shrink:0;${d.image_url?`background-image:url('${(d.image_url||'').replace(/'/g,'%27')}')`:''}"></div>
-        <span style="flex:1;font-size:14px;font-weight:600;min-width:0">${(d.name||'').replace(/</g,'&lt;')}</span>
-        ${chip(d)}
-        ${tgl(d)}
-        <button class="delete-btn" onclick="del('dress_items','${d.id}',loadDress)">🗑</button>
-      </div>`;
-
-    DRESS_CATS.forEach(([key,label])=>{
-      const arr = dressCache.filter(d=>d.category===key).sort(dressByOrder);
-      const shown = arr.filter(match);
-      if(!shown.length) return;
-      html += `<div style="font-size:12px;font-weight:700;color:var(--main);margin:14px 0 7px;letter-spacing:.05em">${label} <span style="color:var(--text-soft);font-weight:500">· ${shown.length}개</span></div>`;
-      html += shown.map(d=>row(d, arr.indexOf(d), arr.length)).join('');
-    });
-
-    // 목록에 없는 분류(예: 과거 데이터)도 보여줘서 잃어버리지 않게
-    const known = DRESS_CATS.map(c=>c[0]);
-    const other = dressCache.filter(d=>!known.includes(d.category)).sort(dressByOrder).filter(match);
-    if(other.length){
-      html += `<div style="font-size:12px;font-weight:700;color:var(--text-soft);margin:16px 0 7px;letter-spacing:.05em">기타 분류 <span style="font-weight:500">· ${other.length}개</span></div>`;
-      html += other.map(d=>`
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card);border:1px dashed var(--main-light);border-radius:10px;margin-bottom:7px;opacity:.9">
-          <span style="font-size:11px;font-weight:700;color:#fff;background:var(--text-soft);padding:2px 8px;border-radius:999px">${(d.category||'?')}</span>
-          <span style="flex:1;font-size:14px;font-weight:600;min-width:0">${(d.name||'').replace(/</g,'&lt;')}</span>
-          ${chip(d)}
-          ${tgl(d)}
-          <button class="delete-btn" onclick="del('dress_items','${d.id}',loadDress)">🗑</button>
-        </div>`).join('');
-    }
-    el.innerHTML = html;
-  }
-  function setDressFilter(f){ dressFilter = f; loadDress(); }
-  async function toggleDressNew(id){
-    const d = dressCache.find(x=>x.id===id); if(!d) return;
-    const had = hasNew(d);
-    const badges = had
-      ? (d.badges||[]).filter(function(b){ var l=(b&&(b.label!=null?b.label:b))||''; return String(l).trim().toUpperCase()!=='NEW'; })
-      : (d.badges||[]).concat([{label:'NEW'}]);
-    showToast(had ? '🗂 기존으로 이동...' : '✨ 새 옷으로 이동...');
-    await updateRow('dress_items', id, { badges });
-    loadDress();
-  }
-
-  // ▲/▼ 순서 변경 (같은 분류 안에서 자리 바꾸기 → 0,1,2…로 다시 매김)
-  async function moveDress(id, dir){
-    const item = dressCache.find(d=>d.id===id);
-    if(!item) return;
-    const arr = dressCache.filter(d=>d.category===item.category).sort(dressByOrder);
-    const i = arr.findIndex(d=>d.id===id);
-    const j = i + dir;
-    if(j<0 || j>=arr.length) return;
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-    showToast('↕ 순서 변경 중...');
-    await Promise.all(arr.map((d,idx)=> updateRow('dress_items', d.id, { sort_order: idx })));
-    loadDress();
-  }
-  async function addDressItem(){
-    const name = document.getElementById('dr-name').value.trim();
-    if(!name){ showToast('❗ 이름 필수!'); return; }
-    const cat = document.getElementById('dr-cat').value;
-    const image_url = document.getElementById('dr-img-url').value.trim();
-    const badges = document.getElementById('dr-new').checked ? [{label:'NEW'}] : [];
-    const orderRaw = (document.getElementById('dr-order').value||'').trim();
-    let sort_order;
-    if(orderRaw !== ''){
-      sort_order = parseInt(orderRaw,10); if(isNaN(sort_order)) sort_order = 0;
-    } else {
-      const inCat = dressCache.filter(d=>d.category===cat);
-      sort_order = inCat.length ? Math.max(...inCat.map(d=>d.sort_order||0)) + 1 : 0;
-    }
-    const ok = await insertRow('dress_items', {
-      category: cat,
-      name, description: document.getElementById('dr-desc').value.trim(),
-      image_url, badges, sort_order
-    });
-    if(ok){
-      showToast('✅ 추가됐어요!');
-      document.getElementById('dr-name').value=''; document.getElementById('dr-desc').value='';
-      document.getElementById('dr-img-url').value=''; document.getElementById('dr-new').checked=false;
-      document.getElementById('dr-order').value='';
-      loadDress();
-    } else showToast('❌ 추가 실패 (옷장 SQL 실행했는지 확인)');
-  }
 </script>
 <script>
 /* ── 갤러리 관리 (gallery_items) ── */
@@ -944,7 +727,6 @@ async function delGalleryItem(id){
   if(!confirm('삭제할까요?')) return;
   await deleteRow('gallery_items', id); loadGalleryAdmin();
 }
-loadGalleryAdmin();
 </script>
 </body>
 </html>
