@@ -298,7 +298,6 @@ body.dark .cc-img{background:linear-gradient(150deg,#262d18,#212714); color:rgba
 .p-art img{width:100%; height:100%; object-fit:cover; display:none;}
 .p-info{flex:1; min-width:0;}
 .p-eyebrow{font-size:11px; font-weight:800; letter-spacing:2.5px; opacity:.85;}
-.p-hint{font-size:10px; font-weight:700; letter-spacing:.4px; background:rgba(244,241,221,.2); border-radius:999px; padding:3px 9px; margin-left:9px; vertical-align:1px; animation:pulse 1.8s ease infinite; display:inline-block;}
 .p-title{font-family:var(--disp); font-size:21px; font-weight:700; margin-top:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .p-sub{font-size:12.5px; opacity:.8; margin-top:3px; white-space:nowrap; overflow:hidden;}
 .p-barrow{display:flex; align-items:center; gap:12px; margin:15px 0 13px;}
@@ -317,8 +316,15 @@ body.dark .cc-img{background:linear-gradient(150deg,#262d18,#212714); color:rgba
 .p-ctrl .p-play{width:46px; height:46px; background:#f2f0dd; color:#374e2e; font-size:16px;}
 .p-ctrl .p-play:hover{transform:scale(1.07); background:#fff;}
 .p-vol{display:flex; align-items:center; gap:8px; margin-left:auto;}
-.p-vol button{font-size:15px;}
-.p-vol input[type=range]{width:76px; height:4px; accent-color:#f2f0dd; cursor:pointer;}
+.p-vol button svg{width:17px; height:17px;}
+#volBtn .vx{display:none;}
+#volBtn.muted .vw1, #volBtn.muted .vw2{display:none;}
+#volBtn.muted .vx{display:block;}
+#volBtn.low .vw2{display:none;}
+.p-vol input[type=range]{-webkit-appearance:none; appearance:none; width:76px; height:4px; border-radius:999px; background:rgba(244,241,221,.28); outline:none; cursor:pointer;}
+.p-vol input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:12px; height:12px; border-radius:50%; background:#f2f0dd; box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.p-vol input[type=range]::-moz-range-thumb{width:12px; height:12px; border-radius:50%; background:#f2f0dd; border:none;}
+.p-vol input[type=range]::-moz-range-progress{background:#f2f0dd; height:4px; border-radius:999px;}
 .p-title.marq,.p-sub.marq{
   text-overflow:clip;
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 14px),transparent);
@@ -643,7 +649,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     <div class="player" id="playerBox">
       <div class="p-art" id="pArt"><span>♪</span><img id="pArtImg" alt=""></div>
       <div class="p-info">
-        <div class="p-eyebrow">♪ NOW PLAYING<span id="muteHint" class="p-hint" hidden>🔇 누르면 소리 ON</span></div>
+        <div class="p-eyebrow">♪ NOW PLAYING</div>
         <div class="p-title" id="npTitle">숲의 노래</div>
         <div class="p-sub" id="npSub">모요 cover</div>
         <div class="p-barrow">
@@ -655,8 +661,8 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
           <button type="button" class="p-play" id="songPlayBtn" aria-label="노래 재생" onclick="toggleSong()">▶</button>
           <button type="button" aria-label="다음">▷</button>
           <div class="p-vol">
-            <button type="button" id="volBtn" aria-label="음소거 전환" onclick="toggleMute()">🔊</button>
-            <input type="range" id="volRange" min="0" max="100" value="80" aria-label="음량">
+            <button type="button" id="volBtn" aria-label="음소거 전환" onclick="toggleMute()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 5.5 7.5 9H4.5v6h3l4 3.5z" fill="currentColor" stroke="currentColor" stroke-width="1.2"/><path class="vw1" d="M14.8 9.8a3.2 3.2 0 0 1 0 4.4"/><path class="vw2" d="M17 7.6a6.4 6.4 0 0 1 0 8.8"/><g class="vx"><path d="M15 9.8l4.4 4.4M19.4 9.8L15 14.2"/></g></svg></button>
+            <input type="range" id="volRange" min="0" max="100" value="30" aria-label="음량">
           </div>
         </div>
       </div>
@@ -903,7 +909,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     });
   }
   const VOL_KEY='moyo-vol';
-  function getVol(){ const v=parseInt(localStorage.getItem(VOL_KEY)); return isNaN(v)?80:Math.min(100,Math.max(0,v)); }
+  function getVol(){ const v=parseInt(localStorage.getItem(VOL_KEY)); return isNaN(v)?30:Math.min(100,Math.max(0,v)); }
   function applyVol(v){
     const a=document.getElementById('songAudio'); if(a) a.volume=v/100;
     if(ytPlayer && ytPlayer.setVolume) ytPlayer.setVolume(v);
@@ -916,7 +922,9 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     const a=document.getElementById('songAudio');
     if(songMode==='audio' && a) muted=a.muted;
     const v=getVol();
-    const b=document.getElementById('volBtn'); if(b) b.textContent=(muted||v===0)?'🔇':(v<45?'🔉':'🔊');
+    const b=document.getElementById('volBtn'); if(!b) return;
+    b.classList.toggle('muted', muted || v===0);
+    b.classList.toggle('low', !muted && v>0 && v<45);
   }
   function toggleMute(){
     if(songMode==='yt' && ytPlayer && ytPlayer.isMuted){
