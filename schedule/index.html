@@ -80,7 +80,8 @@
     body.dark .modal { background: var(--card); }
     body.dark .m-part,
     body.dark .m-desc { background: #22262e; }
-  </style>
+  .up-part{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--main-light);color:var(--main-dark);vertical-align:2px;margin-left:2px;}
+</style>
 </head>
 <body>
 <script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
@@ -162,8 +163,15 @@
       const events = allSchedule.filter(s => s.date === dateStr);
       const hl = events.some(e=>e.highlight);
       let evHtml = events.map(e => {
-        const label = (e.time ? e.time+' ' : '') + (e.title || (kind(e.type)==='off'?'휴방':'방송'));
-        return `<div class="ev ${colorClass(e)}" title="${esc(label)}">${esc(label)}</div>`;
+        const base = e.title || (kind(e.type)==='off'?'휴방':'방송');
+        const chips = [];
+        const l1 = (e.time ? e.time+' ' : '') + base;
+        chips.push(`<div class="ev ${colorClass(e)}" title="${esc(l1)}">${esc(l1)}</div>`);
+        if (e.time2 || e.title2) {
+          const l2 = (e.time2 ? e.time2+' ' : '') + (e.title2 || base);
+          chips.push(`<div class="ev ${colorClass(e)}" title="${esc(l2)}">${esc(l2)}</div>`);
+        }
+        return chips.join('');
       }).join('');
       const cls = `cal-cell${isToday?' today':''}${events.length?' has':''}${hl?' hl':''}`;
       const click = events.length ? `onclick="openModal('${dateStr}')"` : '';
@@ -175,17 +183,26 @@
     grid.innerHTML = html;
   }
   function renderUpcoming() {
-    const today = new Date().toISOString().split('T')[0];
-    const upcoming = allSchedule.filter(s => s.date >= today).slice(0, 12);
+    const n = new Date();
+    const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`; /* 로컬(KST) 기준 — UTC 밀림 방지 */
+    const rows = allSchedule.filter(s => s.date >= today);
+    /* 1부/2부(time2·title2)를 별도 항목으로 분리 */
+    const slots = [];
+    rows.forEach(s => {
+      const both = !!(s.time2 || s.title2);
+      slots.push({ row:s, time:s.time, title:s.title, type:s.type, part: both ? '1부' : '' });
+      if (both) slots.push({ row:s, time:s.time2, title:s.title2 || s.title, type:s.type2 || s.type, part:'2부' });
+    });
+    const upcoming = slots.slice(0, 12);
     const el = document.getElementById('upcoming');
     if (!upcoming.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>다가오는 일정이 없어요</div>'; return; }
-    el.innerHTML = upcoming.map(s => {
-      const dd = new Date(s.date + 'T00:00:00'); const k = kind(s.type);
+    el.innerHTML = upcoming.map(u => {
+      const s = u.row;
+      const dd = new Date(s.date + 'T00:00:00'); const k = kind(u.type || s.type);
       const label = k==='off' ? '휴방' : '방송';
-      const times = [s.time, s.time2].filter(Boolean).join(' · ');
       return `<div class="up-item ${colorClass(s)}" style="border-left-color:currentColor" onclick="openModal('${s.date}')">
         <div class="up-date"><div class="up-d1">${String(dd.getMonth()+1).padStart(2,'0')}-${String(dd.getDate()).padStart(2,'0')} (${DAYS[dd.getDay()]})</div></div>
-        <div class="up-info"><div class="up-title">${esc(s.title || label)}</div>${times?`<div class="up-time">${esc(times)}</div>`:''}</div>
+        <div class="up-info"><div class="up-title">${esc(u.title || label)}${u.part?` <span class="up-part">${u.part}</span>`:''}</div>${u.time?`<div class="up-time">${esc(u.time)}</div>`:''}</div>
         <span class="up-badge ${colorClass(s)}">${label}</span>
       </div>`;
     }).join('');
