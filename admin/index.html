@@ -26,7 +26,14 @@
     .ord-btn { width: 22px; height: 18px; line-height: 1; padding: 0; border: 1px solid var(--main-light); background: var(--card); color: var(--main-dark); border-radius: 5px; font-size: 9px; cursor: pointer; transition: background .2s; }
     .ord-btn:hover:not(:disabled) { background: var(--main-light); }
     .ord-btn:disabled { opacity: .3; cursor: default; }
-  </style>
+      .cc-cus input[type=radio]{display:none;}
+    .cc-wrap{display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:999px; border:1.5px dashed rgba(96,118,66,.45); vertical-align:middle;}
+    .cc-cus input[type=radio]:checked + .cc-wrap{border-style:solid; border-color:#6d8c4f; background:rgba(109,140,79,.1);}
+    input.cc-col{width:30px; height:30px; border:none; background:none; padding:0; cursor:pointer;}
+    input.cc-col::-webkit-color-swatch-wrapper{padding:0;}
+    input.cc-col::-webkit-color-swatch{border-radius:50%; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.2);}
+    input.cc-hex{width:76px; padding:5px 8px; border-radius:8px; border:1px solid rgba(96,118,66,.35); font-family:ui-monospace,monospace; font-size:12px; background:#fff;}
+</style>
 </head>
 <body>
 
@@ -188,6 +195,7 @@
             <label><input type="radio" name="schcolor" value="purple"><span class="cdot-purple"></span></label>
             <label><input type="radio" name="schcolor" value="red"><span class="cdot-red"></span></label>
             <label><input type="radio" name="schcolor" value="gray"><span class="cdot-gray"></span></label>
+            <label class="cc-cus"><input type="radio" name="schcolor" value="custom"><span class="cc-wrap"><input type="color" class="cc-col" data-g="schcolor" value="#6d8c4f"><input type="text" class="cc-hex" data-g="schcolor" value="#6d8c4f" maxlength="7" spellcheck="false"></span></label>
           </div>
         </div>
         <div class="form-field"><label class="input-label">1부 시간</label><input class="input" id="sch-time" placeholder="오후 5시"></div>
@@ -206,6 +214,7 @@
             <label><input type="radio" name="schcolor2" value="purple"><span class="cdot-purple"></span></label>
             <label><input type="radio" name="schcolor2" value="red"><span class="cdot-red"></span></label>
             <label><input type="radio" name="schcolor2" value="gray"><span class="cdot-gray"></span></label>
+            <label class="cc-cus"><input type="radio" name="schcolor2" value="custom"><span class="cc-wrap"><input type="color" class="cc-col" data-g="schcolor2" value="#6d8c4f"><input type="text" class="cc-hex" data-g="schcolor2" value="#6d8c4f" maxlength="7" spellcheck="false"></span></label>
           </div>
         </div>
         <div class="form-field full"><label class="input-label">설명 (선택)</label><textarea class="input" id="sch-desc" rows="2"></textarea></div>
@@ -408,7 +417,7 @@
       document.getElementById('loginOverlay').style.display = 'none';
       document.getElementById('adminBody').style.display = 'flex';
       loadProfileFields();
-      loadSchedule(); loadWork(); loadDiary(); loadSong(); loadInquiry(); loadOriginalSongs(); loadGalleryAdmin();
+      loadSchedule(); loadWork(); loadDiary(); loadSong(); loadInquiry(); loadOriginalSongs(); loadGalleryAdmin(); initCC();
     } else {
       document.getElementById('loginErr').textContent = '비밀번호가 틀렸어요 >﹏<';
     }
@@ -487,8 +496,8 @@
     set('em-desc', s.description);
     document.getElementById('em-type').value = s.type || '방송';
     document.getElementById('em-hl').checked = !!s.highlight;
-    const c1 = document.querySelector(`input[name="emcolor"][value="${s.color||'green'}"]`); if (c1) c1.checked = true;
-    const c2 = document.querySelector(`input[name="emcolor2"][value="${s.color2||''}"]`); if (c2) c2.checked = true;
+    setCol('emcolor', s.color, 'green');
+    setCol('emcolor2', s.color2, '');
     document.getElementById('em-ov').classList.add('show');
   }
   function closeEditSch(){ schEditId = null; document.getElementById('em-ov').classList.remove('show'); }
@@ -503,8 +512,8 @@
     if (end_date && end_date < date) { showToast('❗ 종료일이 시작일보다 빨라요'); return; }
     const row = {
       title, date, type, end_date,
-      color: (document.querySelector('input[name="emcolor"]:checked')||{}).value || 'green',
-      color2: (document.querySelector('input[name="emcolor2"]:checked')||{}).value || null,
+      color: readCol('emcolor','green') || 'green',
+      color2: readCol('emcolor2','') || null,
       time: document.getElementById('em-time').value,
       time2: document.getElementById('em-time2').value,
       title2: document.getElementById('em-title2').value.trim(),
@@ -515,14 +524,51 @@
     if (ok){ showToast('✅ 수정 완료!'); closeEditSch(); loadSchedule(); }
     else showToast('❗ 수정 실패');
   }
+  function initCC(){
+    document.querySelectorAll('.cc-col').forEach(c=>{
+      c.addEventListener('input', ()=>{
+        const g=c.dataset.g;
+        const h=document.querySelector(`.cc-hex[data-g="${g}"]`); if(h) h.value=c.value;
+        const r=document.querySelector(`input[name="${g}"][value="custom"]`); if(r) r.checked=true;
+      });
+    });
+    document.querySelectorAll('.cc-hex').forEach(h=>{
+      h.addEventListener('input', ()=>{
+        let v=h.value.trim(); if(v && v[0]!=='#') v='#'+v;
+        if(/^#[0-9a-fA-F]{6}$/.test(v)){
+          const g=h.dataset.g;
+          const c=document.querySelector(`.cc-col[data-g="${g}"]`); if(c) c.value=v;
+          const r=document.querySelector(`input[name="${g}"][value="custom"]`); if(r) r.checked=true;
+        }
+      });
+    });
+  }
+  function readCol(g, fb){
+    const sel=(document.querySelector(`input[name="${g}"]:checked`)||{}).value;
+    if(sel==='custom'){
+      let v=((document.querySelector(`.cc-hex[data-g="${g}"]`)||{}).value||'').trim();
+      if(v && v[0]!=='#') v='#'+v;
+      return /^#[0-9a-fA-F]{6}$/.test(v)? v : fb;
+    }
+    return sel!==undefined? sel : fb;
+  }
+  function setCol(g, val, def){
+    if(val && val[0]==='#'){
+      const r=document.querySelector(`input[name="${g}"][value="custom"]`); if(r) r.checked=true;
+      const c=document.querySelector(`.cc-col[data-g="${g}"]`); if(c) c.value=val;
+      const h=document.querySelector(`.cc-hex[data-g="${g}"]`); if(h) h.value=val;
+    } else {
+      const r=document.querySelector(`input[name="${g}"][value="${val!=null?val:def}"]`); if(r) r.checked=true;
+    }
+  }
   async function addSchedule() {
     const date = document.getElementById('sch-date').value;
     if (!date) { showToast('❗ 날짜 필수!'); return; }
     const type = document.getElementById('sch-type').value;
     let title = document.getElementById('sch-title').value.trim();
     if (!title) title = (type === '휴방' ? '휴방' : '방송');
-    const color = (document.querySelector('input[name="schcolor"]:checked')||{}).value || 'green';
-    const color2 = (document.querySelector('input[name="schcolor2"]:checked')||{}).value || null;
+    const color = readCol('schcolor','green') || 'green';
+    const color2 = readCol('schcolor2','') || null;
     const end_date = document.getElementById('sch-end').value || null;
     if (end_date && end_date < date) { showToast('❗ 종료일이 시작일보다 빨라요'); return; }
     const row = {
@@ -791,7 +837,8 @@
             <label><input type="radio" name="emcolor" value="blue"><span class="cdot-blue"></span></label>
             <label><input type="radio" name="emcolor" value="purple"><span class="cdot-purple"></span></label>
             <label><input type="radio" name="emcolor" value="red"><span class="cdot-red"></span></label>
-            <label><input type="radio" name="emcolor" value="gray"><span class="cdot-gray"></span></label></div></div>
+            <label><input type="radio" name="emcolor" value="gray"><span class="cdot-gray"></span></label>
+            <label class="cc-cus"><input type="radio" name="emcolor" value="custom"><span class="cc-wrap"><input type="color" class="cc-col" data-g="emcolor" value="#6d8c4f"><input type="text" class="cc-hex" data-g="emcolor" value="#6d8c4f" maxlength="7" spellcheck="false"></span></label></div></div>
       <div class="form-field full"><label class="input-label">2부 색상 (미선택=1부와 동일)</label><div class="color-pick"><label><input type="radio" name="emcolor2" value="" checked><span style="background:repeating-linear-gradient(45deg,#ccc 0 4px,#f6f6f6 4px 8px)"></span></label>
             <label><input type="radio" name="emcolor2" value="green"><span class="cdot-green"></span></label>
             <label><input type="radio" name="emcolor2" value="pink"><span class="cdot-pink"></span></label>
@@ -800,7 +847,8 @@
             <label><input type="radio" name="emcolor2" value="blue"><span class="cdot-blue"></span></label>
             <label><input type="radio" name="emcolor2" value="purple"><span class="cdot-purple"></span></label>
             <label><input type="radio" name="emcolor2" value="red"><span class="cdot-red"></span></label>
-            <label><input type="radio" name="emcolor2" value="gray"><span class="cdot-gray"></span></label></div></div>
+            <label><input type="radio" name="emcolor2" value="gray"><span class="cdot-gray"></span></label>
+            <label class="cc-cus"><input type="radio" name="emcolor2" value="custom"><span class="cc-wrap"><input type="color" class="cc-col" data-g="emcolor2" value="#6d8c4f"><input type="text" class="cc-hex" data-g="emcolor2" value="#6d8c4f" maxlength="7" spellcheck="false"></span></label></div></div>
       <div class="form-field full"><label class="input-label">설명 (선택)</label><textarea class="input" id="em-desc" rows="2"></textarea></div>
       <div class="form-field full"><label><input type="checkbox" id="em-hl"> ⭐ 하이라이트 (달력 별표)</label></div>
     </div>

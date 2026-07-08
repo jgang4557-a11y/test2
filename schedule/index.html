@@ -27,11 +27,12 @@
     .off-tag { position:absolute; top:3px; right:7px; font-size:16px; font-weight:800; letter-spacing:2px; background:transparent !important; z-index:1; }
     .cal-cell.hl { overflow:visible; }
     .cal-cell.hasband { overflow:visible; }
-    .band { position:relative; height:26px; margin:7px -6px 4px; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; z-index:1; }
-    .band span { position:relative; z-index:2; white-space:nowrap; padding:0 6px; }
-    .band.b-start { border-radius:999px 0 0 999px; margin-left:0; }
-    .band.b-end { border-radius:0 999px 999px 0; margin-right:0; }
-    .band.b-start.b-end { border-radius:999px; }
+    .band { position:relative; margin:3px -6px 0; padding:3px 4px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; line-height:1.35; z-index:1; border-radius:0; }
+    .band span { position:relative; z-index:2; white-space:nowrap; padding:0 4px; }
+    .band.b-start { margin-left:0; }
+    .band.b-end { margin-right:0; }
+    .cal-cell:nth-child(7n) .band { margin-right:0; }      /* 토요일 칸 밖 삐짐 방지 */
+    .cal-cell:nth-child(7n+1) .band { margin-left:0; }     /* 일요일 칸 */
     .cal-date { font-size:13px; font-weight:700; color:var(--text-mid); padding:1px 3px; }
     .cal-cell:nth-child(7n+1) .cal-date { color:#e05; }
     .cal-cell:nth-child(7n) .cal-date { color:#4a9; }
@@ -98,7 +99,10 @@
     .m-part.c-purple{background:#e8ddf7; border-color:#e8ddf7;} .m-part.c-purple .pt{color:#7a4fb0;}
     .m-part.c-red{background:#ffd9d9; border-color:#ffd9d9;} .m-part.c-red .pt{color:#c44;}
     .m-part.c-gray{background:#ececed; border-color:#ececed;} .m-part.c-gray .pt{color:#666;}
-  </style>
+      /* 커스텀 hex 색 */
+    .c-hex{background:var(--cbg); color:var(--cfg);}
+    .m-part.c-hex{background:var(--cbg); border-color:var(--cbg);} .m-part.c-hex .pt{color:var(--cfg);}
+</style>
 </head>
 <body>
 <script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
@@ -152,7 +156,16 @@
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function kind(t){ return t === '휴방' ? 'off' : 'on'; }
   function colorClass(s){ return 'c-' + (s.color || (kind(s.type)==='off'?'pink':'green')); }
-  function cc(color, type){ return 'c-' + (color || (kind(type)==='off'?'pink':'green')); }
+  function cc(color, type){
+    if (color && color[0]==='#' && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(color)){
+      let h=color.slice(1); if(h.length===3) h=h.split('').map(c=>c+c).join('');
+      const n=parseInt(h,16), r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+      const t=`rgb(${Math.round(r+(255-r)*.78)},${Math.round(g+(255-g)*.78)},${Math.round(b+(255-b)*.78)})`;
+      const d=`rgb(${Math.round(r*.55)},${Math.round(g*.55)},${Math.round(b*.55)})`;
+      return 'c-hex" style="--cbg:'+t+';--cfg:'+d;   /* 클래스+스타일 동시 주입 */
+    }
+    return 'c-' + (color || (kind(type)==='off'?'pink':'green'));
+  }
   function evOn(dateStr){ return allSchedule.filter(s => s.date <= dateStr && dateStr <= (s.end_date || s.date)); }
 
   async function init() {
