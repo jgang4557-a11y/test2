@@ -389,7 +389,7 @@ body.dark .nav a.active{ color:#161b0e !important; }
 .nav a.nav-logo{ font-size:24px !important; margin-right:auto; padding:6px 10px 6px 2px; }
 .nav a.nav-logo:hover{ background:transparent; }
 .ohd{ display:flex; align-items:center; justify-content:center; gap:13px;
-  font-family:'Italiana','Gowun Batang',serif; font-size:24px; letter-spacing:6px; color:var(--main-dark); margin:10px 0 0; }
+  font-family:'Playfair Display','Gowun Batang',serif; font-size:24px; letter-spacing:6px; color:var(--main-dark); margin:10px 0 0; }
 .ohd i{ flex:0 0 52px; height:1px; background:linear-gradient(90deg,transparent,rgba(96,118,66,.30)); }
 .ohd i:last-child{ background:linear-gradient(-90deg,transparent,rgba(96,118,66,.30)); }
 .ohd .dm{ font-size:11px; letter-spacing:0; color:var(--main); }
