@@ -64,7 +64,7 @@
     .jb-set{display:flex; align-items:center; gap:22px; flex-wrap:wrap;}
     .jb-stage{display:flex; justify-content:center; padding:148px 0 14px; overflow-x:auto;}
     .jb-scene{position:relative; display:inline-block;}
-    .jb-gob{position:absolute; right:-66px; bottom:-8px; width:82px; transform:rotate(5deg);
+    .jb-gob{position:absolute; right:4px; bottom:-2px; width:74px; transform:rotate(5deg);
       filter:drop-shadow(0 6px 10px rgba(40,55,25,.3)); pointer-events:none; z-index:4;}
     .jb-sticks{position:relative; display:flex; gap:15px; padding:0 34px; align-items:flex-end; height:176px; z-index:1;}
     .jb-stick{position:relative; width:22px; height:172px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;
@@ -80,22 +80,25 @@
       border-radius:8px 8px 6px 6px;
       background:linear-gradient(90deg,#dcc296,#cbaa76 55%,#b89560);
       box-shadow:inset -2px 0 2px rgba(0,0,0,.14), inset 2px 0 2px rgba(255,255,255,.4);}
-    .jb-stick .cap{position:absolute; top:-3px; left:50%; transform:translateX(-50%); width:20px; height:20px; border-radius:50%;
-      background:radial-gradient(circle at 35% 30%, #b3d086, #6d8c4f);
-      box-shadow:0 2px 5px rgba(60,75,40,.32), inset 0 -2px 0 rgba(0,0,0,.1);}
-    .jb-stick .no{position:absolute; top:24px; left:50%; transform:translateX(-50%); font-size:9.5px; font-weight:800; color:#8a6f45; font-style:normal;}
+    .jb-stick .cap{position:absolute; top:-20px; left:50%; transform:translateX(-50%); width:34px; height:34px; border-radius:50%;
+      background:#fffdf4; border:2px solid #d9c9a8; display:flex; align-items:center; justify-content:center;
+      box-shadow:0 3px 7px rgba(60,75,40,.3);}
+    body.dark .jb-stick .cap{background:var(--card); border-color:rgba(169,196,127,.35);}
+    .jb-stick .cap img{width:86%; height:86%; object-fit:contain; display:block;}
+    .jb-stick .no{position:absolute; top:20px; left:50%; transform:translateX(-50%); font-size:9.5px; font-weight:800; color:#8a6f45; font-style:normal;}
     .jb-stick .tip{position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:15px; height:40px;
       border-radius:2px 2px 6px 6px; opacity:0; transition:opacity .25s ease .35s;}
     .jb-stick.out .tip{opacity:1;}
     .tip.win{background:linear-gradient(#f4d878,#d9a520); box-shadow:0 0 14px rgba(217,165,32,.6);}
     .tip.lose{background:linear-gradient(#b9be9f,#98a082);}
-    .jb-tag{position:absolute; bottom:-36px; left:50%; transform:translateX(-50%) scale(0); white-space:nowrap;
-      background:#fff; border:1.5px solid; border-radius:999px; padding:6px 13px; font-size:13px; font-weight:800;
+    .jb-tag{position:absolute; bottom:-34px; left:50%; transform:translateX(-50%) scale(0); white-space:nowrap;
+      background:#fff; border:1.5px solid; border-radius:999px; padding:5px 11px; font-size:12.5px; font-weight:800;
       box-shadow:0 6px 14px rgba(70,85,45,.22); z-index:6;
       transition:transform .28s cubic-bezier(.3,1.5,.5,1) .5s;}
     body.dark .jb-tag{background:var(--card);}
     .jb-stick.out .jb-tag{transform:translateX(-50%) scale(1);}
-    .jb-tag.win{border-color:#d9a520; color:#9a7112; font-family:'Gowun Batang','Noto Sans KR',serif; font-size:14.5px;}
+    .jb-tag.win{border-color:#d9a520; color:#9a7112; font-family:'Gowun Batang','Noto Sans KR',serif; font-size:13.5px;}
+    .jb-stick:nth-child(even) .jb-tag{bottom:-64px;}
     body.dark .jb-tag.win{color:#e2b93f;}
     .jb-tag.lose{border-color:#b0b596; color:#8f957a; font-family:'Gaegu','Noto Sans KR',cursive; font-size:15px;}
     .jb-cup{position:relative; z-index:3; height:96px; margin-top:-92px; border-radius:16px 16px 30px 30px;
@@ -108,7 +111,7 @@
     @media (max-width:640px){
       .lg-res{width:64px;} .lg-res input,.lg-res .mask{font-size:11.5px; padding:8px 3px;}
       .lg-av{width:40px; height:40px;}
-      .jb-sticks{gap:10px; padding:0 24px;} .jb-stage{padding-top:132px;} .jb-gob{width:62px; right:-52px;}
+      .jb-sticks{gap:10px; padding:0 24px;} .jb-stage{padding-top:132px;} .jb-gob{width:56px; right:2px;}
     }
   </style>
 </head>
@@ -419,7 +422,7 @@ function jbStart(){
     b.className='jb-stick'; b.type='button'; b.id='jb-stick-'+i;
     b.style.setProperty('--rot', (Math.random()*4-2).toFixed(1)+'deg');
     b.style.animationDelay=(i*0.05)+'s';
-    b.innerHTML='<span class="bar"></span><span class="cap"></span><i class="no">'+(i+1)+'</i>'
+    b.innerHTML='<span class="bar"></span><span class="cap"><img src="'+gob(i)+'" alt=""></span><i class="no">'+(i+1)+'</i>'
       +'<span class="tip '+(win?'win':'lose')+'"></span>'
       +'<span class="jb-tag '+(win?'win':'lose')+'" id="jb-tag-'+i+'">'+(win?'당첨 🎁':'꽝 🍂')+'</span>';
     b.onclick=()=>jbPull(i,false);
