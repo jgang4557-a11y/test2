@@ -195,7 +195,6 @@
       const isToday = today.getFullYear()===currentYear && today.getMonth()===currentMonth && today.getDate()===d;
       const events = evOn(dateStr);
       const hl = events.some(e=>e.highlight);
-      const dow = new Date(dateStr + 'T00:00:00').getDay();
       let fillCls = '', fillLabel = '', fillUsed = false, offTag = '';
       const chips = [];
       events.forEach(e => {
@@ -205,15 +204,7 @@
         if (ranged && !fillUsed){
           /* 기간 일정 = 캡슐 밴드: 시작/끝만 둥글고 중간은 셀 경계 없이 이어짐. 라벨은 주 구간 가운데 하루에 */
           fillUsed = true;
-          const t0 = new Date(dateStr + 'T00:00:00');
-          const iso = t => t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
-          const wkS = new Date(t0); wkS.setDate(t0.getDate() - dow);
-          const wkE = new Date(wkS); wkE.setDate(wkS.getDate() + 6);
-          const segS = e.date > iso(wkS) ? e.date : iso(wkS);
-          const segE = (e.end_date < iso(wkE)) ? e.end_date : iso(wkE);
-          const dS = new Date(segS+'T00:00:00'), dE = new Date(segE+'T00:00:00');
-          const mid = new Date(dS); mid.setDate(dS.getDate() + Math.floor((dE - dS) / 864e5 / 2));
-          const showLabel = dateStr === iso(mid);
+          const showLabel = dateStr === e.date;   /* 글자는 시작일에만 */
           const caps = (dateStr===e.date ? ' b-start' : '') + (dateStr===e.end_date ? ' b-end' : '');
           const btxt = k1==='off' ? '휴방' : ((e.time ? e.time+' ' : '') + base);
           fillCls = ' hasband';

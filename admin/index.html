@@ -33,6 +33,11 @@
     input.cc-col::-webkit-color-swatch-wrapper{padding:0;}
     input.cc-col::-webkit-color-swatch{border-radius:50%; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.2);}
     input.cc-hex{width:76px; padding:5px 8px; border-radius:8px; border:1px solid rgba(96,118,66,.35); font-family:ui-monospace,monospace; font-size:12px; background:#fff;}
+    /* 템플릿 color-pick 규칙(30px 원·input 숨김) 예외 */
+    .color-pick label.cc-cus{ width:auto; height:auto; border:none; display:inline-flex; align-items:center; }
+    .color-pick span.cc-wrap{ width:auto; height:auto; border-radius:999px; display:inline-flex; align-items:center; gap:6px; padding:3px 9px 3px 3px; }
+    .color-pick .cc-wrap input.cc-col{ display:block; width:26px; height:26px; }
+    .color-pick .cc-wrap input.cc-hex{ display:inline-block; }
 </style>
 </head>
 <body>
