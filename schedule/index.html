@@ -23,7 +23,7 @@
     .cal-cell.has:hover { background:var(--main-light); }
     .cal-cell.today { background:var(--main-light); }
     .cal-cell.today .cal-date { background:var(--main); color:#fff; border-radius:50%; width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; }
-    .cal-cell.hl { box-shadow:inset 0 0 0 2px var(--main); border-radius:8px; }
+    .cal-cell.hl .cal-date::after { content:'⭐'; font-size:10px; margin-left:3px; vertical-align:1px; }
     .cal-date { font-size:13px; font-weight:700; color:var(--text-mid); padding:1px 3px; }
     .cal-cell:nth-child(7n+1) .cal-date { color:#e05; }
     .cal-cell:nth-child(7n) .cal-date { color:#4a9; }
@@ -81,7 +81,17 @@
     body.dark .m-part,
     body.dark .m-desc { background: #22262e; }
   .up-part{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--main-light);color:var(--main-dark);vertical-align:2px;margin-left:2px;}
-</style>
+
+    /* 모달 슬롯 색 */
+    .m-part.c-green{background:#d6f0e4; border-color:#d6f0e4;} .m-part.c-green .pt{color:#1f7a52;}
+    .m-part.c-pink{background:#ffe0eb; border-color:#ffe0eb;} .m-part.c-pink .pt{color:#d95f7f;}
+    .m-part.c-yellow{background:#fff0cc; border-color:#fff0cc;} .m-part.c-yellow .pt{color:#b07d18;}
+    .m-part.c-orange{background:#ffe0cc; border-color:#ffe0cc;} .m-part.c-orange .pt{color:#c2611f;}
+    .m-part.c-blue{background:#d6e8fa; border-color:#d6e8fa;} .m-part.c-blue .pt{color:#2c6fb0;}
+    .m-part.c-purple{background:#e8ddf7; border-color:#e8ddf7;} .m-part.c-purple .pt{color:#7a4fb0;}
+    .m-part.c-red{background:#ffd9d9; border-color:#ffd9d9;} .m-part.c-red .pt{color:#c44;}
+    .m-part.c-gray{background:#ececed; border-color:#ececed;} .m-part.c-gray .pt{color:#666;}
+  </style>
 </head>
 <body>
 <script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
@@ -134,6 +144,8 @@
   function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function kind(t){ return t === '휴방' ? 'off' : 'on'; }
   function colorClass(s){ return 'c-' + (s.color || (kind(s.type)==='off'?'pink':'green')); }
+  function cc(color, type){ return 'c-' + (color || (kind(type)==='off'?'pink':'green')); }
+  function evOn(dateStr){ return allSchedule.filter(s => s.date <= dateStr && dateStr <= (s.end_date || s.date)); }
 
   async function init() {
     const now = new Date(); currentYear = now.getFullYear(); currentMonth = now.getMonth();
@@ -160,16 +172,18 @@
     for (let d = 1; d <= last.getDate(); d++) {
       const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
       const isToday = today.getFullYear()===currentYear && today.getMonth()===currentMonth && today.getDate()===d;
-      const events = allSchedule.filter(s => s.date === dateStr);
+      const events = evOn(dateStr);
       const hl = events.some(e=>e.highlight);
       let evHtml = events.map(e => {
-        const base = e.title || (kind(e.type)==='off'?'휴방':'방송');
+        const k1 = kind(e.type);
+        const base = e.title || (k1==='off'?'휴방':'방송');
         const chips = [];
-        const l1 = (e.time ? e.time+' ' : '') + base;
-        chips.push(`<div class="ev ${colorClass(e)}" title="${esc(l1)}">${esc(l1)}</div>`);
+        const l1 = k1==='off' ? '휴방' : ((e.time ? e.time+' ' : '') + base);
+        chips.push(`<div class="ev ${cc(e.color, e.type)}" title="${esc(l1)}">${esc(l1)}</div>`);
         if (e.time2 || e.title2) {
-          const l2 = (e.time2 ? e.time2+' ' : '') + (e.title2 || base);
-          chips.push(`<div class="ev ${colorClass(e)}" title="${esc(l2)}">${esc(l2)}</div>`);
+          const k2 = kind(e.type2 || e.type);
+          const l2 = k2==='off' ? '휴방' : ((e.time2 ? e.time2+' ' : '') + (e.title2 || base));
+          chips.push(`<div class="ev ${cc(e.color2 || e.color, e.type2 || e.type)}" title="${esc(l2)}">${esc(l2)}</div>`);
         }
         return chips.join('');
       }).join('');
@@ -185,13 +199,13 @@
   function renderUpcoming() {
     const n = new Date();
     const today = `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`; /* 로컬(KST) 기준 — UTC 밀림 방지 */
-    const rows = allSchedule.filter(s => s.date >= today);
+    const rows = allSchedule.filter(s => (s.end_date || s.date) >= today);
     /* 1부/2부(time2·title2)를 별도 항목으로 분리 */
     const slots = [];
     rows.forEach(s => {
       const both = !!(s.time2 || s.title2);
-      slots.push({ row:s, time:s.time, title:s.title, type:s.type, part: both ? '1부' : '' });
-      if (both) slots.push({ row:s, time:s.time2, title:s.title2 || s.title, type:s.type2 || s.type, part:'2부' });
+      slots.push({ row:s, time:s.time, title:s.title, type:s.type, color:s.color, part: both ? '1부' : '' });
+      if (both) slots.push({ row:s, time:s.time2, title:s.title2 || s.title, type:s.type2 || s.type, color:s.color2 || s.color, part:'2부' });
     });
     const upcoming = slots.slice(0, 12);
     const el = document.getElementById('upcoming');
@@ -200,26 +214,27 @@
       const s = u.row;
       const dd = new Date(s.date + 'T00:00:00'); const k = kind(u.type || s.type);
       const label = k==='off' ? '휴방' : '방송';
-      return `<div class="up-item ${colorClass(s)}" style="border-left-color:currentColor" onclick="openModal('${s.date}')">
-        <div class="up-date"><div class="up-d1">${String(dd.getMonth()+1).padStart(2,'0')}-${String(dd.getDate()).padStart(2,'0')} (${DAYS[dd.getDay()]})</div></div>
+      const d2s = ds => { const t=new Date(ds+'T00:00:00'); return String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'); };
+      const dtxt = (s.end_date && s.end_date !== s.date) ? `${d2s(s.date)} ~ ${d2s(s.end_date)}` : `${d2s(s.date)} (${DAYS[dd.getDay()]})`;
+      return `<div class="up-item ${cc(u.color, u.type || s.type)}" style="border-left-color:currentColor" onclick="openModal('${s.date}')">
+        <div class="up-date"><div class="up-d1">${dtxt}</div></div>
         <div class="up-info"><div class="up-title">${esc(u.title || label)}${u.part?` <span class="up-part">${u.part}</span>`:''}</div>${u.time?`<div class="up-time">${esc(u.time)}</div>`:''}</div>
-        <span class="up-badge ${colorClass(s)}">${label}</span>
+        <span class="up-badge ${cc(u.color, u.type || s.type)}">${label}</span>
       </div>`;
     }).join('');
   }
   function openModal(dateStr) {
-    const events = allSchedule.filter(s => s.date === dateStr);
+    const events = evOn(dateStr);
     if (!events.length) return;
     const dd = new Date(dateStr + 'T00:00:00');
     let html = `<div class="m-date">${dateStr} (${DAYS[dd.getDay()]})</div>`;
     events.forEach(s => {
       const k = kind(s.type);
-      html += `<div class="m-badge ${colorClass(s)}">${k==='off'?'휴방':'방송'}</div>`;
-      // 1부
-      html += `<div class="m-part"><div class="pt">${s.time?esc(s.time):'1부'}</div><div class="pn">${esc(s.title || (k==='off'?'휴방':'방송'))}</div></div>`;
-      // 2부
+      html += `<div class="m-badge ${cc(s.color, s.type)}">${k==='off'?'휴방':'방송'}</div>`;
+      html += `<div class="m-part ${cc(s.color, s.type)}">${s.time?`<div class="pt">${esc(s.time)}</div>`:''}<div class="pn">${esc(s.title || (k==='off'?'휴방':'방송'))}</div></div>`;
       if (s.title2 || s.time2) {
-        html += `<div class="m-part"><div class="pt">${s.time2?esc(s.time2):'2부'}</div><div class="pn">${esc(s.title2||'방송')}</div></div>`;
+        const k2 = kind(s.type2 || s.type);
+        html += `<div class="m-part ${cc(s.color2 || s.color, s.type2 || s.type)}">${s.time2?`<div class="pt">${esc(s.time2)}</div>`:''}<div class="pn">${esc(s.title2 || s.title || '방송')}</div></div>`;
       }
       if (s.description) html += `<div class="m-desc">${esc(s.description)}</div>`;
     });
