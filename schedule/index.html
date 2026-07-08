@@ -23,9 +23,11 @@
     .cal-cell.has:hover { background:var(--main-light); }
     .cal-cell.today { background:var(--main-light); }
     .cal-cell.today .cal-date { background:var(--main); color:#fff; border-radius:50%; width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; }
-    .cal-cell.hl-star { position:absolute; top:-8px; left:-7px; font-size:15px; transform:rotate(-14deg); filter:drop-shadow(0 2px 3px rgba(70,85,45,.4)); z-index:3; pointer-events:none; }
+    .cal-cell.hl-star { position:absolute; top:-10px; left:-9px; font-size:19px; transform:rotate(-14deg); filter:drop-shadow(0 2px 3px rgba(70,85,45,.4)); z-index:3; pointer-events:none; }
+    .off-tag { position:absolute; top:3px; right:7px; font-size:16px; font-weight:800; letter-spacing:2px; background:transparent !important; z-index:1; }
     .cal-cell.hl { overflow:visible; }
-    .cal-cell .fl { font-size:10.5px; font-weight:700; margin-top:3px; padding:1px 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .cal-cell.fill { display:flex; flex-direction:column; }
+    .cal-cell .fl { margin:auto 2px; text-align:center; font-size:13px; font-weight:800; letter-spacing:.2px; padding:1px 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .cal-date { font-size:13px; font-weight:700; color:var(--text-mid); padding:1px 3px; }
     .cal-cell:nth-child(7n+1) .cal-date { color:#e05; }
     .cal-cell:nth-child(7n) .cal-date { color:#4a9; }
@@ -177,7 +179,7 @@
       const events = evOn(dateStr);
       const hl = events.some(e=>e.highlight);
       const dow = new Date(dateStr + 'T00:00:00').getDay();
-      let fillCls = '', fillLabel = '', fillUsed = false;
+      let fillCls = '', fillLabel = '', fillUsed = false, offTag = '';
       const chips = [];
       events.forEach(e => {
         const k1 = kind(e.type);
@@ -197,7 +199,14 @@
           return;
         }
         if (k1==='off'){
-          chips.push(`<div class="ev ${cc(e.color, e.type)}" title="휴방">휴방</div>`);
+          if (!offTag) offTag = `<span class="off-tag ${cc(e.color, e.type)}">휴방</span>`;
+          if (e.title && e.title !== '휴방')
+            chips.push(`<div class="ev ${cc(e.color, e.type)}" title="${esc(e.title)}">${esc(e.title)}</div>`);
+          if (e.time2 || e.title2){
+            const t2 = e.title2 || '';
+            if (t2 && t2 !== '휴방')
+              chips.push(`<div class="ev ${cc(e.color2 || e.color, e.type2 || e.type)}" title="${esc(t2)}">${esc(t2)}</div>`);
+          }
         } else {
           const l1 = (e.time ? e.time+' ' : '') + base;
           chips.push(`<div class="ev ${cc(e.color, e.type)}" title="${esc(l1)}">${esc(l1)}</div>`);
@@ -211,7 +220,7 @@
       const evHtml = fillLabel + chips.join('');
       const cls = `cal-cell${isToday?' today':''}${events.length?' has':''}${hl?' hl':''}${fillCls}`;
       const click = events.length ? `onclick="openModal('${dateStr}')"` : '';
-      html += `<div class="${cls}" ${click}><span class="cal-date">${d}</span>${hl?'<span class="hl-star">⭐</span>':''}${evHtml}</div>`;
+      html += `<div class="${cls}" ${click}><span class="cal-date">${d}</span>${hl?'<span class="hl-star">⭐</span>':''}${offTag}${evHtml}</div>`;
     }
     const totalCells = startDay + last.getDate();
     const rem = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);

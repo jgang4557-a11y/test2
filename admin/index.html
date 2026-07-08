@@ -210,7 +210,7 @@
         </div>
         <div class="form-field full"><label class="input-label">설명 (선택)</label><textarea class="input" id="sch-desc" rows="2"></textarea></div>
         <div class="form-field full"><label><input type="checkbox" id="sch-hl"> ⭐ 하이라이트 (달력에서 강조)</label></div>
-        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn" id="sch-cancel" type="button" style="display:none;margin-right:8px" onclick="resetSchForm()">취소</button><button class="btn btn-primary" id="sch-submit" onclick="addSchedule()">+ 추가</button></div>
+        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addSchedule()">+ 추가</button></div>
       </div>
     </div>
     <div class="card">
@@ -481,26 +481,39 @@
     const s = schCache.find(x => x.id === id); if (!s) return;
     schEditId = id;
     const set = (i,v) => { const el=document.getElementById(i); if(el) el.value = v || ''; };
-    set('sch-date', s.date); set('sch-end', s.end_date);
-    set('sch-title', s.title); set('sch-time', s.time);
-    set('sch-time2', s.time2); set('sch-title2', s.title2);
-    set('sch-desc', s.description);
-    document.getElementById('sch-type').value = s.type || '방송';
-    document.getElementById('sch-hl').checked = !!s.highlight;
-    const c1 = document.querySelector(`input[name="schcolor"][value="${s.color||'green'}"]`); if (c1) c1.checked = true;
-    const c2 = document.querySelector(`input[name="schcolor2"][value="${s.color2||''}"]`); if (c2) c2.checked = true;
-    const btn = document.getElementById('sch-submit'); if (btn){ btn.textContent = '✏️ 수정 저장'; btn.scrollIntoView({behavior:'smooth', block:'center'}); }
-    const cx = document.getElementById('sch-cancel'); if (cx) cx.style.display = '';
+    set('em-date', s.date); set('em-end', s.end_date);
+    set('em-title', s.title); set('em-time', s.time);
+    set('em-time2', s.time2); set('em-title2', s.title2);
+    set('em-desc', s.description);
+    document.getElementById('em-type').value = s.type || '방송';
+    document.getElementById('em-hl').checked = !!s.highlight;
+    const c1 = document.querySelector(`input[name="emcolor"][value="${s.color||'green'}"]`); if (c1) c1.checked = true;
+    const c2 = document.querySelector(`input[name="emcolor2"][value="${s.color2||''}"]`); if (c2) c2.checked = true;
+    document.getElementById('em-ov').classList.add('show');
   }
-  function resetSchForm(){
-    schEditId = null;
-    ['sch-date','sch-end','sch-title','sch-time','sch-time2','sch-title2','sch-desc'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
-    document.getElementById('sch-hl').checked = false;
-    document.getElementById('sch-type').value = '방송';
-    const c1 = document.querySelector('input[name="schcolor"][value="green"]'); if (c1) c1.checked = true;
-    const c2 = document.querySelector('input[name="schcolor2"][value=""]'); if (c2) c2.checked = true;
-    const btn = document.getElementById('sch-submit'); if (btn) btn.textContent = '+ 추가';
-    const cx = document.getElementById('sch-cancel'); if (cx) cx.style.display = 'none';
+  function closeEditSch(){ schEditId = null; document.getElementById('em-ov').classList.remove('show'); }
+  async function saveEditSch(){
+    if (!schEditId) return;
+    const date = document.getElementById('em-date').value;
+    if (!date) { showToast('❗ 날짜 필수!'); return; }
+    const type = document.getElementById('em-type').value;
+    let title = document.getElementById('em-title').value.trim();
+    if (!title) title = (type === '휴방' ? '휴방' : '방송');
+    const end_date = document.getElementById('em-end').value || null;
+    if (end_date && end_date < date) { showToast('❗ 종료일이 시작일보다 빨라요'); return; }
+    const row = {
+      title, date, type, end_date,
+      color: (document.querySelector('input[name="emcolor"]:checked')||{}).value || 'green',
+      color2: (document.querySelector('input[name="emcolor2"]:checked')||{}).value || null,
+      time: document.getElementById('em-time').value,
+      time2: document.getElementById('em-time2').value,
+      title2: document.getElementById('em-title2').value.trim(),
+      description: document.getElementById('em-desc').value.trim(),
+      highlight: document.getElementById('em-hl').checked
+    };
+    const ok = await updateRow('schedule', schEditId, row);
+    if (ok){ showToast('✅ 수정 완료!'); closeEditSch(); loadSchedule(); }
+    else showToast('❗ 수정 실패');
   }
   async function addSchedule() {
     const date = document.getElementById('sch-date').value;
@@ -520,12 +533,6 @@
       description: document.getElementById('sch-desc').value.trim(),
       highlight: document.getElementById('sch-hl').checked
     };
-    if (schEditId){
-      const ok2 = await updateRow('schedule', schEditId, row);
-      if (ok2){ showToast('✅ 수정 완료!'); resetSchForm(); loadSchedule(); }
-      else showToast('❗ 수정 실패');
-      return;
-    }
     const ok = await insertRow('schedule', row);
     if (ok) {
       showToast('✅ 추가!');
@@ -759,6 +766,50 @@
 
   
 </script>
+<style>
+  .em-ov{position:fixed;inset:0;background:rgba(35,45,22,.5);display:none;align-items:flex-start;justify-content:center;z-index:900;padding:30px 16px;overflow-y:auto;}
+  .em-ov.show{display:flex;}
+  .em-modal{background:#fbf9ec;border:1.5px solid rgba(96,118,66,.3);border-radius:20px;max-width:580px;width:100%;padding:24px;box-shadow:0 26px 70px rgba(0,0,0,.35);}
+  .em-title{font-size:17px;font-weight:800;margin-bottom:14px;color:#47613a;}
+  .em-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;}
+</style>
+<div class="em-ov" id="em-ov" onclick="if(event.target===this)closeEditSch()">
+  <div class="em-modal">
+    <div class="em-title">✏️ 일정 수정</div>
+    <div class="form-grid">
+      <div class="form-field"><label class="input-label">날짜 *</label><input class="input" id="em-date" type="date"></div>
+      <div class="form-field"><label class="input-label">종료일 (선택)</label><input class="input" id="em-end" type="date"></div>
+      <div class="form-field"><label class="input-label">유형</label><select class="input" id="em-type"><option value="방송">방송</option><option value="휴방">휴방</option></select></div>
+      <div class="form-field"><label class="input-label">1부 시간</label><input class="input" id="em-time" placeholder="오후 5시"></div>
+      <div class="form-field full"><label class="input-label">제목</label><input class="input" id="em-title"></div>
+      <div class="form-field"><label class="input-label">2부 시간</label><input class="input" id="em-time2"></div>
+      <div class="form-field"><label class="input-label">2부 제목</label><input class="input" id="em-title2"></div>
+      <div class="form-field full"><label class="input-label">1부 색상</label><div class="color-pick"><label><input type="radio" name="emcolor" value="green" checked><span class="cdot-green"></span></label>
+            <label><input type="radio" name="emcolor" value="pink"><span class="cdot-pink"></span></label>
+            <label><input type="radio" name="emcolor" value="yellow"><span class="cdot-yellow"></span></label>
+            <label><input type="radio" name="emcolor" value="orange"><span class="cdot-orange"></span></label>
+            <label><input type="radio" name="emcolor" value="blue"><span class="cdot-blue"></span></label>
+            <label><input type="radio" name="emcolor" value="purple"><span class="cdot-purple"></span></label>
+            <label><input type="radio" name="emcolor" value="red"><span class="cdot-red"></span></label>
+            <label><input type="radio" name="emcolor" value="gray"><span class="cdot-gray"></span></label></div></div>
+      <div class="form-field full"><label class="input-label">2부 색상 (미선택=1부와 동일)</label><div class="color-pick"><label><input type="radio" name="emcolor2" value="" checked><span style="background:repeating-linear-gradient(45deg,#ccc 0 4px,#f6f6f6 4px 8px)"></span></label>
+            <label><input type="radio" name="emcolor2" value="green"><span class="cdot-green"></span></label>
+            <label><input type="radio" name="emcolor2" value="pink"><span class="cdot-pink"></span></label>
+            <label><input type="radio" name="emcolor2" value="yellow"><span class="cdot-yellow"></span></label>
+            <label><input type="radio" name="emcolor2" value="orange"><span class="cdot-orange"></span></label>
+            <label><input type="radio" name="emcolor2" value="blue"><span class="cdot-blue"></span></label>
+            <label><input type="radio" name="emcolor2" value="purple"><span class="cdot-purple"></span></label>
+            <label><input type="radio" name="emcolor2" value="red"><span class="cdot-red"></span></label>
+            <label><input type="radio" name="emcolor2" value="gray"><span class="cdot-gray"></span></label></div></div>
+      <div class="form-field full"><label class="input-label">설명 (선택)</label><textarea class="input" id="em-desc" rows="2"></textarea></div>
+      <div class="form-field full"><label><input type="checkbox" id="em-hl"> ⭐ 하이라이트 (달력 별표)</label></div>
+    </div>
+    <div class="em-btns">
+      <button class="btn" type="button" onclick="closeEditSch()">취소</button>
+      <button class="btn btn-primary" type="button" onclick="saveEditSch()">저장</button>
+    </div>
+  </div>
+</div>
 <script>
 /* ── 갤러리 관리 (gallery_items) ── */
 async function loadGalleryAdmin(){
