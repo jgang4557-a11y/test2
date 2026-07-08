@@ -797,7 +797,6 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
         if (el && (d[id]||'').toString().trim()) el.textContent = d[id];
       });
       const fanEl = document.getElementById('stat-fan');
-      const fanEl = document.getElementById('stat-mbti');
       if (fanEl && (d['info-fandom']||'').trim()) fanEl.textContent = d['info-fandom'].replace(/\s+/g,'');
 
       const tagsEl = document.getElementById('info-tags');
