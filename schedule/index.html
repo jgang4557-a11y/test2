@@ -23,7 +23,10 @@
     .cal-cell.has:hover { background:var(--main-light); }
     .cal-cell.today { background:var(--main-light); }
     .cal-cell.today .cal-date { background:var(--main); color:#fff; border-radius:50%; width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; }
-    .cal-cell.hl .cal-date::after { content:'⭐'; font-size:10px; margin-left:3px; vertical-align:1px; }
+    .cal-cell.hl-star { font-size:11px; margin-left:2px; vertical-align:1px; }
+    .ev.r-start { border-top-right-radius:0; border-bottom-right-radius:0; margin-right:-5px; max-width:none; }
+    .ev.r-end   { border-top-left-radius:0;  border-bottom-left-radius:0;  margin-left:-5px;  max-width:none; }
+    .ev.r-mid   { border-radius:0; margin-left:-5px; margin-right:-5px; max-width:none; }
     .cal-date { font-size:13px; font-weight:700; color:var(--text-mid); padding:1px 3px; }
     .cal-cell:nth-child(7n+1) .cal-date { color:#e05; }
     .cal-cell:nth-child(7n) .cal-date { color:#4a9; }
@@ -174,22 +177,31 @@
       const isToday = today.getFullYear()===currentYear && today.getMonth()===currentMonth && today.getDate()===d;
       const events = evOn(dateStr);
       const hl = events.some(e=>e.highlight);
+      const dow = new Date(dateStr + 'T00:00:00').getDay();
       let evHtml = events.map(e => {
         const k1 = kind(e.type);
         const base = e.title || (k1==='off'?'휴방':'방송');
+        const ranged = e.end_date && e.end_date !== e.date;
+        let pos = '';
+        if (ranged) pos = dateStr===e.date ? ' r-start' : (dateStr===e.end_date ? ' r-end' : ' r-mid');
+        const showLabel = !ranged || dateStr===e.date || dow===0;   /* 글자는 시작일 + 주 첫 칸에만 */
         const chips = [];
-        const l1 = k1==='off' ? '휴방' : ((e.time ? e.time+' ' : '') + base);
-        chips.push(`<div class="ev ${cc(e.color, e.type)}" title="${esc(l1)}">${esc(l1)}</div>`);
-        if (e.time2 || e.title2) {
-          const k2 = kind(e.type2 || e.type);
-          const l2 = k2==='off' ? '휴방' : ((e.time2 ? e.time2+' ' : '') + (e.title2 || base));
-          chips.push(`<div class="ev ${cc(e.color2 || e.color, e.type2 || e.type)}" title="${esc(l2)}">${esc(l2)}</div>`);
+        if (k1==='off'){
+          chips.push(`<div class="ev${pos} ${cc(e.color, e.type)}" title="휴방">${showLabel?'휴방':'&nbsp;'}</div>`);
+        } else {
+          const l1 = (e.time ? e.time+' ' : '') + base;
+          chips.push(`<div class="ev${pos} ${cc(e.color, e.type)}" title="${esc(l1)}">${showLabel?esc(l1):'&nbsp;'}</div>`);
+          if (e.time2 || e.title2) {
+            const k2 = kind(e.type2 || e.type);
+            const l2 = k2==='off' ? '휴방' : ((e.time2 ? e.time2+' ' : '') + (e.title2 || base));
+            chips.push(`<div class="ev${pos} ${cc(e.color2 || e.color, e.type2 || e.type)}" title="${esc(l2)}">${showLabel?esc(l2):'&nbsp;'}</div>`);
+          }
         }
         return chips.join('');
       }).join('');
       const cls = `cal-cell${isToday?' today':''}${events.length?' has':''}${hl?' hl':''}`;
       const click = events.length ? `onclick="openModal('${dateStr}')"` : '';
-      html += `<div class="${cls}" ${click}><span class="cal-date">${d}</span>${evHtml}</div>`;
+      html += `<div class="${cls}" ${click}><span class="cal-date">${d}</span>${hl?'<span class="hl-star">⭐</span>':''}${evHtml}</div>`;
     }
     const totalCells = startDay + last.getDate();
     const rem = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
