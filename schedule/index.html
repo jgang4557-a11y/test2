@@ -27,10 +27,11 @@
     .off-tag { position:absolute; top:3px; right:7px; font-size:16px; font-weight:800; letter-spacing:2px; background:transparent !important; z-index:1; }
     .cal-cell.hl { overflow:visible; }
     .cal-cell.hasband { overflow:visible; }
-    .band { position:relative; margin:3px -6px 0; height:20px; padding:0 4px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; z-index:1; border-radius:0; }
-    .band span { position:relative; z-index:2; white-space:nowrap; padding:0 4px; }
-    .band.b-start { margin-left:0; }
-    .band.b-end { margin-right:0; }
+    .band { position:relative; margin:3px -6px 0; height:20px; display:flex; align-items:center; justify-content:flex-start; font-size:10px; font-weight:600; z-index:1; }
+    .band span { position:relative; z-index:2; white-space:nowrap; padding:0 6px; overflow:hidden; text-overflow:ellipsis; }
+    .band.b-start { margin-left:0; border-radius:6px 0 0 6px; }
+    .band.b-end { margin-right:0; border-radius:0 6px 6px 0; }
+    .band.b-start.b-end { border-radius:6px; }
     .cal-cell:nth-child(7n) .band { margin-right:0; }      /* 토요일 칸 밖 삐짐 방지 */
     .cal-cell:nth-child(7n+1) .band { margin-left:0; }     /* 일요일 칸 */
     .cal-date { font-size:13px; font-weight:700; color:var(--text-mid); padding:1px 3px; }
