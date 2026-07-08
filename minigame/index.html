@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모요 · 미니게임</title>
+  <link rel="icon" type="image/jpeg" href="https://profile.img.sooplive.co.kr/LOGO/du/duvl123/duvl123.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Gowun+Batang:wght@400;700&family=Jua&family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .lg-set{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;}
+    .lg-set label{display:block; font-size:12px; font-weight:700; color:var(--text-soft); margin-bottom:6px;}
+    .lg-set input{width:100%; padding:11px 13px; border-radius:12px; border:1.5px solid var(--main-light); background:#fff; color:var(--text); font-size:14px; font-family:inherit; outline:none; box-sizing:border-box;}
+    body.dark .lg-set input{background:var(--card); border-color:rgba(169,196,127,.25);}
+    .lg-set input:focus{border-color:var(--main);}
+    .lg-btns{display:flex; gap:9px; justify-content:flex-end; margin-bottom:6px;}
+    .lg-btn{border:none; cursor:pointer; border-radius:999px; padding:11px 20px; font-size:14px; font-weight:700; font-family:inherit; background:var(--main-dark); color:#f5f3e0; transition:transform .15s ease;}
+    .lg-btn:hover{transform:translateY(-2px);}
+    .lg-btn.ghost{background:var(--main-light); color:var(--main-dark);}
+    body.dark .lg-btn{color:#161b0e;}
+    body.dark .lg-btn.ghost{color:var(--main-dark);}
+    .lg-stage{position:relative; margin-top:10px; display:none;}
+    .lg-stage.on{display:block;}
+    .lg-chip{position:absolute; transform:translateX(-50%); border-radius:999px; padding:6px 12px; font-size:12.5px; font-weight:800; cursor:pointer; border:1.5px solid transparent; white-space:nowrap; transition:transform .15s ease; font-family:inherit;}
+    .lg-chip:hover{transform:translateX(-50%) scale(1.08);}
+    .lg-chip.done{opacity:.45; cursor:default;}
+    .lg-res{position:absolute; transform:translateX(-50%); border-radius:11px; padding:6px 10px; font-size:12px; font-weight:700; background:var(--main-light); color:var(--main-dark); white-space:nowrap; transition:all .2s ease;}
+    .lg-res.hit{transform:translateX(-50%) scale(1.16); box-shadow:0 8px 18px rgba(71,97,58,.3);}
+    #lgCanvas{display:block; width:100%;}
+    .lg-log{margin-top:14px; display:flex; flex-direction:column; gap:6px;}
+    .lg-log div{font-size:13.5px; font-weight:600; color:var(--text); background:var(--main-light); border-radius:10px; padding:9px 13px;}
+    @media (max-width:600px){ .lg-set{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
+<div class="sheet">
+<div class="chrome">
+  <span class="dots"><i></i><i></i><i></i></span>
+  <div class="addr"><span class="lock">🔒</span> https://moyo.sooplive.com/minigame</div>
+  <button class="theme-switch" id="themeSwitch" type="button" aria-label="다크모드 전환"><span class="knob" id="themeKnob">🌙</span></button>
+</div>
+<nav class="nav"><div class="nav-inner">
+  <a href="../index.html" class="nav-logo">모요</a>
+  <a href="../index.html">프로필</a>
+  <a href="../schedule/">방송 일정</a>
+  <a href="../replay/">다시보기</a>
+  <a href="../gallery/">갤러리</a>
+  <a href="../song/">노래책</a>
+  <a href="../diary/">일기</a>
+  <a href="../work/">숙제</a>
+  <a href="index.html" class="active">미니게임</a>
+</div></nav>
+
+<div class="container stagger">
+  <div class="ohd"><i></i><span class="dm">✦</span>MINI GAME<span class="dm">✦</span><i></i></div>
+  <div class="ohd-sub">사다리타기</div>
+
+  <div class="card">
+    <div class="lg-set">
+      <div><label>참가자 (쉼표로 · 2~8명)</label><input id="lg-names" value="모요, 새싹이1, 새싹이2, 새싹이3"></div>
+      <div><label>결과 (쉼표로 · 모자라면 "꽝"으로 채움)</label><input id="lg-results" value="당첨 🎁, 꽝, 한 번 더 🌱, 꽝"></div>
+    </div>
+    <div class="lg-btns">
+      <button class="lg-btn ghost" type="button" onclick="revealAll()" id="lg-allbtn" style="display:none">전부 공개</button>
+      <button class="lg-btn" type="button" onclick="buildLadder()">🌿 사다리 만들기</button>
+    </div>
+    <div class="lg-stage" id="lg-stage">
+      <div id="lg-tops"></div>
+      <canvas id="lgCanvas"></canvas>
+      <div id="lg-bots"></div>
+    </div>
+    <div class="lg-log" id="lg-log"></div>
+  </div>
+</div>
+
+<footer>© 2026 모요 Official.<br>비즈니스 문의 — 문의 버튼을 이용해 주세요</footer>
+</div><!-- /sheet -->
+
+<script>
+/* ═══ 숲 사다리타기 ═══ */
+const PCOLORS=['#6d8c4f','#d95f7f','#b07d18','#ee9a4d','#5a9fe0','#a07fd0','#e05252','#7a8699'];
+let G=null;   /* {n, rows, rung[gap][row], names, results, done[]} */
+
+function cssVar(name){ return getComputedStyle(document.body).getPropertyValue(name).trim() || '#47613a'; }
+
+function buildLadder(){
+  const names=document.getElementById('lg-names').value.split(',').map(s=>s.trim()).filter(Boolean).slice(0,8);
+  if(names.length<2){ alert('참가자를 2명 이상 적어주세요'); return; }
+  let results=document.getElementById('lg-results').value.split(',').map(s=>s.trim()).filter(Boolean);
+  while(results.length<names.length) results.push('꽝');
+  results=results.slice(0,names.length);
+  /* 결과 섞기 */
+  for(let i=results.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [results[i],results[j]]=[results[j],results[i]]; }
+  const n=names.length, rows=9+((Math.random()*3)|0);
+  const rung=[];
+  for(let g=0; g<n-1; g++){
+    rung[g]=[];
+    for(let r=0; r<rows; r++){
+      rung[g][r] = Math.random()<0.42 && !(g>0 && rung[g-1][r]);
+    }
+  }
+  /* 세로줄마다 최소 1개 보장 */
+  for(let g=0; g<n-1; g++){
+    if(!rung[g].some(Boolean)){
+      let r=(Math.random()*rows)|0;
+      while(g>0 && rung[g-1][r]) r=(r+1)%rows;
+      rung[g][r]=true;
+    }
+  }
+  G={n, rows, rung, names, results, done:Array(n).fill(false)};
+  document.getElementById('lg-stage').classList.add('on');
+  document.getElementById('lg-allbtn').style.display='';
+  document.getElementById('lg-log').innerHTML='';
+  layout(); draw();
+}
+
+function geom(){
+  const cv=document.getElementById('lgCanvas');
+  const W=cv.clientWidth, H=Math.max(300, Math.min(430, G.rows*40));
+  const pad=Math.max(34, W*0.07);
+  const colW=(W-pad*2)/(G.n-1);
+  const y0=16, y1=H-16;
+  const rowH=(y1-y0)/(G.rows+1);
+  return {W,H,pad,colW,y0,y1,rowH};
+}
+
+function layout(){
+  const cv=document.getElementById('lgCanvas');
+  cv.style.height=Math.max(300, Math.min(430, G.rows*40))+'px';
+  const {pad,colW}=geom();
+  const tops=document.getElementById('lg-tops'), bots=document.getElementById('lg-bots');
+  tops.innerHTML=''; bots.innerHTML='';
+  tops.style.cssText='position:relative;height:38px;'; bots.style.cssText='position:relative;height:36px;';
+  G.names.forEach((nm,i)=>{
+    const b=document.createElement('button');
+    b.className='lg-chip'+(G.done[i]?' done':''); b.type='button';
+    b.textContent='🌱 '+nm;
+    b.style.left=(pad+i*colW)+'px'; b.style.top='4px';
+    b.style.background=PCOLORS[i%8]+'22'; b.style.color=PCOLORS[i%8]; b.style.borderColor=PCOLORS[i%8]+'66';
+    b.onclick=()=>trace(i);
+    tops.appendChild(b);
+  });
+  G.results.forEach((rs,i)=>{
+    const d=document.createElement('div');
+    d.className='lg-res'; d.id='lg-res-'+i;
+    d.textContent=rs;
+    d.style.left=(pad+i*colW)+'px'; d.style.top='6px';
+    bots.appendChild(d);
+  });
+}
+
+function draw(){
+  const cv=document.getElementById('lgCanvas');
+  const {W,H,pad,colW,y0,y1,rowH}=geom();
+  const dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr; cv.height=H*dpr;
+  const c=cv.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0);
+  c.clearRect(0,0,W,H);
+  c.lineCap='round'; c.lineWidth=3; c.strokeStyle=cssVar('--main-light');
+  c.lineWidth=3.5; c.strokeStyle=cssVar('--main');
+  c.globalAlpha=.5;
+  for(let i=0;i<G.n;i++){
+    const x=pad+i*colW;
+    c.beginPath(); c.moveTo(x,y0); c.lineTo(x,y1); c.stroke();
+  }
+  for(let g=0; g<G.n-1; g++) for(let r=0; r<G.rows; r++) if(G.rung[g][r]){
+    const y=y0+rowH*(r+1);
+    c.beginPath(); c.moveTo(pad+g*colW, y); c.lineTo(pad+(g+1)*colW, y); c.stroke();
+  }
+  c.globalAlpha=1;
+  /* 잎 장식 */
+  c.font='11px serif';
+  for(let g=0; g<G.n-1; g++) for(let r=0; r<G.rows; r++) if(G.rung[g][r] && (g+r)%3===0){
+    c.fillText('🌿', pad+g*colW+colW/2-6, y0+rowH*(r+1)-5);
+  }
+}
+
+function pathOf(start){
+  const {pad,colW,y0,y1,rowH}=geom();
+  let col=start; const pts=[[pad+col*colW, y0]];
+  for(let r=0; r<G.rows; r++){
+    const y=y0+rowH*(r+1);
+    pts.push([pad+col*colW, y]);
+    if(col<G.n-1 && G.rung[col][r]){ col++; pts.push([pad+col*colW, y]); }
+    else if(col>0 && G.rung[col-1][r]){ col--; pts.push([pad+col*colW, y]); }
+  }
+  pts.push([pad+col*colW, y1]);
+  return {pts, end:col};
+}
+
+let animBusy=false;
+function trace(i, instant){
+  if(!G || G.done[i] || (animBusy && !instant)) return;
+  G.done[i]=true; animBusy=!instant;
+  const {pts,end}=pathOf(i);
+  const cv=document.getElementById('lgCanvas');
+  const c=cv.getContext('2d');
+  const col=PCOLORS[i%8];
+  c.lineCap='round'; c.lineJoin='round';
+  function seg(a,b,t){
+    c.strokeStyle=col; c.lineWidth=4.5;
+    c.beginPath(); c.moveTo(a[0],a[1]);
+    c.lineTo(a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t); c.stroke();
+  }
+  function finish(){
+    animBusy=false;
+    const rs=document.getElementById('lg-res-'+end);
+    rs.classList.add('hit'); rs.style.background=col+'26'; rs.style.color=col;
+    const log=document.createElement('div');
+    log.textContent='🌱 '+G.names[i]+'  →  '+G.results[end];
+    log.style.borderLeft='4px solid '+col;
+    document.getElementById('lg-log').appendChild(log);
+    layout();
+    if(typeof window.fxHearts==='function'){
+      const r=cv.getBoundingClientRect();
+      window.fxHearts(r.left+pts[pts.length-1][0], r.top+pts[pts.length-1][1], 8);
+    }
+  }
+  if(instant){ for(let k=0;k<pts.length-1;k++) seg(pts[k],pts[k+1],1); finish(); return; }
+  let k=0, t=0;
+  (function step(){
+    t+=0.22;
+    if(t>=1){ seg(pts[k],pts[k+1],1); k++; t=0; }
+    else seg(pts[k],pts[k+1],t);
+    if(k<pts.length-1) requestAnimationFrame(step);
+    else finish();
+  })();
+}
+
+function revealAll(){
+  if(!G) return;
+  for(let i=0;i<G.n;i++) if(!G.done[i]) trace(i,true);
+}
+
+window.addEventListener('resize', ()=>{ if(G){ layout(); draw(); G.done.forEach((d,i)=>{ if(d) trace(i,true); }); } });
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.body.classList.add('ready');
+  const sw=document.getElementById('themeSwitch');
+  if(sw) sw.addEventListener('click', ()=>setTimeout(()=>{ if(G){ draw(); G.done.forEach((d,i)=>{ if(d){ const gd=G.done[i]; G.done[i]=false; trace(i,true); G.done[i]=gd; } }); } }, 60));
+});
+setTimeout(()=>document.body.classList.add('ready'), 1200);
+</script>
+<script>
+(function(){
+  var sw=document.getElementById('themeSwitch'), knob=document.getElementById('themeKnob');
+  function refresh(){ if(knob) knob.textContent=document.body.classList.contains('dark')?'☀️':'🌙'; }
+  if(sw) sw.addEventListener('click', function(){
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');
+    refresh();
+  });
+  refresh();
+})();
+</script>
+<script src="../fx.js"></script>
+<script src="../fxplus.js"></script>
+<script src="../cursor.js"></script>
+</body>
+</html>

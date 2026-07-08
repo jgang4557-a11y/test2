@@ -223,37 +223,3 @@ var FX_TRANS_MS    = 800;    // 커지는 등장 길이(ms). 더 느리게 = 숫
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build);
   else build();
 })();
-
-
-/* ============================================================
-   SOOP 임베드 높이 자동 맞춤 (크로스 오리진 대응)
-   · 이 페이지가 SOOP 게시글(iframe / EMBED_BLOCK) 안에 있을 때,
-     자기 실제 높이를 부모(SOOP)에게 계속 알려 "짤림" 없이 딱 맞게 늘림.
-   · 토글·분류·페이지네이션으로 내용 높이가 바뀌어도 자동으로 따라감.
-   · iframe 밖(직접 접속)에서는 아무 일도 하지 않음.
-   ※ SOOP EMBED_BLOCK이 어떤 메시지 형식을 듣는지 공개돼 있지 않아,
-     흔한 리사이즈 형식들을 함께 전송해 무엇이든 걸리도록 함.
-   ============================================================ */
-(function () {
-  if (window.self === window.top) return;                 // iframe 안일 때만 동작
-  var lastH = 0;
-  function fxSendHeight() {
-    var de = document.documentElement, b = document.body;
-    var h = Math.max(
-      b ? b.scrollHeight : 0, de ? de.scrollHeight : 0,
-      b ? b.offsetHeight : 0, de ? de.offsetHeight : 0
-    );
-    if (!h || h === lastH) return;                         // 변화 없으면 생략(늘고 줄고 모두 반영)
-    lastH = h;
-    try { parent.postMessage(h, '*'); } catch (e) {}                              // 숫자만
-    try { parent.postMessage({ type: 'resize', height: h }, '*'); } catch (e) {} // {type,height}
-    try { parent.postMessage({ height: h }, '*'); } catch (e) {}                  // {height}
-    try { parent.postMessage({ context: 'iframe.resize', height: h }, '*'); } catch (e) {} // oEmbed류
-    try { parent.postMessage('setHeight:' + h, '*'); } catch (e) {}              // 문자열
-  }
-  addEventListener('load', fxSendHeight);
-  addEventListener('resize', fxSendHeight);
-  addEventListener('click', function () { setTimeout(fxSendHeight, 250); });      // 토글·분류·페이지네이션 후
-  if (window.ResizeObserver) { try { new ResizeObserver(fxSendHeight).observe(document.body); } catch (e) {} }
-  [200, 600, 1200, 2500].forEach(function (t) { setTimeout(fxSendHeight, t); });  // 이미지·폰트 로드 후 재전송
-})();
