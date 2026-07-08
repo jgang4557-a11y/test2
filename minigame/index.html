@@ -52,37 +52,38 @@
     .lg-log{margin-top:16px; display:flex; flex-direction:column; gap:6px;}
     .lg-log div{display:flex; align-items:center; gap:9px; font-size:14px; font-weight:700; color:var(--text); background:var(--main-light); border-radius:10px; padding:8px 14px;}
     .lg-log img{width:24px; height:24px; object-fit:contain;}
-    /* ── 제비뽑기 ── */
-    .jb-in{display:flex; flex-wrap:wrap; gap:10px; margin:6px 0 4px;}
-    .jb-in input{width:104px; box-sizing:border-box; text-align:center; padding:10px 6px; border-radius:12px;
-      border:1.5px solid var(--main-light); background:#fff; color:var(--text); font-size:13px; font-weight:700; font-family:inherit; outline:none;}
-    body.dark .jb-in input{background:var(--card); border-color:rgba(169,196,127,.3);}
-    .jb-in input:focus{border-color:var(--main);}
-    .jb-stage{display:flex; justify-content:center; padding:66px 0 8px; overflow-x:auto;}
-    .jb-scene{display:inline-flex; flex-direction:column; align-items:center;}
-    .jb-sticks{display:flex; gap:16px; align-items:flex-end; position:relative; z-index:1; padding:0 26px;}
-    .jb-stick{position:relative; width:36px; height:150px; background:none; border:none; cursor:pointer; padding:0;
-      transition:transform .34s cubic-bezier(.3,1.5,.5,1); font-family:inherit;}
-    .jb-stick .stem{position:absolute; left:50%; transform:translateX(-50%); bottom:0; width:10px; height:100%;
-      border-radius:7px; background:linear-gradient(#a7c47f,#6d8c4f); box-shadow:inset -2px 0 0 rgba(0,0,0,.08);}
-    .jb-stick .leaf{position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:19px;}
-    .jb-stick:hover{transform:translateY(-8px);}
-    .jb-stick.pulled{transform:translateY(-70px); cursor:default;}
-    .jb-stick.pulled:hover{transform:translateY(-70px);}
-    .jb-tag{position:absolute; top:-52px; left:50%; transform:translateX(-50%) scale(0); white-space:nowrap;
-      background:#fff; border:1.5px solid; border-radius:999px; padding:6px 12px; font-size:13px; font-weight:800;
-      transition:transform .22s ease .16s; box-shadow:0 6px 14px rgba(70,85,45,.2); z-index:6;}
-    body.dark .jb-tag{background:var(--card);}
-    .jb-stick.pulled .jb-tag{transform:translateX(-50%) scale(1);}
-    .jb-pot{position:relative; z-index:2; width:100%; height:84px; margin-top:-58px;
-      background:linear-gradient(#96754f,#6f5238); border-radius:12px 12px 30px 30px;
-      box-shadow:inset 0 8px 0 rgba(255,255,255,.14), 0 12px 24px rgba(70,50,30,.22);}
-    .jb-pot::after{content:'🌿 MOYO 🌿'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-      color:#f2e8d5; font-size:13px; font-weight:800; letter-spacing:3px; font-family:'Italiana',serif;}
+    /* ── 사다리 이름칸 ── */
+    .lg-name{position:absolute; transform:translateX(-50%); width:86px; top:58px;}
+    .lg-name input{width:100%; box-sizing:border-box; text-align:center; padding:6px 4px; border-radius:10px;
+      border:1.5px solid var(--main-light); background:#fff; color:var(--text); font-size:12px; font-weight:700; font-family:inherit; outline:none;}
+    body.dark .lg-name input{background:var(--card); border-color:rgba(169,196,127,.3);}
+    .lg-name input:focus{border-color:var(--main);}
+    .lg-name .nm{display:block; text-align:center; font-size:12.5px; font-weight:800; color:var(--text);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+    /* ── 제비뽑기 (접힌 쪽지 뒤집기) ── */
+    .jb-set{display:flex; align-items:center; gap:22px; flex-wrap:wrap;}
+    .jb-grid{display:flex; flex-wrap:wrap; gap:14px; justify-content:center; padding:14px 0 6px;}
+    .jb-slip{width:104px; height:70px; perspective:520px; background:none; border:none; padding:0; cursor:pointer; font-family:inherit;}
+    .jb-slip .in{position:relative; width:100%; height:100%; transition:transform .5s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d;}
+    .jb-slip.open .in{transform:rotateY(180deg);}
+    .jb-slip.open{cursor:default;}
+    .jb-face{position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+      border-radius:13px; display:flex; align-items:center; justify-content:center; font-weight:800;}
+    .jb-front{background:#fffdf4; border:1.5px solid var(--main-light); font-size:22px;
+      box-shadow:0 5px 12px rgba(70,85,45,.14);}
+    .jb-front::after{content:''; position:absolute; top:0; right:0; width:0; height:0;
+      border-style:solid; border-width:0 20px 20px 0; border-color:transparent var(--main-light) transparent transparent;
+      border-radius:0 13px 0 0;}
+    body.dark .jb-front{background:var(--card);}
+    .jb-slip:not(.open):hover .in{transform:rotateY(14deg) translateY(-4px);}
+    .jb-back{transform:rotateY(180deg); font-size:15px;}
+    .jb-back.win{background:#fffdf0; border:2px solid #d9a520; color:#b07d18; box-shadow:0 8px 18px rgba(217,165,32,.3);}
+    .jb-back.lose{background:var(--main-light); color:var(--text-soft);}
+    body.dark .jb-back.win{background:var(--card);}
     @media (max-width:640px){
       .lg-res{width:64px;} .lg-res input,.lg-res .mask{font-size:11.5px; padding:8px 3px;}
       .lg-av{width:40px; height:40px;}
-      .jb-sticks{gap:10px;} .jb-stick{width:30px;}
+      .jb-slip{width:88px; height:62px;}
     }
   </style>
 </head>
@@ -127,7 +128,7 @@
     </div>
     <div class="lg-hint" id="lg-hint">아래 칸에 결과를 적고 시작하기를 누르면, 사다리가 숨겨지고 고블린을 눌러 타고 내려가요 🌱</div>
     <div class="lg-stage" id="lg-stage">
-      <div class="lg-row" id="lg-tops"></div>
+      <div class="lg-row" id="lg-tops" style="height:96px;"></div>
       <canvas id="lgCanvas"></canvas>
       <div class="lg-row" id="lg-bots" style="height:48px;"></div>
     </div>
@@ -137,8 +138,13 @@
   <!-- ═══ 제비뽑기 ═══ -->
   <div class="card" id="game-lots" style="display:none">
     <div class="lg-top">
-      <div class="lg-count">제비
-        <button type="button" onclick="jbSetN(-1)">−</button><b id="jb-n">4</b><button type="button" onclick="jbSetN(1)">+</button>
+      <div class="jb-set">
+        <div class="lg-count">제비
+          <button type="button" onclick="jbSetN(-1)">−</button><b id="jb-n">4</b><button type="button" onclick="jbSetN(1)">+</button>
+        </div>
+        <div class="lg-count">당첨
+          <button type="button" onclick="jbSetW(-1)">−</button><b id="jb-w">1</b><button type="button" onclick="jbSetW(1)">+</button>
+        </div>
       </div>
       <div style="display:flex; gap:8px;">
         <button class="lg-btn ghost" type="button" id="jb-reset" style="display:none" onclick="jbReset()">↺ 다시하기</button>
@@ -146,14 +152,8 @@
         <button class="lg-btn" type="button" id="jb-start" onclick="jbStart()">🍀 시작하기</button>
       </div>
     </div>
-    <div class="lg-hint" id="jb-hint">결과를 적고 시작하기를 누르면 제비가 섞여서 화분에 꽂혀요 — 하나씩 뽑아보세요!</div>
-    <div class="jb-in" id="jb-in"></div>
-    <div class="jb-stage" id="jb-stage" style="display:none">
-      <div class="jb-scene">
-        <div class="jb-sticks" id="jb-sticks"></div>
-        <div class="jb-pot"></div>
-      </div>
-    </div>
+    <div class="lg-hint" id="jb-hint">제비 개수와 당첨 개수를 정하고 시작하기! 접힌 쪽지를 눌러 뒤집어보세요 🍀</div>
+    <div class="jb-grid" id="jb-grid"></div>
     <div class="lg-log" id="jb-log"></div>
   </div>
 </div>
@@ -190,6 +190,7 @@ function geom(){
 }
 function renderSetup(){
   const keep=[...document.querySelectorAll('#lg-bots .lg-res input')].map(i=>i.value);
+  const keepN=(G&&G.names)? G.names.map((n,i)=>G.rawNames[i]) : [...document.querySelectorAll('#lg-tops .lg-name input')].map(i=>i.value);
   const {pad,colW}=geom();
   $('lgCanvas').style.height='440px';
   const tops=$('lg-tops'), bots=$('lg-bots');
@@ -198,8 +199,13 @@ function renderSetup(){
     const a=document.createElement('button');
     a.className='lg-av'; a.type='button'; a.id='lg-av-'+i;
     a.innerHTML='<img src="'+gob(i)+'" alt="">';
-    a.style.left=(pad+i*colW)+'px'; a.style.top='4px'; a.style.borderColor=PC[i%12];
+    a.style.left=(pad+i*colW)+'px'; a.style.top='2px'; a.style.borderColor=PC[i%12];
     tops.appendChild(a);
+    const nw=document.createElement('div');
+    nw.className='lg-name'; nw.id='lg-name-'+i; nw.style.left=(pad+i*colW)+'px';
+    const ni=document.createElement('input');
+    ni.placeholder=(i+1)+'번'; ni.value=keepN[i]!==undefined? keepN[i] : '';
+    nw.appendChild(ni); tops.appendChild(nw);
     const w=document.createElement('div');
     w.className='lg-res'; w.style.left=(pad+i*colW)+'px'; w.style.top='2px'; w.id='lg-res-'+i;
     const inp=document.createElement('input');
@@ -236,7 +242,14 @@ function startGame(){
     rung[g][r]=true;
   }
   const results=[...document.querySelectorAll('#lg-bots .lg-res input')].map(i=>i.value.trim()||'꽝');
-  G={rows, rung, results, done:Array(N).fill(false)};
+  const rawNames=[...document.querySelectorAll('#lg-tops .lg-name input')].map(i=>i.value);
+  const names=rawNames.map((v,i)=>v.trim()||((i+1)+'번'));
+  G={rows, rung, results, names, rawNames, done:Array(N).fill(false)};
+  for(let i=0;i<N;i++){
+    const nw=$('lg-name-'+i); nw.innerHTML='';
+    const sp=document.createElement('span'); sp.className='nm'; sp.textContent=names[i]; sp.style.color=PC[i%12];
+    nw.appendChild(sp);
+  }
   phase='play'; busy=false;
   for(let i=0;i<N;i++){
     const w=$('lg-res-'+i); w.innerHTML='';
@@ -283,7 +296,7 @@ function finishRun(i,end,pts){
   m.textContent=G.results[end]; m.classList.add('open');
   m.style.borderColor=PC[i%12]; m.style.color=PC[i%12];
   const log=document.createElement('div');
-  log.innerHTML='<img src="'+gob(i)+'" alt="">  →  '+G.results[end].replace(/</g,'&lt;');
+  log.innerHTML='<img src="'+gob(i)+'" alt=""> <b>'+G.names[i].replace(/</g,'&lt;')+'</b>  →  '+G.results[end].replace(/</g,'&lt;');
   log.style.borderLeft='4.5px solid '+PC[i%12];
   $('lg-log').appendChild(log);
   if(typeof window.fxHearts==='function'){
@@ -331,6 +344,7 @@ function repaint(){
   const {pad,colW}=geom();
   for(let i=0;i<N;i++){
     $('lg-av-'+i).style.left=(pad+i*colW)+'px';
+    $('lg-name-'+i).style.left=(pad+i*colW)+'px';
     $('lg-res-'+i).style.left=(pad+i*colW)+'px';
   }
   drawBase();
@@ -338,58 +352,60 @@ function repaint(){
   for(let j=0;j<N;j++) if(G.done[j]){ const p=pathOf(j); strokePath(c,p.pts,p.pts.length-1,PC[j%12]); }
 }
 
-/* ═══ 제비뽑기 ═══ */
-let JN=4, jbPhase='setup', JB=null;
-function jbInputs(){ return [...document.querySelectorAll('#jb-in input')]; }
+/* ═══ 제비뽑기 (네이버식: 당첨 개수 → 접힌 쪽지 뒤집기) ═══ */
+let JN=4, JW=1, jbPhase='setup', JB=null;
 function jbSetN(d){
   if(jbPhase!=='setup') return;
-  JN=Math.min(12, Math.max(2, JN+d)); $('jb-n').textContent=JN; jbRenderIn();
+  JN=Math.min(12, Math.max(2, JN+d));
+  JW=Math.min(JW, JN-1);
+  $('jb-n').textContent=JN; $('jb-w').textContent=JW;
 }
-function jbRenderIn(){
-  const keep=jbInputs().map(i=>i.value);
-  const box=$('jb-in'); box.innerHTML='';
-  for(let i=0;i<JN;i++){
-    const inp=document.createElement('input');
-    inp.placeholder='결과 '+(i+1);
-    inp.value = keep[i]!==undefined? keep[i] : (i===0?'당첨 🎁':'꽝');
-    box.appendChild(inp);
-  }
+function jbSetW(d){
+  if(jbPhase!=='setup') return;
+  JW=Math.min(JN-1, Math.max(1, JW+d));
+  $('jb-w').textContent=JW;
+}
+function jbHint(){
+  const left=JB.results.filter((r,i)=>r==='win'&&!JB.done[i]).length;
+  const rem=JB.done.filter(d=>!d).length;
+  $('jb-hint').textContent=`남은 제비 ${rem}개 · 남은 당첨 ${left}개 🍀`;
 }
 function jbStart(){
   if(jbPhase!=='setup') return;
-  const results=jbInputs().map(i=>i.value.trim()||'꽝');
-  for(let i=results.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [results[i],results[j]]=[results[j],results[i]]; }
-  JB={results, done:Array(JN).fill(false)};
+  const arr=Array(JN).fill('lose'); for(let i=0;i<JW;i++) arr[i]='win';
+  for(let i=arr.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  JB={results:arr, done:Array(JN).fill(false)};
   jbPhase='play';
-  $('jb-in').style.display='none'; $('jb-stage').style.display='flex';
   $('jb-start').style.display='none'; $('jb-reset').style.display=''; $('jb-all').style.display='';
-  $('jb-hint').textContent='제비를 뽑아보세요! 🍀';
   $('jb-log').innerHTML='';
-  const box=$('jb-sticks'); box.innerHTML='';
+  const box=$('jb-grid'); box.innerHTML='';
   for(let i=0;i<JN;i++){
     const b=document.createElement('button');
-    b.className='jb-stick'; b.type='button'; b.id='jb-stick-'+i;
-    b.innerHTML='<span class="stem"></span><span class="leaf">🌿</span><span class="jb-tag" id="jb-tag-'+i+'"></span>';
+    b.className='jb-slip'; b.type='button'; b.id='jb-slip-'+i;
+    b.innerHTML='<span class="in"><span class="jb-face jb-front">🍀</span><span class="jb-face jb-back" id="jb-back-'+i+'"></span></span>';
     b.onclick=()=>jbPull(i,false);
     box.appendChild(b);
   }
+  jbHint();
 }
 function jbPull(i, instant){
   if(jbPhase!=='play'||!JB||JB.done[i]) return;
   JB.done[i]=true;
-  const st=$('jb-stick-'+i); st.classList.add('pulled'); st.onclick=null;
-  const col=PC[i%12], res=JB.results[i];
-  const tag=$('jb-tag-'+i);
-  tag.textContent=res; tag.style.borderColor=col; tag.style.color=col;
+  const win=JB.results[i]==='win';
+  const st=$('jb-slip-'+i); st.onclick=null; st.classList.add('open');
+  const back=$('jb-back-'+i);
+  back.textContent = win?'🎁 당첨!':'꽝';
+  back.classList.add(win?'win':'lose');
   const log=document.createElement('div');
-  log.textContent='🌿 제비 '+(i+1)+'  →  '+res;
-  log.style.borderLeft='4.5px solid '+col;
+  log.textContent=(i+1)+'번 쪽지  →  '+(win?'당첨 🎁':'꽝');
+  log.style.borderLeft='4.5px solid '+(win?'#d9a520':'#a9ae94');
   $('jb-log').appendChild(log);
-  if(!instant && typeof window.fxHearts==='function'){
+  jbHint();
+  if(win && !instant && typeof window.fxHearts==='function'){
     setTimeout(()=>{
       const r=st.getBoundingClientRect();
-      window.fxHearts(r.left+r.width/2, r.top+6, 7);
-    }, 240);
+      window.fxHearts(r.left+r.width/2, r.top+r.height/2, 9);
+    }, 320);
   }
 }
 function jbRevealAll(){
@@ -398,16 +414,15 @@ function jbRevealAll(){
 }
 function jbReset(){
   jbPhase='setup'; JB=null;
-  $('jb-in').style.display='flex'; $('jb-stage').style.display='none';
+  $('jb-grid').innerHTML=''; $('jb-log').innerHTML='';
   $('jb-start').style.display=''; $('jb-reset').style.display='none'; $('jb-all').style.display='none';
-  $('jb-log').innerHTML='';
-  $('jb-hint').textContent='결과를 적고 시작하기를 누르면 제비가 섞여서 화분에 꽂혀요 — 하나씩 뽑아보세요!';
+  $('jb-hint').textContent='제비 개수와 당첨 개수를 정하고 시작하기! 접힌 쪽지를 눌러 뒤집어보세요 🍀';
 }
 
 window.addEventListener('resize', ()=>{ if(!busy && $('game-ladder').style.display!=='none') repaint(); });
 document.addEventListener('DOMContentLoaded', ()=>{
   document.body.classList.add('ready');
-  renderSetup(); jbRenderIn();
+  renderSetup();
   const sw=$('themeSwitch');
   if(sw) sw.addEventListener('click', ()=>setTimeout(()=>{ if(!busy && $('game-ladder').style.display!=='none') repaint(); }, 60));
 });
