@@ -23,11 +23,15 @@
     .cal-cell.has:hover { background:var(--main-light); }
     .cal-cell.today { background:var(--main-light); }
     .cal-cell.today .cal-date { background:var(--main); color:#fff; border-radius:50%; width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center; }
-    .cal-cell.hl-star { position:absolute; top:-10px; left:-9px; font-size:19px; transform:rotate(-14deg); filter:drop-shadow(0 2px 3px rgba(70,85,45,.4)); z-index:3; pointer-events:none; }
+    .hl-star { position:absolute; top:-10px; left:-9px; font-size:19px; transform:rotate(-14deg); filter:drop-shadow(0 2px 3px rgba(70,85,45,.4)); z-index:3; pointer-events:none; }
     .off-tag { position:absolute; top:3px; right:7px; font-size:16px; font-weight:800; letter-spacing:2px; background:transparent !important; z-index:1; }
     .cal-cell.hl { overflow:visible; }
-    .cal-cell.fill { display:flex; flex-direction:column; }
-    .cal-cell .fl { margin:auto 2px; text-align:center; font-size:13px; font-weight:800; letter-spacing:.2px; padding:1px 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .cal-cell.hasband { overflow:visible; }
+    .band { position:relative; height:26px; margin:7px -6px 4px; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; z-index:1; }
+    .band span { position:relative; z-index:2; white-space:nowrap; padding:0 6px; }
+    .band.b-start { border-radius:999px 0 0 999px; margin-left:0; }
+    .band.b-end { border-radius:0 999px 999px 0; margin-right:0; }
+    .band.b-start.b-end { border-radius:999px; }
     .cal-date { font-size:13px; font-weight:700; color:var(--text-mid); padding:1px 3px; }
     .cal-cell:nth-child(7n+1) .cal-date { color:#e05; }
     .cal-cell:nth-child(7n) .cal-date { color:#4a9; }
@@ -186,11 +190,21 @@
         const base = e.title || (k1==='off'?'휴방':'방송');
         const ranged = e.end_date && e.end_date !== e.date;
         if (ranged && !fillUsed){
-          /* 기간 일정 = 칸 통째 색칠, 라벨은 시작일·주 첫 칸에만 */
+          /* 기간 일정 = 캡슐 밴드: 시작/끝만 둥글고 중간은 셀 경계 없이 이어짐. 라벨은 주 구간 가운데 하루에 */
           fillUsed = true;
-          fillCls = ' fill ' + cc(e.color, e.type);
-          const showLabel = dateStr===e.date || dow===0;
-          if (showLabel) fillLabel = `<div class="fl">${esc(k1==='off' ? '휴방' : ((e.time?e.time+' ':'')+base))}</div>`;
+          const t0 = new Date(dateStr + 'T00:00:00');
+          const iso = t => t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+          const wkS = new Date(t0); wkS.setDate(t0.getDate() - dow);
+          const wkE = new Date(wkS); wkE.setDate(wkS.getDate() + 6);
+          const segS = e.date > iso(wkS) ? e.date : iso(wkS);
+          const segE = (e.end_date < iso(wkE)) ? e.end_date : iso(wkE);
+          const dS = new Date(segS+'T00:00:00'), dE = new Date(segE+'T00:00:00');
+          const mid = new Date(dS); mid.setDate(dS.getDate() + Math.floor((dE - dS) / 864e5 / 2));
+          const showLabel = dateStr === iso(mid);
+          const caps = (dateStr===e.date ? ' b-start' : '') + (dateStr===e.end_date ? ' b-end' : '');
+          const btxt = k1==='off' ? '휴방' : ((e.time ? e.time+' ' : '') + base);
+          fillCls = ' hasband';
+          fillLabel = `<div class="band${caps} ${cc(e.color, e.type)}">${showLabel?`<span>${esc(btxt)}</span>`:''}</div>`;
           if (k1!=='off' && (e.time2 || e.title2) && showLabel){
             const k2 = kind(e.type2 || e.type);
             const l2 = k2==='off' ? '휴방' : ((e.time2?e.time2+' ':'')+(e.title2||base));
