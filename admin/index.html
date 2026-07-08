@@ -210,7 +210,7 @@
         </div>
         <div class="form-field full"><label class="input-label">설명 (선택)</label><textarea class="input" id="sch-desc" rows="2"></textarea></div>
         <div class="form-field full"><label><input type="checkbox" id="sch-hl"> ⭐ 하이라이트 (달력에서 강조)</label></div>
-        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn btn-primary" onclick="addSchedule()">+ 추가</button></div>
+        <div class="form-field full" style="display:flex;justify-content:flex-end"><button class="btn" id="sch-cancel" type="button" style="display:none;margin-right:8px" onclick="resetSchForm()">취소</button><button class="btn btn-primary" id="sch-submit" onclick="addSchedule()">+ 추가</button></div>
       </div>
     </div>
     <div class="card">
@@ -464,15 +464,43 @@
     if (error) { showToast('❌ 저장 실패: ' + error.message); return; }
     showToast('✅ 저장됐어요!');
   }
+  let schCache = [], schEditId = null;
   async function loadSchedule() {
     const data = await fetchAll('schedule', { order: 'date', asc: true });
+    schCache = data;
     const t = document.getElementById('sch-list');
     if (!data.length) { t.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#ccc;padding:20px">없음</td></tr>'; return; }
     t.innerHTML = data.map(s => {
       const isOff = s.type === '휴방';
       const badge = isOff ? '<span class="badge" style="background:#eceef1;color:#6b7280">휴방</span>' : '<span class="badge" style="background:#d6f0e4;color:#1f7a52">방송</span>';
-      return `<tr><td>${s.date}</td><td>${s.time||'-'}</td><td>${badge}</td><td>${s.title||'-'}</td><td><button class="delete-btn" onclick="del('schedule',${s.id},loadSchedule)">🗑</button></td></tr>`;
+      const dateTxt = (s.end_date && s.end_date !== s.date) ? `${s.date} ~ ${s.end_date.slice(5)}` : s.date;
+      return `<tr><td>${dateTxt}</td><td>${s.time||'-'}</td><td>${badge}</td><td>${s.title||'-'}</td><td><button class="delete-btn" style="margin-right:6px" onclick="editSchedule(${s.id})">✏️</button><button class="delete-btn" onclick="del('schedule',${s.id},loadSchedule)">🗑</button></td></tr>`;
     }).join('');
+  }
+  function editSchedule(id){
+    const s = schCache.find(x => x.id === id); if (!s) return;
+    schEditId = id;
+    const set = (i,v) => { const el=document.getElementById(i); if(el) el.value = v || ''; };
+    set('sch-date', s.date); set('sch-end', s.end_date);
+    set('sch-title', s.title); set('sch-time', s.time);
+    set('sch-time2', s.time2); set('sch-title2', s.title2);
+    set('sch-desc', s.description);
+    document.getElementById('sch-type').value = s.type || '방송';
+    document.getElementById('sch-hl').checked = !!s.highlight;
+    const c1 = document.querySelector(`input[name="schcolor"][value="${s.color||'green'}"]`); if (c1) c1.checked = true;
+    const c2 = document.querySelector(`input[name="schcolor2"][value="${s.color2||''}"]`); if (c2) c2.checked = true;
+    const btn = document.getElementById('sch-submit'); if (btn){ btn.textContent = '✏️ 수정 저장'; btn.scrollIntoView({behavior:'smooth', block:'center'}); }
+    const cx = document.getElementById('sch-cancel'); if (cx) cx.style.display = '';
+  }
+  function resetSchForm(){
+    schEditId = null;
+    ['sch-date','sch-end','sch-title','sch-time','sch-time2','sch-title2','sch-desc'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    document.getElementById('sch-hl').checked = false;
+    document.getElementById('sch-type').value = '방송';
+    const c1 = document.querySelector('input[name="schcolor"][value="green"]'); if (c1) c1.checked = true;
+    const c2 = document.querySelector('input[name="schcolor2"][value=""]'); if (c2) c2.checked = true;
+    const btn = document.getElementById('sch-submit'); if (btn) btn.textContent = '+ 추가';
+    const cx = document.getElementById('sch-cancel'); if (cx) cx.style.display = 'none';
   }
   async function addSchedule() {
     const date = document.getElementById('sch-date').value;
@@ -492,6 +520,12 @@
       description: document.getElementById('sch-desc').value.trim(),
       highlight: document.getElementById('sch-hl').checked
     };
+    if (schEditId){
+      const ok2 = await updateRow('schedule', schEditId, row);
+      if (ok2){ showToast('✅ 수정 완료!'); resetSchForm(); loadSchedule(); }
+      else showToast('❗ 수정 실패');
+      return;
+    }
     const ok = await insertRow('schedule', row);
     if (ok) {
       showToast('✅ 추가!');
