@@ -756,7 +756,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     'info-age': '비밀 🌱',
     'info-mbti': 'INTJ',
     'info-fandom': '새싹이들 🌱',
-    'stat-debut':'2025.12.20','stat-birth':'12.20','stat-race':'엘프','stat-class':'모험가','stat-status':'숲속 탐험 중 🌿',
+    'stat-debut':'2025.12.20','stat-birth':'12.20','stat-race':'엘프','stat-class':'모험가','stat-mbti':'INTJ','stat-status':'숲속 탐험 중 🌿',
     'link-soop':'https://www.sooplive.com/station/duvl123',
     'link-youtube':'{{유튜브주소}}',
     'link-fancim':'{{X주소}}',
@@ -792,11 +792,12 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
 
       /* 텍스트 훅 */
       ['info-name','info-age','info-mbti','info-fandom',
-       'stat-debut','stat-birth','stat-race','stat-class','stat-status','hero-quote'].forEach(id => {
+       'stat-debut','stat-birth','stat-race','stat-class','stat-mbti','stat-status','hero-quote'].forEach(id => {
         const el = document.getElementById(id);
         if (el && (d[id]||'').toString().trim()) el.textContent = d[id];
       });
       const fanEl = document.getElementById('stat-fan');
+      const fanEl = document.getElementById('stat-mbti');
       if (fanEl && (d['info-fandom']||'').trim()) fanEl.textContent = d['info-fandom'].replace(/\s+/g,'');
 
       const tagsEl = document.getElementById('info-tags');
