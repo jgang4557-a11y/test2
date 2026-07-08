@@ -13,7 +13,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Italiana&family=Jua&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jua&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.min.css">
 
 <style>
@@ -38,7 +38,7 @@
   --shadow: 0 22px 60px rgba(70,85,45,.16);
 
   --disp:  'Gowun Batang','Noto Sans KR',serif;      /* 모요 큰 제목 */
-  --serif: 'Italiana','Gowun Batang',serif;          /* PROFILE 영문 세리프 */
+  --serif: 'Playfair Display','Gowun Batang',serif;          /* PROFILE 영문 세리프 */
   --body:  'Pretendard','Noto Sans KR',sans-serif;
 }
 body.dark{
@@ -222,7 +222,7 @@ body.dark .hb{background:rgba(32,38,22,.7);}
 }
 body.dark .ntab.active{color:#161b0e;}
 
-/* ── 장식 프레임 카드 (PROFILE / CLASS CHANGE) ── */
+/* ── 장식 프레임 카드 (PROFILE / CUTSCENE) ── */
 .duo{display:grid; grid-template-columns:.68fr 1fr; gap:24px; margin:24px 30px 0;}
 .ornate{
   position:relative; min-height:520px; display:flex; flex-direction:column;
@@ -548,6 +548,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
   .player.playing .vinyl,.hb.live b{animation:none !important;}
   *{transition:none !important; scroll-behavior:auto !important;}
 }
+
 </style>
 </head>
 <body>
@@ -610,7 +611,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     <button class="ntab" type="button" onclick="openInquiry()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 0-3.1 6.3L20.5 19l-.8-3.4A8 8 0 0 0 20 12z"/></svg>문의</button>
   </nav>
 
-  <!-- PROFILE + CLASS CHANGE -->
+  <!-- PROFILE + CUTSCENE -->
   <div class="duo">
     <section class="ornate">
       <svg class="corner tl" viewBox="0 0 70 70" fill="none"><path d="M6 52 C6 22 22 6 52 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M20 13 q9-8 17-5 q-5 10-17 5z" fill="currentColor" opacity=".8"/><path d="M9 32 q-7-9-3-17 q10 5 3 17z" fill="currentColor" opacity=".55"/><path d="M36 8 q7-6 13-4 q-4 8-13 4z" fill="currentColor" opacity=".4"/></svg>
@@ -628,9 +629,9 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
     <section class="ornate">
       <svg class="corner tl" viewBox="0 0 70 70" fill="none"><path d="M6 52 C6 22 22 6 52 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M20 13 q9-8 17-5 q-5 10-17 5z" fill="currentColor" opacity=".8"/><path d="M9 32 q-7-9-3-17 q10 5 3 17z" fill="currentColor" opacity=".55"/><path d="M36 8 q7-6 13-4 q-4 8-13 4z" fill="currentColor" opacity=".4"/></svg>
       <svg class="corner tr" viewBox="0 0 70 70" fill="none"><path d="M6 52 C6 22 22 6 52 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M20 13 q9-8 17-5 q-5 10-17 5z" fill="currentColor" opacity=".8"/><path d="M9 32 q-7-9-3-17 q10 5 3 17z" fill="currentColor" opacity=".55"/><path d="M36 8 q7-6 13-4 q-4 8-13 4z" fill="currentColor" opacity=".4"/></svg>
-      <div class="ohd"><i></i><span class="dm">✦</span>CLASS CHANGE<span class="dm">✦</span><i></i></div>
+      <div class="ohd"><i></i><span class="dm">✦</span>CUTSCENE<span class="dm">✦</span><i></i></div>
       <div class="cc-body" id="classchange-body">
-        <div class="cc-img" id="ccImgBox"><iframe class="cc-yt" src="https://www.youtube.com/embed/_f9RFMBlrN4?rel=0" title="CLASS CHANGE" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="cc-img" id="ccImgBox"><iframe class="cc-yt" src="https://www.youtube.com/embed/_f9RFMBlrN4?rel=0" title="CUTSCENE" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
         <div class="cc-diary" id="ccDiary">
           <a class="d-row" href="diary/"><b>0706</b><span>오늘의 일기</span><i>›</i></a>
           <a class="d-row" href="diary/"><b>0705</b><span>오늘의 일기</span><i>›</i></a>
@@ -829,7 +830,7 @@ body.ready .stagger > *:nth-child(n+9){animation-delay:.42s}
       if (media){
         const box=document.getElementById('ccImgBox');
         const vid=ytId(media);
-        if (vid) box.innerHTML='<iframe class="cc-yt" src="https://www.youtube.com/embed/'+vid+'?rel=0" title="CLASS CHANGE" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+        if (vid) box.innerHTML='<iframe class="cc-yt" src="https://www.youtube.com/embed/'+vid+'?rel=0" title="CUTSCENE" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
         else box.innerHTML='<img src="'+media+'" alt="" referrerpolicy="no-referrer">';
       }
       const hb=document.getElementById('heroBadges');
